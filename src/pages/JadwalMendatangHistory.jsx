@@ -4,12 +4,34 @@ import Navbar from "../components/Navbar";
 import LoadingIndicator from "../components/LoadingIndicator";
 
 const formatDate = (dateString) => {
-  const options = { day: "numeric", month: "long", year: "numeric" };
-  return new Date(dateString).toLocaleDateString("id-ID", options);
+  try {
+    console.log("Formatting date input:", dateString);
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      console.error("Invalid date:", dateString);
+      return dateString;
+    }
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    const formatted = date.toLocaleDateString("id-ID", options);
+    console.log("Formatted date:", formatted);
+    return formatted;
+  } catch (error) {
+    console.error("Error formatting date:", error, dateString);
+    return dateString;
+  }
 };
 
 const formatTime = (timeString) => {
-  return timeString?.slice(0, 5) || "";
+  try {
+    console.log("Formatting time input:", timeString);
+    if (!timeString) return "";
+    const formatted = timeString.slice(0, 5);
+    console.log("Formatted time:", formatted);
+    return formatted;
+  } catch (error) {
+    console.error("Error formatting time:", error, timeString);
+    return timeString || "";
+  }
 };
 
 const JadwalMendatangHistory = () => {
@@ -26,6 +48,8 @@ const JadwalMendatangHistory = () => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("token");
+      console.log("Token:", token ? "exists" : "missing");
+
       const response = await fetch(
         "http://localhost:3000/api/schedule/jadwal-mendatang/history",
         {
@@ -34,11 +58,20 @@ const JadwalMendatangHistory = () => {
           },
         }
       );
+
+      console.log("Response status:", response.status);
       const data = await response.json();
+      console.log("History data:", data);
+
       if (data.success) {
+        console.log("Setting history:", data.data);
         setHistory(data.data || []);
+      } else {
+        console.error("Error in response:", data.error);
+        setError(data.error || "Failed to fetch history");
       }
     } catch (err) {
+      console.error("Fetch error:", err);
       setError("Failed to fetch history: " + err.message);
     } finally {
       setIsLoading(false);

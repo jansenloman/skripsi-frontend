@@ -39,6 +39,7 @@ const OtherSchedules = () => {
     tanggal: "",
     kegiatan: "",
     deskripsi: "",
+    dates: [],
   });
   const [editingId, setEditingId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -126,50 +127,78 @@ const OtherSchedules = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      // Validasi waktu
       if (!validateTime(formData.jam_mulai, formData.jam_selesai)) {
         setError("Jam selesai harus lebih besar dari jam mulai");
+        setIsLoading(false);
         return;
       }
 
-      // Adjust date for timezone
-      const date = new Date(formData.tanggal);
-      const adjustedDate = new Date(
-        date.getTime() - date.getTimezoneOffset() * 60000
-      );
-      const formattedDate = adjustedDate.toISOString().split("T")[0];
-
-      // Create adjusted formData
-      const adjustedFormData = {
-        ...formData,
-        tanggal: formattedDate,
-      };
+      if (formData.dates.length === 0) {
+        setError("Pilih setidaknya satu tanggal");
+        setIsLoading(false);
+        return;
+      }
 
       const token = localStorage.getItem("token");
       const url = isEditing
         ? `http://localhost:3000/api/schedule/jadwal-mendatang/${editingId}`
         : "http://localhost:3000/api/schedule/jadwal-mendatang";
 
-      const response = await fetch(url, {
-        method: isEditing ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(adjustedFormData),
-      });
+      // Jika editing, hanya kirim satu request
+      if (isEditing) {
+        const response = await fetch(url, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            tanggal: formData.dates[0],
+            kegiatan: formData.kegiatan,
+            deskripsi: formData.deskripsi,
+            jam_mulai: formData.jam_mulai,
+            jam_selesai: formData.jam_selesai,
+          }),
+        });
 
-      const data = await response.json();
-      if (data.success) {
-        setShowMendatangForm(false);
-        clearFormAndError();
-        setIsEditing(false);
-        setEditingId(null);
-        setMode("view");
-        setActiveTable(null);
-        await fetchData();
+        const result = await response.json();
+        if (!result.success) {
+          throw new Error(result.error || "Gagal menyimpan jadwal");
+        }
       } else {
-        setError(data.error || "Gagal menyimpan jadwal");
+        const promises = formData.dates.map(async (date) => {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              tanggal: date,
+              kegiatan: formData.kegiatan,
+              deskripsi: formData.deskripsi,
+              jam_mulai: formData.jam_mulai,
+              jam_selesai: formData.jam_selesai,
+            }),
+          });
+
+          return response.json();
+        });
+
+        const results = await Promise.all(promises);
+        const hasError = results.some((result) => !result.success);
+
+        if (!hasError) {
+          setShowMendatangForm(false);
+          clearFormAndError();
+          setIsEditing(false);
+          setEditingId(null);
+          setMode("view");
+          setActiveTable(null);
+          await fetchData();
+        } else {
+          setError("Gagal menyimpan beberapa jadwal");
+        }
       }
     } catch (err) {
       setError(`Failed to save: ${err.message}`);
@@ -187,6 +216,7 @@ const OtherSchedules = () => {
       tanggal: "",
       kegiatan: "",
       deskripsi: "",
+      dates: [],
     });
     setError("");
     setIsEditing(false);
@@ -288,12 +318,32 @@ const OtherSchedules = () => {
     }
   };
 
+  const handleDateSelect = (date) => {
+    const today = new Date().toISOString().split("T")[0];
+    if (date < today) {
+      setError("Tidak dapat memilih tanggal yang sudah lewat");
+      return;
+    }
+
+    setError("");
+    const updatedDates = formData.dates.includes(date)
+      ? formData.dates.filter((d) => d !== date)
+      : [...formData.dates, date];
+
+    setFormData({ ...formData, dates: updatedDates.sort() });
+  };
+
   if (isLoading) return <LoadingIndicator />;
 
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        {error && (
+          <div className="mb-4 p-4 text-red-700 bg-red-100 rounded-md">
+            {error}
+          </div>
+        )}
         {/* Jadwal Kuliah Section */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
@@ -642,6 +692,7 @@ const OtherSchedules = () => {
                     onClick={() => {
                       setShowKuliahForm(false);
                       clearFormAndError();
+                      setActiveTable(null);
                     }}
                     className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
                   >
@@ -662,43 +713,49 @@ const OtherSchedules = () => {
         {/* Popup Form Jadwal Mendatang */}
         {showMendatangForm && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+            <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
               <h3 className="text-lg font-bold mb-4">
-                Tambah Jadwal Mendatang
+                {isEditing
+                  ? "Edit Jadwal Mendatang"
+                  : "Tambah Jadwal Mendatang"}
               </h3>
               <form onSubmit={handleSubmitMendatang} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Tanggal
+                    Pilih Tanggal (bisa pilih lebih dari satu)
                   </label>
-                  <input
-                    type="date"
-                    name="tanggal"
-                    value={formData.tanggal || ""}
-                    onChange={(e) => {
-                      const selectedDate = e.target.value;
-                      const today = new Date().toISOString().split("T")[0];
+                  <div className="mt-1 grid grid-cols-7 gap-1 bg-gray-50 p-2 rounded-md">
+                    {[...Array(31)].map((_, index) => {
+                      const date = new Date();
+                      date.setDate(date.getDate() + index);
+                      const dateStr = date.toISOString().split("T")[0];
 
-                      if (selectedDate < today) {
-                        setError(
-                          "Tidak dapat memilih tanggal yang sudah lewat"
-                        );
-                        return;
-                      }
-                      setError("");
-
-                      setFormData({ ...formData, tanggal: selectedDate });
-                    }}
-                    min={new Date().toISOString().split("T")[0]}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    required
-                  />
-                  {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                      {error}
+                      return (
+                        <button
+                          key={dateStr}
+                          type="button"
+                          onClick={() => handleDateSelect(dateStr)}
+                          className={`
+                            p-2 text-sm rounded-md
+                            ${
+                              formData.dates.includes(dateStr)
+                                ? "bg-blue-500 text-white"
+                                : "bg-white hover:bg-gray-100"
+                            }
+                          `}
+                        >
+                          {date.getDate()}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {formData.dates.length > 0 && (
+                    <div className="mt-2 text-sm text-gray-600">
+                      Tanggal terpilih: {formData.dates.join(", ")}
                     </div>
                   )}
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Kegiatan
@@ -714,6 +771,7 @@ const OtherSchedules = () => {
                     required
                   />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Deskripsi
@@ -724,11 +782,11 @@ const OtherSchedules = () => {
                     onChange={(e) =>
                       setFormData({ ...formData, deskripsi: e.target.value })
                     }
-                    rows="3"
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                    placeholder="Opsional: Tambahkan deskripsi kegiatan"
+                    rows="3"
                   />
                 </div>
+
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
@@ -764,12 +822,14 @@ const OtherSchedules = () => {
                     />
                   </div>
                 </div>
+
                 <div className="flex justify-end space-x-2">
                   <button
                     type="button"
                     onClick={() => {
                       setShowMendatangForm(false);
                       clearFormAndError();
+                      setActiveTable(null);
                     }}
                     className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
                   >

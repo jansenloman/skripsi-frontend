@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SuccessModal from "../components/SuccessModal";
 import LoadingIndicator from "../components/LoadingIndicator";
@@ -9,6 +9,7 @@ const VerificationPending = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isCheckingVerification, setIsCheckingVerification] = useState(false);
+  const initialSendComplete = useRef(false);
   const navigate = useNavigate();
   const email = localStorage.getItem("pendingVerificationEmail");
 
@@ -47,6 +48,43 @@ const VerificationPending = () => {
     const interval = setInterval(checkVerificationStatus, 5000);
     return () => clearInterval(interval);
   }, [email, navigate]);
+
+  useEffect(() => {
+    const sendInitialVerification = async () => {
+      if (initialSendComplete.current) return;
+      initialSendComplete.current = true;
+
+      setIsLoading(true);
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/accounts/resend-verification",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email }),
+          }
+        );
+
+        const data = await response.json();
+        if (response.ok) {
+          setMessage("Email verifikasi telah dikirim!");
+        } else {
+          throw new Error(data.error || "Gagal mengirim email verifikasi");
+        }
+      } catch (error) {
+        setMessage(error.message);
+        initialSendComplete.current = false;
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (email) {
+      sendInitialVerification();
+    }
+  }, [email]);
 
   const handleContinueToHome = () => {
     setShowSuccessModal(false);

@@ -11,10 +11,16 @@ import JadwalMendatangHistory from "./pages/JadwalMendatangHistory";
 import VerificationPending from "./pages/VerificationPending";
 import Verify from "./pages/Verify";
 import { AnimatePresence } from "framer-motion";
+import GenerateSchedule from "./pages/GenerateSchedule";
+// import SchedulePreview from "./pages/SchedulePreview";
+import Settings from "./pages/Settings";
+import { Toaster } from "react-hot-toast";
+import ScheduleList from "./pages/ScheduleList";
 
 function App() {
   return (
     <Router>
+      <Toaster position="top-right" />
       <AnimatePresence mode="wait">
         <Routes>
           <Route
@@ -77,6 +83,38 @@ function App() {
           <Route
             path="/verification-pending"
             element={<VerificationPending />}
+          />
+          <Route
+            path="/generate-schedule"
+            element={
+              <ProtectedRoute>
+                <GenerateSchedule />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/schedule-list"
+            element={
+              <ProtectedRoute>
+                <ScheduleList />
+              </ProtectedRoute>
+            }
+          />
+          {/* <Route
+            path="/schedule-preview"
+            element={
+              <ProtectedRoute>
+                <SchedulePreview />
+              </ProtectedRoute>
+            }
+          /> */}
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </AnimatePresence>

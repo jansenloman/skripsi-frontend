@@ -73,6 +73,10 @@ const LoginPassword = () => {
       {isLoading && <LoadingIndicator />}
       <div className="flex h-screen">
         <div className="w-1/2 bg-white flex items-center justify-center relative">
+          <div className="absolute w-56 h-56 bg-custom-red rounded-full bottom-1/2 left-1/2 z-10 translate-x-10 -translate-y-10"></div>
+          <div className="absolute w-[28rem] h-[28rem] bg-custom-blue rounded-full bottom-1/2 right-1/2 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute w-56 h-56 bg-custom-green rounded-full top-1/2 right-1/2 z-10 -translate-x-10 translate-y-10"></div>
+
           <div className="relative z-10 bg-white p-8 rounded-lg shadow-lg w-96">
             <form className="space-y-4" onSubmit={handleSubmit}>
               {error && (

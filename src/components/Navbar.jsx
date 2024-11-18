@@ -27,6 +27,18 @@ const Navbar = () => {
               Dashboard
             </Link>
             <Link
+              to="/schedule-list"
+              className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Jadwal Saya
+            </Link>
+            {/* <Link
+              to="/generate-schedule"
+              className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Buat Jadwal
+            </Link> */}
+            <Link
               to="/other-schedules"
               className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
             >
@@ -37,6 +49,12 @@ const Navbar = () => {
               className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
             >
               Profil
+            </Link>
+            <Link
+              to="/settings"
+              className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              Pengaturan
             </Link>
 
             <button

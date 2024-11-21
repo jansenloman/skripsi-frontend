@@ -13,3 +13,88 @@
 body {
   @apply font-sans;
 }
+
+/* Navbar Styles */
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.nav-link {
+  @apply flex items-center space-x-2 px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-all duration-200 relative;
+}
+
+.nav-link-active {
+  @apply bg-custom-blue/10 text-custom-blue;
+}
+
+.nav-link-indicator {
+  @apply absolute bottom-0 left-0 w-full h-0.5 bg-custom-blue scale-x-0 transition-transform duration-200 ease-in-out;
+}
+
+.nav-link:hover .nav-link-indicator {
+  @apply scale-x-100;
+}
+
+.mobile-nav-link {
+  @apply flex items-center space-x-2 w-full px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all duration-200;
+}
+
+.nav-link i {
+  @apply text-lg;
+}
+
+.menu-item {
+  @apply flex items-center space-x-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-all duration-150;
+}
+
+.menu-item i {
+  @apply w-5 text-gray-400 transition-colors duration-150;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.clock-container {
+  transition: all 0.3s ease;
+}
+
+.clock-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.1);
+}
+
+/* Animation delays untuk loading dots */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+/* Custom animation untuk loading spinner */
+@keyframes custom-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-custom-spin {
+  animation: custom-spin 1.5s linear infinite;
+}

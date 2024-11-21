@@ -6,7 +6,8 @@ import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import Profile from "./pages/Profile";
-import OtherSchedules from "./pages/OtherSchedules";
+import JadwalKuliah from "./pages/JadwalKuliah";
+import JadwalMendatang from "./pages/JadwalMendatang";
 import JadwalMendatangHistory from "./pages/JadwalMendatangHistory";
 import VerificationPending from "./pages/VerificationPending";
 import Verify from "./pages/Verify";
@@ -64,10 +65,18 @@ function App() {
             }
           />
           <Route
-            path="/other-schedules"
+            path="/jadwal-kuliah"
             element={
               <ProtectedRoute>
-                <OtherSchedules />
+                <JadwalKuliah />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/jadwal-mendatang"
+            element={
+              <ProtectedRoute>
+                <JadwalMendatang />
               </ProtectedRoute>
             }
           />

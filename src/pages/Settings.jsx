@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { toast } from "react-hot-toast";
+import { API_BASE_URL } from "../utils/constants";
 
 const Settings = () => {
   const [settings, setSettings] = useState({
@@ -26,14 +27,11 @@ const Settings = () => {
   const fetchSettings = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "http://localhost:3000/api/accounts/settings",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/accounts/settings`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
       if (data.success) {
         setSettings(data.settings);
@@ -75,17 +73,14 @@ const Settings = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(
-        "http://localhost:3000/api/accounts/settings",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(prepareSettingsForSubmit()),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/accounts/settings`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(prepareSettingsForSubmit()),
+      });
 
       const data = await response.json();
       if (data.success) {

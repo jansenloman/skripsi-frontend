@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const formatDate = (dateString) => {
   try {
@@ -51,7 +52,7 @@ const JadwalMendatangHistory = () => {
       console.log("Token:", token ? "exists" : "missing");
 
       const response = await fetch(
-        "http://localhost:3000/api/schedule/jadwal-mendatang/history",
+        `${API_BASE_URL}/api/schedule/jadwal-mendatang/history`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

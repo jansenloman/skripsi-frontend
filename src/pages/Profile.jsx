@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { fetchWithAuth } from "../utils/api";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Profile = () => {
 
   const fetchProfileData = async () => {
     try {
-      const response = await fetchWithAuth("http://localhost:3000/api/profile");
+      const response = await fetchWithAuth(`${API_BASE_URL}/api/profile`);
       const data = await response.json();
 
       if (!response) {
@@ -50,7 +51,7 @@ const Profile = () => {
     e.preventDefault();
     try {
       const response = await fetchWithAuth(
-        "http://localhost:3000/api/profile/update",
+        `${API_BASE_URL}/api/profile/update`,
         {
           method: "PUT",
           body: JSON.stringify(editingProfile),

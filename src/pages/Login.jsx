@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal";
+import { API_BASE_URL } from "../utils/constants";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -25,16 +26,13 @@ const Login = () => {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/accounts/check-email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const response = await fetch(`${API_BASE_URL}/api/accounts/check-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
 
       const data = await response.json();
 

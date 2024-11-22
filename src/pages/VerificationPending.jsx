@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import SuccessModal from "../components/SuccessModal";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const VerificationPending = () => {
   const [isResending, setIsResending] = useState(false);
@@ -18,7 +19,7 @@ const VerificationPending = () => {
       setIsCheckingVerification(true);
       try {
         const response = await fetch(
-          "http://localhost:3000/api/accounts/check-verification",
+          `${API_BASE_URL}/api/accounts/check-verification`,
           {
             method: "POST",
             headers: {
@@ -57,7 +58,7 @@ const VerificationPending = () => {
       setIsLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:3000/api/accounts/resend-verification",
+          `${API_BASE_URL}/api/accounts/resend-verification`,
           {
             method: "POST",
             headers: {
@@ -98,7 +99,7 @@ const VerificationPending = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/api/accounts/resend-verification",
+        `${API_BASE_URL}/api/accounts/resend-verification`,
         {
           method: "POST",
           headers: {

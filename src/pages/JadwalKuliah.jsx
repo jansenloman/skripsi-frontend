@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import ActionButtons from "../components/ActionButtons";
 import DeleteConfirmation from "../components/DeleteConfirmation";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const formatTime = (timeString) => {
   return timeString?.slice(0, 5) || "";
@@ -29,7 +30,7 @@ const JadwalKuliah = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:3000/api/schedule/jadwal-kuliah",
+        `${API_BASE_URL}/api/schedule/jadwal-kuliah`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -51,8 +52,8 @@ const JadwalKuliah = () => {
     try {
       const token = localStorage.getItem("token");
       const url = isEditing
-        ? `http://localhost:3000/api/schedule/jadwal-kuliah/${editingId}`
-        : "http://localhost:3000/api/schedule/jadwal-kuliah";
+        ? `${API_BASE_URL}/api/schedule/jadwal-kuliah/${editingId}`
+        : `${API_BASE_URL}/api/schedule/jadwal-kuliah`;
 
       const response = await fetch(url, {
         method: isEditing ? "PUT" : "POST",
@@ -102,7 +103,7 @@ const JadwalKuliah = () => {
     try {
       const token = localStorage.getItem("token");
       const promises = selectedKuliahRows.map((id) =>
-        fetch(`http://localhost:3000/api/schedule/jadwal-kuliah/${id}`, {
+        fetch(`${API_BASE_URL}/api/schedule/jadwal-kuliah/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,

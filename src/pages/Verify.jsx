@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { API_BASE_URL } from "../utils/constants";
 
 const Verify = () => {
   const { code } = useParams();
@@ -13,7 +14,7 @@ const Verify = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:3000/api/accounts/verify/${code}`,
+          `${API_BASE_URL}/api/accounts/verify/${code}`,
           {
             method: "GET",
             headers: {

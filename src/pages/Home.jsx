@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { fetchWithAuth } from "../utils/api";
+import { API_BASE_URL } from "../utils/constants";
 
 const Home = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -63,9 +64,7 @@ const Home = () => {
         }
         setUserEmail(email);
 
-        const response = await fetchWithAuth(
-          "http://localhost:3000/api/profile"
-        );
+        const response = await fetchWithAuth(`${API_BASE_URL}/api/profile`);
         const data = await response.json();
 
         if (data.success && data.profile && data.profile.name) {
@@ -74,7 +73,7 @@ const Home = () => {
 
         // Fetch upcoming schedule
         const scheduleRes = await fetchWithAuth(
-          "http://localhost:3000/api/schedule/upcoming"
+          `${API_BASE_URL}/api/schedule/upcoming`
         );
         const scheduleData = await scheduleRes.json();
         console.log("Upcoming Schedule Response:", scheduleData);
@@ -96,7 +95,7 @@ const Home = () => {
       try {
         // Fetch jadwal kuliah
         const classesRes = await fetchWithAuth(
-          "http://localhost:3000/api/schedule/jadwal-kuliah"
+          `${API_BASE_URL}/api/schedule/jadwal-kuliah`
         );
         const classesData = await classesRes.json();
 
@@ -120,7 +119,7 @@ const Home = () => {
 
         // Fetch jadwal mendatang
         const upcomingRes = await fetchWithAuth(
-          "http://localhost:3000/api/schedule/jadwal-mendatang"
+          `${API_BASE_URL}/api/schedule/jadwal-mendatang`
         );
         const upcomingData = await upcomingRes.json();
 

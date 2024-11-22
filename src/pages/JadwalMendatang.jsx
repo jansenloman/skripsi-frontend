@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import ActionButtons from "../components/ActionButtons";
 import DeleteConfirmation from "../components/DeleteConfirmation";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const formatDate = (dateString) => {
   const options = { day: "numeric", month: "long", year: "numeric" };
@@ -50,7 +51,7 @@ const JadwalMendatang = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:3000/api/schedule/jadwal-mendatang",
+        `${API_BASE_URL}/api/schedule/jadwal-mendatang`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -102,7 +103,7 @@ const JadwalMendatang = () => {
       if (isEditing) {
         // Handle editing single date
         const response = await fetch(
-          `http://localhost:3000/api/schedule/jadwal-mendatang/${editingId}`,
+          `${API_BASE_URL}/api/schedule/jadwal-mendatang/${editingId}`,
           {
             method: "PUT",
             headers: {
@@ -127,7 +128,7 @@ const JadwalMendatang = () => {
         // Handle multiple dates - Kirim request pertama untuk validasi
         const firstDate = formData.dates[0];
         const validateResponse = await fetch(
-          "http://localhost:3000/api/schedule/jadwal-mendatang",
+          `${API_BASE_URL}/api/schedule/jadwal-mendatang`,
           {
             method: "POST",
             headers: {
@@ -152,7 +153,7 @@ const JadwalMendatang = () => {
 
         // Jika validasi berhasil, lanjutkan dengan sisa tanggal
         const promises = formData.dates.slice(1).map((date) =>
-          fetch("http://localhost:3000/api/schedule/jadwal-mendatang", {
+          fetch(`${API_BASE_URL}/api/schedule/jadwal-mendatang`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -211,7 +212,7 @@ const JadwalMendatang = () => {
     try {
       const token = localStorage.getItem("token");
       const promises = selectedMendatangRows.map((id) =>
-        fetch(`http://localhost:3000/api/schedule/jadwal-mendatang/${id}`, {
+        fetch(`${API_BASE_URL}/api/schedule/jadwal-mendatang/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,

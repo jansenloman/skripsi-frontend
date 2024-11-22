@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const GenerateSchedule = () => {
   const [formData, setFormData] = useState({
@@ -19,14 +20,11 @@ const GenerateSchedule = () => {
     const checkScheduleAndFormInput = async () => {
       try {
         const token = localStorage.getItem("token");
-        const scheduleResponse = await fetch(
-          "http://localhost:3000/api/schedule/jadwal-mingguan",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const scheduleResponse = await fetch("/api/schedule/jadwal-mingguan", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         const scheduleData = await scheduleResponse.json();
         const hasSchedule = Object.values(scheduleData.schedule).some(
@@ -36,7 +34,7 @@ const GenerateSchedule = () => {
 
         if (hasSchedule) {
           const formInputResponse = await fetch(
-            "http://localhost:3000/api/schedule/last-form-input",
+            `${API_BASE_URL}/api/schedule/last-form-input`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -73,7 +71,7 @@ const GenerateSchedule = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:3000/api/schedule/generate-schedule",
+        `${API_BASE_URL}/api/schedule/generate-schedule`,
         {
           method: "POST",
           headers: {

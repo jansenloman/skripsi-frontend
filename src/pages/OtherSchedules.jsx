@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import ActionButtons from "../components/ActionButtons";
 import DeleteConfirmation from "../components/DeleteConfirmation";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const formatDate = (dateString) => {
   const options = { day: "numeric", month: "long", year: "numeric" };
@@ -60,10 +61,10 @@ const OtherSchedules = () => {
     try {
       const token = localStorage.getItem("token");
       const [kuliahResponse, mendatangResponse] = await Promise.all([
-        fetch("http://localhost:3000/api/schedule/jadwal-kuliah", {
+        fetch(`${API_BASE_URL}/api/schedule/jadwal-kuliah`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch("http://localhost:3000/api/schedule/jadwal-mendatang", {
+        fetch(`${API_BASE_URL}/api/schedule/jadwal-mendatang`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -92,8 +93,8 @@ const OtherSchedules = () => {
     try {
       const token = localStorage.getItem("token");
       const url = isEditing
-        ? `http://localhost:3000/api/schedule/jadwal-kuliah/${editingId}`
-        : "http://localhost:3000/api/schedule/jadwal-kuliah";
+        ? `${API_BASE_URL}/api/schedule/jadwal-kuliah/${editingId}`
+        : `${API_BASE_URL}/api/schedule/jadwal-kuliah`;
 
       const response = await fetch(url, {
         method: isEditing ? "PUT" : "POST",
@@ -141,8 +142,8 @@ const OtherSchedules = () => {
 
       const token = localStorage.getItem("token");
       const url = isEditing
-        ? `http://localhost:3000/api/schedule/jadwal-mendatang/${editingId}`
-        : "http://localhost:3000/api/schedule/jadwal-mendatang";
+        ? `${API_BASE_URL}/api/schedule/jadwal-mendatang/${editingId}`
+        : `${API_BASE_URL}/api/schedule/jadwal-mendatang`;
 
       // Jika editing, hanya kirim satu request
       if (isEditing) {
@@ -238,7 +239,7 @@ const OtherSchedules = () => {
         deleteType === "kuliah" ? "jadwal-kuliah" : "jadwal-mendatang";
 
       const promises = selectedIds.map((id) =>
-        fetch(`http://localhost:3000/api/schedule/${endpoint}/${id}`, {
+        fetch(`${API_BASE_URL}/api/schedule/${endpoint}/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,

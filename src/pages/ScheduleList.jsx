@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const ScheduleList = () => {
   const [schedule, setSchedule] = useState({});
@@ -23,7 +24,7 @@ const ScheduleList = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        "http://localhost:3000/api/schedule/jadwal-mingguan",
+        `${API_BASE_URL}/api/schedule/jadwal-mingguan`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

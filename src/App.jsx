@@ -17,6 +17,7 @@ import GenerateSchedule from "./pages/GenerateSchedule";
 import Settings from "./pages/Settings";
 import { Toaster } from "react-hot-toast";
 import ScheduleList from "./pages/ScheduleList";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -125,6 +126,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
     </Router>

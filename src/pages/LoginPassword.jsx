@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import LoadingIndicator from "../components/LoadingIndicator";
+import { API_BASE_URL } from "../utils/constants";
 
 const LoginPassword = () => {
   const [password, setPassword] = useState("");
@@ -25,7 +26,7 @@ const LoginPassword = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/accounts/login", {
+      const response = await fetch(`${API_BASE_URL}/api/accounts/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

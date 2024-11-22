@@ -154,13 +154,13 @@ const JadwalMendatangHistory = () => {
                       key={item.id}
                       className="hover:bg-gray-50 transition-colors"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap  text-gray-900">
                         {formatDate(item.tanggal)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap  text-gray-900">
                         {item.kegiatan}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 max-w-md">
+                      <td className="px-6 py-4  text-gray-500 max-w-md">
                         <div className="line-clamp-2">
                           {item.deskripsi || "-"}
                         </div>

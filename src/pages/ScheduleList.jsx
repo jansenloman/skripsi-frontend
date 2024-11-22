@@ -66,10 +66,22 @@ const ScheduleList = () => {
             </div>
             <button
               onClick={() => navigate("/generate-schedule")}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-custom-blue rounded-lg hover:bg-custom-blue/90 transition-all duration-200 shadow-sm"
+              className="inline-flex items-center px-4 py-2.5 text-sm font-medium bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
             >
-              <i className="fas fa-plus mr-2"></i>
-              Buat Jadwal Baru
+              <svg
+                className="mr-2 h-5 w-5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                />
+              </svg>
+              Buat Jadwal Mingguan
             </button>
           </div>
 
@@ -100,9 +112,21 @@ const ScheduleList = () => {
               </p>
               <button
                 onClick={() => navigate("/generate-schedule")}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-custom-blue rounded-lg hover:bg-custom-blue/90 transition-all duration-200"
+                className="inline-flex items-center px-4 py-2.5 text-sm font-medium bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
               >
-                <i className="fas fa-plus mr-2"></i>
+                <svg
+                  className="mr-2 h-5 w-5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
                 Buat Jadwal
               </button>
             </div>

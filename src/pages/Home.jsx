@@ -228,7 +228,7 @@ const Home = () => {
                     <i className="fas fa-clock text-custom-blue text-lg"></i>
                   </div>
                   <h2 className="text-xl font-semibold text-gray-800">
-                    Jadwal Selanjutnya
+                    Jadwal Hari ini (selanjutnya)
                   </h2>
                 </div>
                 <button

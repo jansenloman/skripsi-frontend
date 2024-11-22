@@ -10,7 +10,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const validateMikroskilEmail = (email) => {
-    const microskilDomain = "@students.mikroskil.ac.id";
+    const microskilDomain = ""; // Use below later, this is just testing mode
+    // "@students.mikroskil.ac.id";
     return email.endsWith(microskilDomain);
   };
 

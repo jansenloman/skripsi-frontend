@@ -20,11 +20,14 @@ const GenerateSchedule = () => {
     const checkScheduleAndFormInput = async () => {
       try {
         const token = localStorage.getItem("token");
-        const scheduleResponse = await fetch("/api/schedule/jadwal-mingguan", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const scheduleResponse = await fetch(
+          `${API_BASE_URL}/api/schedule/jadwal-mingguan`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const scheduleData = await scheduleResponse.json();
         const hasSchedule = Object.values(scheduleData.schedule).some(

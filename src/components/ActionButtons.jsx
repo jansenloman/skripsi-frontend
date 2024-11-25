@@ -21,7 +21,9 @@ const ActionButtons = ({ onAdd, onEdit, onDelete, disabled }) => {
         onClick={() => setIsOpen(!isOpen)}
         disabled={disabled}
         className={`
-          inline-flex items-center px-4 py-2.5 text-sm font-medium
+          inline-flex items-center 
+          px-2 py-1.5 md:px-4 md:py-2.5 
+          text-xs md:text-sm font-medium
           bg-white border border-gray-300 rounded-lg shadow-sm
           hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
           transition-all duration-200
@@ -30,7 +32,7 @@ const ActionButtons = ({ onAdd, onEdit, onDelete, disabled }) => {
       >
         <span>Aksi</span>
         <svg
-          className={`ml-2 h-4 w-4 transition-transform duration-200 ${
+          className={`ml-1 md:ml-2 h-3 w-3 md:h-4 md:w-4 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
           fill="none"
@@ -47,17 +49,17 @@ const ActionButtons = ({ onAdd, onEdit, onDelete, disabled }) => {
       </button>
 
       {isOpen && !disabled && (
-        <div className="absolute right-0 mt-2 w-48 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-fadeIn">
+        <div className="absolute mt-2 w-40 md:w-48 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 z-50 animate-fadeIn left-0 md:left-auto md:right-0">
           <div className="py-1" role="menu">
             <button
               onClick={() => {
                 onAdd();
                 setIsOpen(false);
               }}
-              className="group flex w-full items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="group flex w-full items-center px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-gray-700 hover:bg-gray-50 transition-colors"
             >
               <svg
-                className="mr-3 h-5 w-5 text-gray-400 group-hover:text-blue-500"
+                className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -76,10 +78,10 @@ const ActionButtons = ({ onAdd, onEdit, onDelete, disabled }) => {
                 onEdit();
                 setIsOpen(false);
               }}
-              className="group flex w-full items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="group flex w-full items-center px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-gray-700 hover:bg-gray-50 transition-colors"
             >
               <svg
-                className="mr-3 h-5 w-5 text-gray-400 group-hover:text-blue-500"
+                className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-blue-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -98,10 +100,10 @@ const ActionButtons = ({ onAdd, onEdit, onDelete, disabled }) => {
                 onDelete();
                 setIsOpen(false);
               }}
-              className="group flex w-full items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="group flex w-full items-center px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-gray-700 hover:bg-gray-50 transition-colors"
             >
               <svg
-                className="mr-3 h-5 w-5 text-gray-400 group-hover:text-red-500"
+                className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-red-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

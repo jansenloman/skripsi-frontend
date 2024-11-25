@@ -82,18 +82,18 @@ const JadwalMendatangHistory = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800">
+      <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
               Riwayat Jadwal
             </h2>
             <button
               onClick={() => navigate("/jadwal-mendatang")}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+              className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               <svg
-                className="w-5 h-5 mr-2"
+                className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -131,49 +131,53 @@ const JadwalMendatangHistory = () => {
           {isLoading ? (
             <LoadingIndicator />
           ) : history.length > 0 ? (
-            <div className="overflow-hidden rounded-xl border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Tanggal
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Kegiatan
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Deskripsi
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Waktu
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {history.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap  text-gray-900">
-                        {formatDate(item.tanggal)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap  text-gray-900">
-                        {item.kegiatan}
-                      </td>
-                      <td className="px-6 py-4  text-gray-500 max-w-md">
-                        <div className="line-clamp-2">
-                          {item.deskripsi || "-"}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {formatTime(item.jam_mulai)} -{" "}
-                        {formatTime(item.jam_selesai)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto -mx-3 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden border border-gray-200 sm:rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Tanggal
+                        </th>
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Kegiatan
+                        </th>
+                        <th className="hidden sm:table-cell px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Deskripsi
+                        </th>
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Waktu
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {history.map((item) => (
+                        <tr
+                          key={item.id}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm">
+                            {formatDate(item.tanggal)}
+                          </td>
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm">
+                            {item.kegiatan}
+                          </td>
+                          <td className="hidden sm:table-cell px-3 py-3 sm:px-6 sm:py-4 text-sm text-gray-500">
+                            <div className="line-clamp-2">
+                              {item.deskripsi || "-"}
+                            </div>
+                          </td>
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm">
+                            {formatTime(item.jam_mulai)} -{" "}
+                            {formatTime(item.jam_selesai)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="text-center py-12">

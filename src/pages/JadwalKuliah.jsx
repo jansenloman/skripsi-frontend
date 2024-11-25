@@ -143,20 +143,20 @@ const JadwalKuliah = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800">
+      <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
               Jadwal Kuliah
             </h2>
-            <div className="flex gap-3">
+            <div className="flex gap-2 sm:gap-3">
               {mode !== "view" && (
                 <button
                   onClick={() => {
                     setMode("view");
                     setSelectedKuliahRows([]);
                   }}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                  className="px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                 >
                   Batal
                 </button>
@@ -176,98 +176,101 @@ const JadwalKuliah = () => {
           </div>
 
           {jadwalKuliah.length > 0 ? (
-            <div className="overflow-hidden rounded-xl border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    {mode === "delete" && (
-                      <th className="px-6 py-4">
-                        <input
-                          type="checkbox"
-                          checked={
-                            selectedKuliahRows.length === jadwalKuliah.length
-                          }
-                          onChange={handleSelectAll}
-                          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        />
-                      </th>
-                    )}
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Hari
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Mata Kuliah
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Jam
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {jadwalKuliah.map((jadwal) => (
-                    <tr
-                      key={jadwal.kuliah_id}
-                      onClick={() => {
-                        if (mode === "edit") {
-                          setFormData({
-                            hari: jadwal.hari,
-                            mata_kuliah: jadwal.mata_kuliah,
-                            jam_mulai: jadwal.jam_mulai,
-                            jam_selesai: jadwal.jam_selesai,
-                          });
-                          setEditingId(jadwal.kuliah_id);
-                          setIsEditing(true);
-                          setShowKuliahForm(true);
-                        } else if (mode === "delete") {
-                          handleSelectRow(jadwal.kuliah_id);
-                        }
-                      }}
-                      className={`
-                        transition-colors
-                        ${
-                          selectedKuliahRows.includes(jadwal.kuliah_id)
-                            ? "bg-blue-50"
-                            : mode === "delete"
-                            ? "cursor-pointer hover:bg-gray-50"
-                            : "hover:bg-gray-50"
-                        }
-                        ${mode === "edit" ? "hover:bg-blue-50" : ""}
-                      `}
-                    >
-                      {mode === "delete" && (
-                        <td className="px-6 py-4">
-                          <input
-                            type="checkbox"
-                            checked={selectedKuliahRows.includes(
-                              jadwal.kuliah_id
-                            )}
-                            onChange={(e) => {
-                              e.stopPropagation();
-                              handleSelectRow(jadwal.kuliah_id);
-                            }}
-                            className="rounded border-gray-300"
-                          />
-                        </td>
-                      )}
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {jadwal.hari}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {jadwal.mata_kuliah}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {formatTime(jadwal.jam_mulai)} -{" "}
-                        {formatTime(jadwal.jam_selesai)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto -mx-3 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden border border-gray-200 sm:rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        {mode === "delete" && (
+                          <th className="px-3 py-3 sm:px-6 sm:py-4">
+                            <input
+                              type="checkbox"
+                              checked={
+                                selectedKuliahRows.length ===
+                                jadwalKuliah.length
+                              }
+                              onChange={handleSelectAll}
+                              className="h-4 w-4 sm:h-4 sm:w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                          </th>
+                        )}
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Hari
+                        </th>
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Mata Kuliah
+                        </th>
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Jam
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {jadwalKuliah.map((jadwal) => (
+                        <tr
+                          key={jadwal.kuliah_id}
+                          onClick={() => {
+                            if (mode === "edit") {
+                              setFormData({
+                                hari: jadwal.hari,
+                                mata_kuliah: jadwal.mata_kuliah,
+                                jam_mulai: jadwal.jam_mulai,
+                                jam_selesai: jadwal.jam_selesai,
+                              });
+                              setIsEditing(true);
+                              setEditingId(jadwal.kuliah_id);
+                              setShowKuliahForm(true);
+                            }
+                          }}
+                          className={`
+                            transition-colors text-sm sm:text-sm
+                            ${
+                              selectedKuliahRows.includes(jadwal.kuliah_id)
+                                ? "bg-blue-50"
+                                : mode === "delete"
+                                ? "cursor-pointer hover:bg-gray-50"
+                                : "hover:bg-gray-50"
+                            }
+                            ${mode === "edit" ? "hover:bg-blue-50" : ""}
+                          `}
+                        >
+                          {mode === "delete" && (
+                            <td className="px-3 py-3 sm:px-6 sm:py-4">
+                              <input
+                                type="checkbox"
+                                checked={selectedKuliahRows.includes(
+                                  jadwal.kuliah_id
+                                )}
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectRow(jadwal.kuliah_id);
+                                }}
+                                className="h-4 w-4 sm:h-4 sm:w-4 rounded border-gray-300"
+                              />
+                            </td>
+                          )}
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
+                            {jadwal.hari}
+                          </td>
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
+                            {jadwal.mata_kuliah}
+                          </td>
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
+                            {formatTime(jadwal.jam_mulai)} -{" "}
+                            {formatTime(jadwal.jam_selesai)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           ) : (
-            <div className="text-center py-12">
+            <div className="text-center py-8 sm:py-12">
               <svg
-                className="mx-auto h-12 w-12 text-gray-400"
+                className="mx-auto h-12 w-12 sm:h-12 sm:w-12 text-gray-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -279,12 +282,12 @@ const JadwalKuliah = () => {
                   d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
                 />
               </svg>
-              <p className="mt-4 text-gray-500 text-lg">
+              <p className="mt-4 text-gray-500 text-base sm:text-lg">
                 Tidak ada jadwal kuliah
               </p>
               <button
                 onClick={() => setShowKuliahForm(true)}
-                className="mt-4 px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                className="mt-4 px-4 py-2 sm:px-4 sm:py-2 text-sm sm:text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
               >
                 Tambah Jadwal
               </button>
@@ -294,9 +297,9 @@ const JadwalKuliah = () => {
 
         {/* Form Modal */}
         {showKuliahForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto m-4">
-              <div className="p-6">
+          <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-4">
+            <div className="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+              <div className="p-4 sm:p-6">
                 <h3 className="text-xl font-semibold text-gray-800 mb-6">
                   {isEditing ? "Edit Jadwal Kuliah" : "Tambah Jadwal Kuliah"}
                 </h3>
@@ -420,11 +423,11 @@ const JadwalKuliah = () => {
         />
 
         {mode === "delete" && selectedKuliahRows.length > 0 && (
-          <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
+          <div className="fixed bottom-16 sm:bottom-4 right-2 sm:right-4 bg-red-500 text-white px-3 py-2 rounded-lg shadow-lg text-sm sm:text-base">
             {selectedKuliahRows.length} jadwal dipilih
             <button
               onClick={handleDeleteSelected}
-              className="ml-2 bg-white text-red-500 px-2 py-1 rounded"
+              className="ml-2 bg-white text-red-500 px-2 py-1 rounded text-sm"
             >
               Hapus
             </button>

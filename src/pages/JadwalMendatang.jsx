@@ -252,19 +252,32 @@ const JadwalMendatang = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800">
+      <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
               Jadwal Mendatang
             </h2>
-            <div className="flex gap-3">
+            <div className="flex justify-between sm:justify-end items-center gap-2 sm:gap-3">
+              <div className="sm:order-2">
+                <ActionButtons
+                  onAdd={() => setShowMendatangForm(true)}
+                  onEdit={() => {
+                    setMode("edit");
+                    setSelectedMendatangRows([]);
+                  }}
+                  onDelete={() => {
+                    setMode("delete");
+                    setSelectedMendatangRows([]);
+                  }}
+                />
+              </div>
               <button
                 onClick={() => navigate("/jadwal-mendatang-history")}
-                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+                className="inline-flex items-center px-2 py-1.5 md:px-4 md:py-2.5 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 sm:order-1"
               >
                 <svg
-                  className="w-5 h-5 mr-2"
+                  className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -278,120 +291,108 @@ const JadwalMendatang = () => {
                 </svg>
                 Lihat Riwayat
               </button>
-              {mode !== "view" && (
-                <button
-                  onClick={() => {
-                    setMode("view");
-                    setSelectedMendatangRows([]);
-                  }}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-                >
-                  Batal
-                </button>
-              )}
-              <ActionButtons
-                onAdd={() => setShowMendatangForm(true)}
-                onEdit={() => {
-                  setMode("edit");
-                  setSelectedMendatangRows([]);
-                }}
-                onDelete={() => {
-                  setMode("delete");
-                  setSelectedMendatangRows([]);
-                }}
-              />
             </div>
           </div>
 
           {jadwalMendatang.length > 0 ? (
-            <div className="overflow-hidden rounded-xl border border-gray-200">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    {mode === "delete" && (
-                      <th className="px-6 py-4">
-                        <input
-                          type="checkbox"
-                          checked={
-                            selectedMendatangRows.length ===
-                            jadwalMendatang.length
-                          }
-                          onChange={handleSelectAll}
-                          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                        />
-                      </th>
-                    )}
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Tanggal
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Kegiatan
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Deskripsi
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Jam
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {jadwalMendatang.map((jadwal) => (
-                    <tr
-                      key={jadwal.id}
-                      onClick={() => {
-                        if (mode === "edit") {
-                          setFormData({
-                            dates: [jadwal.tanggal],
-                            kegiatan: jadwal.kegiatan,
-                            deskripsi: jadwal.deskripsi,
-                            jam_mulai: jadwal.jam_mulai,
-                            jam_selesai: jadwal.jam_selesai,
-                          });
-                          setEditingId(jadwal.id);
-                          setIsEditing(true);
-                          setShowMendatangForm(true);
-                        } else if (mode === "delete") {
-                          handleSelectRow(jadwal.id);
-                        }
-                      }}
-                      className={`
-                        transition-colors cursor-pointer
-                        ${
-                          mode === "delete" &&
-                          selectedMendatangRows.includes(jadwal.id)
-                            ? "bg-blue-50"
-                            : mode === "delete"
-                            ? "cursor-pointer hover:bg-gray-50"
-                            : "hover:bg-gray-50"
-                        }
-                        ${mode === "edit" ? "hover:bg-blue-50" : ""}
-                      `}
-                    >
-                      {mode === "delete" && (
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <input
-                            type="checkbox"
-                            checked={selectedMendatangRows.includes(jadwal.id)}
-                            onChange={() => handleSelectRow(jadwal.id)}
-                            onClick={(e) => e.stopPropagation()}
-                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                          />
-                        </td>
-                      )}
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {formatDate(jadwal.tanggal)}
-                      </td>
-                      <td className="px-6 py-4">{jadwal.kegiatan}</td>
-                      <td className="px-6 py-4">{jadwal.deskripsi}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {formatTime(jadwal.jam_mulai)} -{" "}
-                        {formatTime(jadwal.jam_selesai)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto -mx-3 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden border border-gray-200 sm:rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        {mode === "delete" && (
+                          <th className="px-3 py-3 sm:px-6 sm:py-4">
+                            <input
+                              type="checkbox"
+                              checked={
+                                selectedMendatangRows.length ===
+                                jadwalMendatang.length
+                              }
+                              onChange={handleSelectAll}
+                              className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                          </th>
+                        )}
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Tanggal
+                        </th>
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Kegiatan
+                        </th>
+                        <th className="hidden sm:table-cell px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Deskripsi
+                        </th>
+                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Jam
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {jadwalMendatang.map((jadwal) => (
+                        <tr
+                          key={jadwal.id}
+                          onClick={() => {
+                            if (mode === "edit") {
+                              setFormData({
+                                dates: [jadwal.tanggal],
+                                kegiatan: jadwal.kegiatan,
+                                deskripsi: jadwal.deskripsi,
+                                jam_mulai: jadwal.jam_mulai,
+                                jam_selesai: jadwal.jam_selesai,
+                              });
+                              setEditingId(jadwal.id);
+                              setIsEditing(true);
+                              setShowMendatangForm(true);
+                            } else if (mode === "delete") {
+                              handleSelectRow(jadwal.id);
+                            }
+                          }}
+                          className={`
+                            transition-colors cursor-pointer
+                            ${
+                              mode === "delete" &&
+                              selectedMendatangRows.includes(jadwal.id)
+                                ? "bg-blue-50"
+                                : mode === "delete"
+                                ? "cursor-pointer hover:bg-gray-50"
+                                : "hover:bg-gray-50"
+                            }
+                            ${mode === "edit" ? "hover:bg-blue-50" : ""}
+                          `}
+                        >
+                          {mode === "delete" && (
+                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
+                              <input
+                                type="checkbox"
+                                checked={selectedMendatangRows.includes(
+                                  jadwal.id
+                                )}
+                                onChange={() => handleSelectRow(jadwal.id)}
+                                onClick={(e) => e.stopPropagation()}
+                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                              />
+                            </td>
+                          )}
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm">
+                            {formatDate(jadwal.tanggal)}
+                          </td>
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 text-sm">
+                            {jadwal.kegiatan}
+                          </td>
+                          <td className="hidden sm:table-cell px-3 py-3 sm:px-6 sm:py-4 text-sm">
+                            {jadwal.deskripsi}
+                          </td>
+                          <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-sm">
+                            {formatTime(jadwal.jam_mulai)} -{" "}
+                            {formatTime(jadwal.jam_selesai)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="text-center py-12">

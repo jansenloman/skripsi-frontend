@@ -9,13 +9,13 @@ const Home = () => {
   const [userEmail, setUserEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [upcomingSchedule, setUpcomingSchedule] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const [currentQuote, setCurrentQuote] = useState("");
   const [todayClasses, setTodayClasses] = useState([]);
   const [tomorrowClasses, setTomorrowClasses] = useState([]);
-  const [nextSchedules, setNextSchedules] = useState([]);
+  const [todayUpcomingSchedules, setTodayUpcomingSchedules] = useState([]);
+  const [futureEvents, setFutureEvents] = useState([]);
 
   // Update waktu setiap detik
   useEffect(() => {
@@ -70,16 +70,6 @@ const Home = () => {
         if (data.success && data.profile && data.profile.name) {
           setUserName(data.profile.name);
         }
-
-        // Fetch upcoming schedule
-        const scheduleRes = await fetchWithAuth(
-          `${API_BASE_URL}/api/schedule/upcoming`
-        );
-        const scheduleData = await scheduleRes.json();
-        console.log("Upcoming Schedule Response:", scheduleData);
-        if (scheduleData.success) {
-          setUpcomingSchedule(scheduleData.schedule);
-        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -117,14 +107,24 @@ const Home = () => {
           setTomorrowClasses(tomorrowSchedule);
         }
 
-        // Fetch jadwal mendatang
+        // Fetch jadwal selanjutnya (hari ini)
         const upcomingRes = await fetchWithAuth(
-          `${API_BASE_URL}/api/schedule/jadwal-mendatang`
+          `${API_BASE_URL}/api/schedule/upcoming`
         );
         const upcomingData = await upcomingRes.json();
+        console.log("Upcoming Schedule Response:", upcomingData);
 
         if (upcomingData.success) {
-          setNextSchedules(upcomingData.data.slice(0, 2));
+          setTodayUpcomingSchedules(upcomingData.schedules);
+        }
+
+        // Fetch jadwal mendatang
+        const futureRes = await fetchWithAuth(
+          `${API_BASE_URL}/api/schedule/jadwal-mendatang`
+        );
+        const futureData = await futureRes.json();
+        if (futureData.success) {
+          setFutureEvents(futureData.data.slice(0, 2));
         }
       } catch (error) {
         console.error("Error fetching schedules:", error);
@@ -219,7 +219,7 @@ const Home = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left Column */}
           <div className="space-y-8">
-            {/* Upcoming Schedule Card */}
+            {/* Today's Upcoming Schedules */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
@@ -227,43 +227,43 @@ const Home = () => {
                     <i className="fas fa-clock text-custom-blue text-lg"></i>
                   </div>
                   <h2 className="text-xl font-semibold text-gray-800">
-                    Jadwal Hari ini (selanjutnya)
+                    Jadwal Selanjutnya Hari Ini
                   </h2>
                 </div>
-                <button
-                  onClick={() => navigate("/schedule-list")}
-                  className="text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200"
-                >
-                  Lihat Semua
-                </button>
               </div>
-
-              {upcomingSchedule ? (
-                <div className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-2">
-                      <div className="flex items-center space-x-2 text-sm text-gray-500">
-                        <i className="far fa-calendar-alt"></i>
-                        <span>{upcomingSchedule.day}</span>
-                      </div>
-                      <h3 className="font-medium text-gray-800">
-                        {upcomingSchedule.title}
-                      </h3>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <i className="far fa-clock mr-2"></i>
-                        <span>{upcomingSchedule.time}</span>
+              <div className="space-y-3">
+                {todayUpcomingSchedules.length > 0 ? (
+                  todayUpcomingSchedules.map((schedule, index) => (
+                    <div
+                      key={index}
+                      className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2 text-sm text-gray-500">
+                            <i className="far fa-calendar-alt"></i>
+                            <span>{schedule.day}</span>
+                          </div>
+                          <h3 className="font-medium text-gray-800">
+                            {schedule.title}
+                          </h3>
+                          <div className="flex items-center text-sm text-gray-600">
+                            <i className="far fa-clock mr-2"></i>
+                            <span>{schedule.time}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8 text-gray-500 bg-gray-50 rounded-xl">
+                    <i className="far fa-calendar-check text-4xl mb-3 text-gray-400"></i>
+                    <p className="text-sm">
+                      Tidak ada jadwal selanjutnya untuk hari ini
+                    </p>
                   </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-8 text-gray-500 bg-gray-50 rounded-xl">
-                  <i className="far fa-calendar-check text-4xl mb-3 text-gray-400"></i>
-                  <p className="text-sm">
-                    Tidak ada jadwal selanjutnya untuk hari ini
-                  </p>
-                </div>
-              )}
+                )}
+              </div>
             </div>
 
             {/* Today's Classes */}
@@ -361,7 +361,7 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Upcoming Events */}
+            {/* Future Events */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
@@ -380,20 +380,20 @@ const Home = () => {
                 </button>
               </div>
               <div className="space-y-3">
-                {nextSchedules.length > 0 ? (
-                  nextSchedules.map((schedule, index) => (
+                {futureEvents.length > 0 ? (
+                  futureEvents.map((event, index) => (
                     <div
                       key={index}
                       className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200"
                     >
                       <p className="font-medium text-gray-800 mb-2">
-                        {schedule.kegiatan}
+                        {event.kegiatan}
                       </p>
                       <div className="space-y-1 text-sm text-gray-600">
                         <div className="flex items-center">
                           <i className="far fa-calendar mr-2"></i>
                           <span>
-                            {new Date(schedule.tanggal).toLocaleDateString(
+                            {new Date(event.tanggal).toLocaleDateString(
                               "id-ID"
                             )}
                           </span>
@@ -401,8 +401,8 @@ const Home = () => {
                         <div className="flex items-center">
                           <i className="far fa-clock mr-2"></i>
                           <span>
-                            {formatTime(schedule.jam_mulai)} -{" "}
-                            {formatTime(schedule.jam_selesai)}
+                            {formatTime(event.jam_mulai)} -{" "}
+                            {formatTime(event.jam_selesai)}
                           </span>
                         </div>
                       </div>

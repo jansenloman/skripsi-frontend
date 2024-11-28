@@ -73,20 +73,20 @@ const LoginPassword = () => {
     <>
       {isLoading && <LoadingIndicator />}
       <div className="min-h-screen bg-gray-50">
-        {/* Mobile Header - Hanya muncul di mobile */}
-        <div className="lg:hidden bg-gradient-to-br from-custom-blue to-blue-600 text-white px-4 py-6">
+        {/* Mobile Header - Lebih simpel */}
+        <div className="lg:hidden bg-gradient-to-br from-custom-blue to-blue-600 text-white px-4 py-8">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-xl rounded-xl mb-4">
-              <i className="fas fa-lock text-2xl"></i>
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-white/20 backdrop-blur-xl rounded-xl mb-4">
+              <i className="fas fa-lock text-3xl"></i>
             </div>
-            <h1 className="text-xl font-bold mb-2">Verifikasi Password</h1>
-            <p className="text-sm text-white/90">
+            <h1 className="text-2xl font-bold mb-2">Verifikasi Password</h1>
+            <p className="text-base text-white/90 max-w-xs mx-auto">
               Masukkan password Anda untuk melanjutkan
             </p>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row min-h-[calc(100vh-132px)] lg:min-h-screen">
+        <div className="flex flex-col lg:flex-row min-h-[calc(100vh-180px)] lg:min-h-screen">
           {/* Left Side - Welcome Section (Hidden di mobile) */}
           <div className="hidden lg:flex w-full lg:w-1/2 bg-gradient-to-br from-custom-blue to-blue-600 text-white items-center justify-center p-6 sm:p-8 relative overflow-hidden">
             {/* Background Pattern */}
@@ -134,31 +134,31 @@ const LoginPassword = () => {
           </div>
 
           {/* Right Side - Form Section */}
-          <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-4">
+          <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-4 sm:p-6">
             {/* Login Form */}
             <div className="w-full max-w-md mx-auto">
               <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
-                <div className="text-center mb-6">
-                  <h2 className="text-xl font-bold text-gray-800 mb-2">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
                     Login
                   </h2>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-base text-gray-500">
                     Masuk sebagai: {email}
                   </p>
                 </div>
 
-                <form className="space-y-4" onSubmit={handleSubmit}>
+                <form className="space-y-6" onSubmit={handleSubmit}>
                   {error && (
-                    <div className="flex items-center p-3 bg-red-50 border border-red-100 rounded-xl">
-                      <i className="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                    <div className="flex items-center p-4 bg-red-50 border border-red-100 rounded-xl">
+                      <i className="fas fa-exclamation-circle text-red-500 mr-3"></i>
                       <span className="text-sm text-red-600">{error}</span>
                     </div>
                   )}
 
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     <label
                       htmlFor="password"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-base font-medium text-gray-700"
                     >
                       Password
                     </label>
@@ -167,20 +167,20 @@ const LoginPassword = () => {
                         type="password"
                         id="password"
                         placeholder="Masukkan password"
-                        className="pl-10 pr-4 py-2.5 w-full text-sm border border-gray-200 rounded-xl focus:ring-2 focus:ring-custom-blue/20 focus:border-custom-blue"
+                        className="pl-12 pr-4 py-3.5 w-full text-base border border-gray-200 rounded-xl focus:ring-2 focus:ring-custom-blue/20 focus:border-custom-blue"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                       />
-                      <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                        <i className="fas fa-lock"></i>
+                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                        <i className="fas fa-lock text-lg"></i>
                       </div>
                     </div>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-custom-blue to-blue-600 text-white py-2.5 rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 text-sm font-medium"
+                    className="w-full bg-gradient-to-r from-custom-blue to-blue-600 text-white py-3.5 rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 text-base font-medium"
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center">
@@ -194,55 +194,10 @@ const LoginPassword = () => {
                 </form>
 
                 {/* Additional Info */}
-                <div className="mt-6 pt-4 border-t border-gray-100">
-                  <p className="text-xs text-center text-gray-500">
+                <div className="mt-8 pt-6 border-t border-gray-100">
+                  <p className="text-sm text-center text-gray-500">
                     Lupa password? Hubungi administrator untuk bantuan
                   </p>
-                </div>
-              </div>
-
-              {/* Mobile Security Points */}
-              <div className="mt-6 space-y-4 lg:hidden px-2">
-                <div className="flex items-center p-3 bg-white/80 rounded-xl border border-gray-100">
-                  <div className="w-8 h-8 bg-custom-blue/10 rounded-lg flex items-center justify-center mr-3">
-                    <i className="fas fa-shield-alt text-custom-blue text-sm"></i>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-800">
-                      Secure
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      End-to-end encryption
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center p-3 bg-white/80 rounded-xl border border-gray-100">
-                  <div className="w-8 h-8 bg-custom-blue/10 rounded-lg flex items-center justify-center mr-3">
-                    <i className="fas fa-fingerprint text-custom-blue text-sm"></i>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-800">
-                      Authentication
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      Secure login process
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center p-3 bg-white/80 rounded-xl border border-gray-100">
-                  <div className="w-8 h-8 bg-custom-blue/10 rounded-lg flex items-center justify-center mr-3">
-                    <i className="fas fa-user-shield text-custom-blue text-sm"></i>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-800">
-                      Privacy
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      Data privacy protection
-                    </p>
-                  </div>
                 </div>
               </div>
             </div>

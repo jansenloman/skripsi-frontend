@@ -146,21 +146,23 @@ const JadwalKuliah = () => {
       <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-6">
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
-              Jadwal Kuliah
-            </h2>
-            <div className="flex gap-2 sm:gap-3">
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
+                Jadwal Kuliah
+              </h2>
               {mode !== "view" && (
-                <button
-                  onClick={() => {
-                    setMode("view");
-                    setSelectedKuliahRows([]);
-                  }}
-                  className="px-2 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                <span
+                  className={`
+                  text-sm px-2 py-0.5 rounded-full
+                  ${mode === "edit" ? "bg-blue-100 text-blue-700" : ""}
+                  ${mode === "delete" ? "bg-red-100 text-red-700" : ""}
+                `}
                 >
-                  Batal
-                </button>
+                  Mode {mode === "edit" ? "Edit" : "Hapus"}
+                </span>
               )}
+            </div>
+            <div className="flex gap-2 sm:gap-3">
               <ActionButtons
                 onAdd={() => setShowKuliahForm(true)}
                 onEdit={() => {
@@ -175,6 +177,46 @@ const JadwalKuliah = () => {
             </div>
           </div>
 
+          {mode === "edit" && (
+            <div className="mb-4 p-3 sm:p-4 bg-blue-50 text-blue-700 rounded-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                <div className="flex items-center gap-2">
+                  <i className="fas fa-info-circle text-lg sm:text-base"></i>
+                  <span className="text-sm sm:text-base">
+                    Klik pada jadwal yang ingin Anda ubah
+                  </span>
+                </div>
+                <button
+                  onClick={() => setMode("view")}
+                  className="w-full sm:w-auto mt-2 sm:mt-0 py-2 sm:py-1.5 px-4 text-sm font-medium bg-white rounded-lg hover:bg-blue-50 transition-colors"
+                >
+                  Batal Ubah
+                </button>
+              </div>
+            </div>
+          )}
+          {mode === "delete" && (
+            <div className="mb-4 p-3 sm:p-4 bg-red-50 text-red-700 rounded-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                <div className="flex items-center gap-2">
+                  <i className="fas fa-info-circle text-lg sm:text-base"></i>
+                  <span className="text-sm sm:text-base">
+                    Klik pada jadwal yang ingin Anda hapus
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    setMode("view");
+                    setSelectedKuliahRows([]);
+                  }}
+                  className="w-full sm:w-auto mt-2 sm:mt-0 py-2 sm:py-1.5 px-4 text-sm font-medium bg-white rounded-lg hover:bg-red-50 transition-colors"
+                >
+                  Batal Hapus
+                </button>
+              </div>
+            </div>
+          )}
+
           {jadwalKuliah.length > 0 ? (
             <div className="overflow-x-auto -mx-3 sm:mx-0">
               <div className="inline-block min-w-full align-middle">
@@ -183,7 +225,7 @@ const JadwalKuliah = () => {
                     <thead className="bg-gray-50">
                       <tr>
                         {mode === "delete" && (
-                          <th className="px-3 py-3 sm:px-6 sm:py-4">
+                          <th scope="col" className="px-3 py-3 sm:px-6 sm:py-4">
                             <input
                               type="checkbox"
                               checked={
@@ -191,17 +233,26 @@ const JadwalKuliah = () => {
                                 jadwalKuliah.length
                               }
                               onChange={handleSelectAll}
-                              className="h-4 w-4 sm:h-4 sm:w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="h-4 w-4 rounded border-gray-300"
                             />
                           </th>
                         )}
-                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                          scope="col"
+                          className="px-3 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Hari
                         </th>
-                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                          scope="col"
+                          className="px-3 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Mata Kuliah
                         </th>
-                        <th className="px-3 py-3 sm:px-6 sm:py-4 text-left text-sm sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th
+                          scope="col"
+                          className="px-3 py-3 sm:px-6 sm:py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
                           Jam
                         </th>
                       </tr>
@@ -221,22 +272,33 @@ const JadwalKuliah = () => {
                               setIsEditing(true);
                               setEditingId(jadwal.kuliah_id);
                               setShowKuliahForm(true);
+                            } else if (mode === "delete") {
+                              handleSelectRow(jadwal.kuliah_id);
                             }
                           }}
                           className={`
-                            transition-colors text-sm sm:text-sm
+                            transition-colors text-sm sm:text-base
+                            ${
+                              mode === "edit" || mode === "delete"
+                                ? "cursor-pointer"
+                                : ""
+                            }
                             ${
                               selectedKuliahRows.includes(jadwal.kuliah_id)
-                                ? "bg-blue-50"
+                                ? "bg-red-50"
                                 : mode === "delete"
-                                ? "cursor-pointer hover:bg-gray-50"
+                                ? "hover:bg-red-50/50"
+                                : mode === "edit"
+                                ? "hover:bg-blue-50/70"
                                 : "hover:bg-gray-50"
                             }
-                            ${mode === "edit" ? "hover:bg-blue-50" : ""}
                           `}
                         >
                           {mode === "delete" && (
-                            <td className="px-3 py-3 sm:px-6 sm:py-4">
+                            <td
+                              className="px-3 py-3 sm:px-6 sm:py-4"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <input
                                 type="checkbox"
                                 checked={selectedKuliahRows.includes(
@@ -423,14 +485,16 @@ const JadwalKuliah = () => {
         />
 
         {mode === "delete" && selectedKuliahRows.length > 0 && (
-          <div className="fixed bottom-16 sm:bottom-4 right-2 sm:right-4 bg-red-500 text-white px-3 py-2 rounded-lg shadow-lg text-sm sm:text-base">
-            {selectedKuliahRows.length} jadwal dipilih
-            <button
-              onClick={handleDeleteSelected}
-              className="ml-2 bg-white text-red-500 px-2 py-1 rounded text-sm"
-            >
-              Hapus
-            </button>
+          <div className="fixed bottom-16 sm:bottom-4 left-0 right-0 sm:left-auto sm:right-4 mx-2 sm:mx-0">
+            <div className="bg-red-500 text-white px-4 py-3 sm:py-2 rounded-lg shadow-lg text-sm sm:text-base flex items-center justify-between sm:inline-flex sm:space-x-2">
+              <span>{selectedKuliahRows.length} jadwal dipilih</span>
+              <button
+                onClick={handleDeleteSelected}
+                className="bg-white text-red-500 px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-red-50 transition-colors"
+              >
+                Hapus
+              </button>
+            </div>
           </div>
         )}
       </div>

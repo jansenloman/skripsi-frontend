@@ -258,6 +258,7 @@ const JadwalMendatang = () => {
             <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
               Jadwal Mendatang
             </h2>
+
             <div className="flex justify-between sm:justify-end items-center gap-2 sm:gap-3">
               <div className="sm:order-2">
                 <ActionButtons
@@ -293,6 +294,46 @@ const JadwalMendatang = () => {
               </button>
             </div>
           </div>
+          {mode === "edit" && (
+            <div className="mb-4 p-3 sm:p-4 bg-blue-50 text-blue-700 rounded-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                <div className="flex items-center gap-2">
+                  <i className="fas fa-info-circle text-lg sm:text-base"></i>
+                  <span className="text-sm sm:text-base">
+                    Klik pada jadwal yang ingin Anda ubah
+                  </span>
+                </div>
+                <button
+                  onClick={() => setMode("view")}
+                  className="w-full sm:w-auto mt-2 sm:mt-0 py-2 sm:py-1.5 px-4 text-sm font-medium bg-white rounded-lg hover:bg-blue-50 transition-colors"
+                >
+                  Batal Ubah
+                </button>
+              </div>
+            </div>
+          )}
+
+          {mode === "delete" && (
+            <div className="mb-4 p-3 sm:p-4 bg-red-50 text-red-700 rounded-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+                <div className="flex items-center gap-2">
+                  <i className="fas fa-info-circle text-lg sm:text-base"></i>
+                  <span className="text-sm sm:text-base">
+                    Klik pada jadwal yang ingin Anda hapus
+                  </span>
+                </div>
+                <button
+                  onClick={() => {
+                    setMode("view");
+                    setSelectedMendatangRows([]);
+                  }}
+                  className="w-full sm:w-auto mt-2 sm:mt-0 py-2 sm:py-1.5 px-4 text-sm font-medium bg-white rounded-lg hover:bg-red-50 transition-colors"
+                >
+                  Batal Hapus
+                </button>
+              </div>
+            </div>
+          )}
 
           {jadwalMendatang.length > 0 ? (
             <div className="overflow-x-auto -mx-3 sm:mx-0">
@@ -341,36 +382,46 @@ const JadwalMendatang = () => {
                                 jam_mulai: jadwal.jam_mulai,
                                 jam_selesai: jadwal.jam_selesai,
                               });
-                              setEditingId(jadwal.id);
                               setIsEditing(true);
+                              setEditingId(jadwal.id);
                               setShowMendatangForm(true);
                             } else if (mode === "delete") {
                               handleSelectRow(jadwal.id);
                             }
                           }}
                           className={`
-                            transition-colors cursor-pointer
+                            transition-colors text-sm sm:text-base
                             ${
-                              mode === "delete" &&
+                              mode === "edit" || mode === "delete"
+                                ? "cursor-pointer"
+                                : ""
+                            }
+                            ${
                               selectedMendatangRows.includes(jadwal.id)
-                                ? "bg-blue-50"
+                                ? "bg-red-50"
                                 : mode === "delete"
-                                ? "cursor-pointer hover:bg-gray-50"
+                                ? "hover:bg-red-50/50"
+                                : mode === "edit"
+                                ? "hover:bg-blue-50/70"
                                 : "hover:bg-gray-50"
                             }
-                            ${mode === "edit" ? "hover:bg-blue-50" : ""}
                           `}
                         >
                           {mode === "delete" && (
-                            <td className="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap">
+                            <td
+                              className="px-3 py-3 sm:px-6 sm:py-4"
+                              onClick={(e) => e.stopPropagation()}
+                            >
                               <input
                                 type="checkbox"
                                 checked={selectedMendatangRows.includes(
                                   jadwal.id
                                 )}
-                                onChange={() => handleSelectRow(jadwal.id)}
-                                onClick={(e) => e.stopPropagation()}
-                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                onChange={(e) => {
+                                  e.stopPropagation();
+                                  handleSelectRow(jadwal.id);
+                                }}
+                                className="h-4 w-4 sm:h-4 sm:w-4 rounded border-gray-300"
                               />
                             </td>
                           )}
@@ -574,14 +625,16 @@ const JadwalMendatang = () => {
         />
 
         {mode === "delete" && selectedMendatangRows.length > 0 && (
-          <div className="fixed bottom-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
-            {selectedMendatangRows.length} jadwal dipilih
-            <button
-              onClick={handleDeleteSelected}
-              className="ml-2 bg-white text-red-500 px-2 py-1 rounded"
-            >
-              Hapus
-            </button>
+          <div className="fixed bottom-16 sm:bottom-4 left-0 right-0 sm:left-auto sm:right-4 mx-2 sm:mx-0">
+            <div className="bg-red-500 text-white px-4 py-3 sm:py-2 rounded-lg shadow-lg text-sm sm:text-base flex items-center justify-between sm:inline-flex sm:space-x-2">
+              <span>{selectedMendatangRows.length} jadwal dipilih</span>
+              <button
+                onClick={handleDeleteSelected}
+                className="bg-white text-red-500 px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-red-50 transition-colors"
+              >
+                Hapus
+              </button>
+            </div>
           </div>
         )}
       </div>

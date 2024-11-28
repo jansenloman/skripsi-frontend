@@ -181,72 +181,81 @@ const Home = () => {
         {/* Welcome & Time Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-8">
-            <div>
+            {/* Profile Section - Gunakan flex dan width full */}
+            <div className="w-full">
               {profileLoading ? (
                 <div className="h-24 flex items-center">
                   <LoadingIndicator />
                 </div>
               ) : (
-                <>
-                  <span className="text-xs sm:text-sm font-medium text-custom-blue/80 mb-1 block">
+                <div>
+                  <div className="text-sm sm:text-base text-gray-500 mb-1">
                     {getGreeting()}
-                  </span>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">
-                    {userName || userEmail} 👋
-                  </h1>
-                  <div className="flex items-center text-sm sm:text-base text-gray-600">
-                    <i className="far fa-calendar-alt text-custom-blue/70 mr-2"></i>
+                  </div>
+                  {userName ? (
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 truncate w-full">
+                      {userName} 👋
+                    </h1>
+                  ) : (
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 truncate w-full">
+                      {userEmail} 👋
+                    </h1>
+                  )}
+                  <div className="text-sm sm:text-base text-gray-500">
                     {formatDate(currentTime)}
                   </div>
-                </>
+                </div>
               )}
             </div>
 
-            {/* Clock Container */}
-            <div className="clock-container bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm relative w-full sm:w-auto sm:min-w-[280px]">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-custom-blue/20 to-purple-400/20 rounded-t-2xl"></div>
+            {/* Time Section */}
+            <div className="text-center">
+              {/* Clock Container */}
+              <div className="clock-container bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm relative w-full sm:w-auto sm:min-w-[280px]">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-custom-blue/20 to-purple-400/20 rounded-t-2xl"></div>
 
-              <div className="flex flex-col items-center">
-                {/* Digital Clock Display */}
-                <div className="flex items-center space-x-2">
-                  {/* Hours */}
-                  <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100">
-                    <span className="text-4xl font-bold text-gray-800 font-mono">
-                      {currentTime.getHours().toString().padStart(2, "0")}
+                <div className="flex flex-col items-center">
+                  {/* Digital Clock Display */}
+                  <div className="flex items-center space-x-2">
+                    {/* Hours */}
+                    <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100">
+                      <span className="text-4xl font-bold text-gray-800 font-mono">
+                        {currentTime.getHours().toString().padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    {/* Separator */}
+                    <div className="text-3xl font-bold text-custom-blue animate-pulse">
+                      :
+                    </div>
+
+                    {/* Minutes */}
+                    <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100">
+                      <span className="text-4xl font-bold text-gray-800 font-mono">
+                        {currentTime.getMinutes().toString().padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    {/* Separator */}
+                    <div className="text-3xl font-bold text-custom-blue animate-pulse">
+                      :
+                    </div>
+
+                    {/* Seconds */}
+                    <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100">
+                      <span className="text-4xl font-bold text-custom-blue/90 font-mono">
+                        {currentTime.getSeconds().toString().padStart(2, "0")}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Time Zone */}
+                  <div className="mt-3 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-xs font-medium text-gray-500">
+                      Waktu Indonesia Barat
                     </span>
                   </div>
-
-                  {/* Separator */}
-                  <div className="text-3xl font-bold text-custom-blue animate-pulse">
-                    :
-                  </div>
-
-                  {/* Minutes */}
-                  <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100">
-                    <span className="text-4xl font-bold text-gray-800 font-mono">
-                      {currentTime.getMinutes().toString().padStart(2, "0")}
-                    </span>
-                  </div>
-
-                  {/* Separator */}
-                  <div className="text-3xl font-bold text-custom-blue animate-pulse">
-                    :
-                  </div>
-
-                  {/* Seconds */}
-                  <div className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-100">
-                    <span className="text-4xl font-bold text-custom-blue/90 font-mono">
-                      {currentTime.getSeconds().toString().padStart(2, "0")}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Time Zone */}
-                <div className="mt-3 flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <span className="text-xs font-medium text-gray-500">
-                    Waktu Indonesia Barat
-                  </span>
                 </div>
               </div>
             </div>
@@ -254,9 +263,9 @@ const Home = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
-          {/* Left Column */}
-          <div className="space-y-4 sm:space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
+          {/* Left Column - Upcoming Schedule */}
+          <div className="lg:col-span-2">
             {/* Today's Upcoming */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
               <div className="flex items-center justify-between mb-4 sm:mb-6">

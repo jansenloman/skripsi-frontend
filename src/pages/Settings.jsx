@@ -175,7 +175,7 @@ const Settings = () => {
                       onChange={(e) =>
                         setSettings({ ...settings, wake_time: e.target.value })
                       }
-                      className="mt-1 block w-full p-2 sm:p-2.5 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 [appearance:textfield] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-time-picker-indicator]:hidden"
                     />
                   </div>
                   <div>
@@ -188,7 +188,7 @@ const Settings = () => {
                       onChange={(e) =>
                         setSettings({ ...settings, sleep_time: e.target.value })
                       }
-                      className="mt-1 block w-full p-2 sm:p-2.5 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 [appearance:textfield] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-time-picker-indicator]:hidden"
                     />
                   </div>
                 </div>
@@ -219,7 +219,7 @@ const Settings = () => {
                             breakfast_time: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full p-2 sm:p-2.5 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 [appearance:textfield] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-time-picker-indicator]:hidden"
                       />
                     </div>
                     <div>
@@ -257,7 +257,7 @@ const Settings = () => {
                             lunch_time: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full p-2 sm:p-2.5 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 [appearance:textfield] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-time-picker-indicator]:hidden"
                       />
                     </div>
                     <div>
@@ -295,7 +295,7 @@ const Settings = () => {
                             dinner_time: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full p-2 sm:p-2.5 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 [appearance:textfield] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-time-picker-indicator]:hidden"
                       />
                     </div>
                     <div>
@@ -345,7 +345,7 @@ const Settings = () => {
                             rest_time: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full p-2 sm:p-2.5 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 [appearance:textfield] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-time-picker-indicator]:hidden"
                       />
                     </div>
                     <div>
@@ -383,7 +383,7 @@ const Settings = () => {
                             productive_time_start: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full p-2 sm:p-2.5 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 [appearance:textfield] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-time-picker-indicator]:hidden"
                       />
                     </div>
                     <div>
@@ -399,7 +399,7 @@ const Settings = () => {
                             productive_time_end: e.target.value,
                           })
                         }
-                        className="mt-1 block w-full p-2 sm:p-2.5 text-sm rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 [appearance:textfield] [&::-webkit-datetime-edit-fields-wrapper]:p-0 [&::-webkit-time-picker-indicator]:hidden"
                       />
                     </div>
                   </div>

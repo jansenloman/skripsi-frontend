@@ -242,51 +242,6 @@ const RegisterPassword = () => {
                   </p>
                 </div>
               </div>
-
-              {/* Mobile Password Tips */}
-              <div className="mt-6 space-y-4 lg:hidden px-2">
-                <div className="flex items-center p-3 bg-white/80 rounded-xl border border-gray-100">
-                  <div className="w-8 h-8 bg-custom-blue/10 rounded-lg flex items-center justify-center mr-3">
-                    <i className="fas fa-key text-custom-blue text-sm"></i>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-800">
-                      Minimal 8 Karakter
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      Password harus minimal 8 karakter
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center p-3 bg-white/80 rounded-xl border border-gray-100">
-                  <div className="w-8 h-8 bg-custom-blue/10 rounded-lg flex items-center justify-center mr-3">
-                    <i className="fas fa-dice-d20 text-custom-blue text-sm"></i>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-800">
-                      Kombinasi
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      Gunakan huruf dan angka
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center p-3 bg-white/80 rounded-xl border border-gray-100">
-                  <div className="w-8 h-8 bg-custom-blue/10 rounded-lg flex items-center justify-center mr-3">
-                    <i className="fas fa-shield-alt text-custom-blue text-sm"></i>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-800">
-                      Karakter Khusus
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      Tambahkan simbol untuk keamanan
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

@@ -98,3 +98,21 @@ body {
 .animate-custom-spin {
   animation: custom-spin 1.5s linear infinite;
 }
+
+/* Untuk memaksa tampilan textfield di Android */
+input[type="time"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Menyembunyikan icon picker native */
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-time-picker-indicator {
+  display: none;
+}
+
+/* Menyesuaikan padding text */
+input[type="time"]::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}

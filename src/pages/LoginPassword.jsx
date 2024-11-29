@@ -115,19 +115,19 @@ const LoginPassword = () => {
                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-xl">
                     <i className="fas fa-shield-alt text-xs"></i>
                   </div>
-                  <span className="text-white/80">End-to-end Encryption</span>
+                  <span className="text-white/80">Enkripsi Akhir-ke-akhir</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-xl">
                     <i className="fas fa-fingerprint text-xs"></i>
                   </div>
-                  <span className="text-white/80">Secure Authentication</span>
+                  <span className="text-white/80">Autentikasi Aman</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-xl">
                     <i className="fas fa-user-shield text-xs"></i>
                   </div>
-                  <span className="text-white/80">Privacy Protected</span>
+                  <span className="text-white/80">Privasi Terlindungi</span>
                 </div>
               </div>
             </div>
@@ -185,7 +185,7 @@ const LoginPassword = () => {
                     {isLoading ? (
                       <span className="flex items-center justify-center">
                         <i className="fas fa-circle-notch fa-spin mr-2"></i>
-                        Processing...
+                        Memproses...
                       </span>
                     ) : (
                       "Login"

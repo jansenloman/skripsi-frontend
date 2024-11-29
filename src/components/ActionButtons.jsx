@@ -1,6 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 
-const ActionButtons = ({ onAdd, onEdit, onDelete, disabled }) => {
+const ActionButtons = ({
+  onAdd,
+  onEdit,
+  onDelete,
+  disabled,
+  editDisabled,
+  deleteDisabled,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -78,10 +85,20 @@ const ActionButtons = ({ onAdd, onEdit, onDelete, disabled }) => {
                 onEdit();
                 setIsOpen(false);
               }}
-              className="group flex w-full items-center px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              disabled={editDisabled}
+              className={`group flex w-full items-center px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm transition-colors
+                ${
+                  editDisabled
+                    ? "text-gray-400 cursor-not-allowed hover:bg-white"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
             >
               <svg
-                className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-blue-500"
+                className={`mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 ${
+                  editDisabled
+                    ? "text-gray-300"
+                    : "text-gray-400 group-hover:text-blue-500"
+                }`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -100,10 +117,20 @@ const ActionButtons = ({ onAdd, onEdit, onDelete, disabled }) => {
                 onDelete();
                 setIsOpen(false);
               }}
-              className="group flex w-full items-center px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              disabled={deleteDisabled}
+              className={`group flex w-full items-center px-3 py-2 md:px-4 md:py-3 text-xs md:text-sm transition-colors
+                ${
+                  deleteDisabled
+                    ? "text-gray-400 cursor-not-allowed hover:bg-white"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
             >
               <svg
-                className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-gray-400 group-hover:text-red-500"
+                className={`mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 ${
+                  deleteDisabled
+                    ? "text-gray-300"
+                    : "text-gray-400 group-hover:text-red-500"
+                }`}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

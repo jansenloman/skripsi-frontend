@@ -7,6 +7,7 @@ import {
 } from "../components/LoadingIndicator";
 import { fetchWithAuth } from "../utils/api";
 import { API_BASE_URL } from "../utils/constants";
+import TutorialModal from "../components/TutorialModal";
 
 const Home = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -26,6 +27,20 @@ const Home = () => {
   const [classesLoading, setClassesLoading] = useState(true);
   const [upcomingLoading, setUpcomingLoading] = useState(true);
   const [futureLoading, setFutureLoading] = useState(true);
+
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  // Tambahkan useEffect untuk mengecek apakah ini pertama kali user mengakses dashboard
+  useEffect(() => {
+    const isFirstVisit = !localStorage.getItem("tutorialShown");
+    const isNewUser = localStorage.getItem("isNewUser") === "true";
+
+    if (isFirstVisit && isNewUser) {
+      setShowTutorial(true);
+      localStorage.setItem("tutorialShown", "true");
+      localStorage.removeItem("isNewUser"); // Hapus flag new user
+    }
+  }, []);
 
   // Pisahkan fetch data menjadi beberapa useEffect terpisah
   useEffect(() => {
@@ -177,6 +192,56 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
+      {/* Tutorial Modal */}
+      <TutorialModal
+        isOpen={showTutorial}
+        onClose={() => setShowTutorial(false)}
+        slides={[
+          {
+            icon: (
+              <i className="fas fa-calendar-check text-4xl text-custom-blue"></i>
+            ),
+            title: "Selamat Datang di AI Scheduler!",
+            description:
+              "Aplikasi ini membantu Anda membuat jadwal mingguan yang terorganisir dan personal. Mari mulai dengan mengenal fitur-fitur utamanya!",
+          },
+          {
+            icon: <i className="fas fa-user text-4xl text-custom-blue"></i>,
+            title: "Langkah 1: Profil & Pengaturan",
+            description:
+              "Lengkapi profil dan pengaturan Anda di menu 'Profile'. Tentukan waktu produktif dan preferensi belajar untuk jadwal yang lebih personal (opsional).",
+          },
+          {
+            icon: (
+              <i className="fas fa-calendar-alt text-4xl text-custom-blue"></i>
+            ),
+            title: "Langkah 2: Input Jadwal Kuliah",
+            description:
+              "Klik menu 'Jadwal Kuliah' untuk memasukkan jadwal perkuliahan Anda. Ini akan menjadi dasar utama pembuatan jadwal mingguan Anda.",
+          },
+          {
+            icon: (
+              <i className="fas fa-calendar-check text-4xl text-custom-blue"></i>
+            ),
+            title: "Langkah 3: Jadwal Mendatang",
+            description:
+              "Di menu 'Jadwal Mendatang', tambahkan kegiatan-kegiatan penting seperti ujian, deadline tugas, atau kegiatan kampus lainnya, atau bisa juga kegiatan pribadi seperti janji temu, acara, dan lainnya.",
+          },
+          {
+            icon: <i className="fas fa-list-alt text-4xl text-custom-blue"></i>,
+            title: "Langkah 4: Generate Jadwal",
+            description:
+              "Untuk membuat jadwal pergi ke Jadwal Mingguan dan klik 'Buat Jadwal Mingguan' untuk membuat jadwal mingguan. AI akan menganalisis semua data Anda (jadwal kuliah, jadwal mendatang, profil, dan pengaturan) untuk membuat jadwal yang optimal.",
+          },
+          {
+            icon: <i className="fas fa-home text-4xl text-custom-blue"></i>,
+            title: "Siap Digunakan!",
+            description:
+              "Dashboard ini akan menampilkan jadwal harian Anda. Mulailah dengan mengisi jadwal kuliah untuk hasil terbaik. Selamat menggunakan AI Scheduler!",
+          },
+        ]}
+      />
+
       <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
         {/* Welcome & Time Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-8">

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import TutorialModal from "../components/TutorialModal";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -103,6 +105,15 @@ const Navbar = () => {
                 <div className="nav-link-indicator"></div>
               </Link>
 
+              {/* Help Button - Add before user menu */}
+              <button
+                onClick={() => setShowTutorial(true)}
+                className="p-2 lg:p-2.5 rounded-lg text-gray-600 hover:bg-gray-50 transition-all duration-200 flex items-center space-x-1 group"
+                title="Bantuan"
+              >
+                <i className="fas fa-question-circle text-lg lg:text-xl group-hover:text-custom-blue"></i>
+              </button>
+
               {/* User Menu Dropdown*/}
               <div className="relative ml-1 lg:ml-2">
                 <button
@@ -143,7 +154,16 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="md:hidden">
+            <div className="md:hidden flex items-center space-x-2">
+              {/* Help Button for Mobile */}
+              <button
+                onClick={() => setShowTutorial(true)}
+                className="p-2 rounded-lg text-gray-600 hover:bg-gray-50"
+                title="Bantuan"
+              >
+                <i className="fas fa-question-circle text-xl"></i>
+              </button>
+
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2 rounded-lg text-gray-600 hover:bg-gray-50"
@@ -231,6 +251,56 @@ const Navbar = () => {
         )}
       </nav>
       <div className="h-16"></div>
+
+      {/* Tutorial Modal */}
+      <TutorialModal
+        isOpen={showTutorial}
+        onClose={() => setShowTutorial(false)}
+        slides={[
+          {
+            icon: (
+              <i className="fas fa-calendar-check text-4xl text-custom-blue"></i>
+            ),
+            title: "Selamat Datang di AI Scheduler!",
+            description:
+              "Aplikasi ini membantu Anda membuat jadwal mingguan yang terorganisir dan personal. Mari mulai dengan mengenal fitur-fitur utamanya!",
+          },
+          {
+            icon: <i className="fas fa-user text-4xl text-custom-blue"></i>,
+            title: "Langkah 1: Profil & Pengaturan",
+            description:
+              "Lengkapi profil dan pengaturan Anda di menu 'Profile'. Tentukan waktu produktif dan preferensi belajar untuk jadwal yang lebih personal (opsional).",
+          },
+          {
+            icon: (
+              <i className="fas fa-calendar-alt text-4xl text-custom-blue"></i>
+            ),
+            title: "Langkah 2: Input Jadwal Kuliah",
+            description:
+              "Klik menu 'Jadwal Kuliah' untuk memasukkan jadwal perkuliahan Anda. Ini akan menjadi dasar utama pembuatan jadwal mingguan Anda.",
+          },
+          {
+            icon: (
+              <i className="fas fa-calendar-check text-4xl text-custom-blue"></i>
+            ),
+            title: "Langkah 3: Jadwal Mendatang",
+            description:
+              "Di menu 'Jadwal Mendatang', tambahkan kegiatan-kegiatan penting seperti ujian, deadline tugas, atau kegiatan kampus lainnya, atau bisa juga kegiatan pribadi seperti janji temu, acara, dan lainnya.",
+          },
+          {
+            icon: <i className="fas fa-list-alt text-4xl text-custom-blue"></i>,
+            title: "Langkah 4: Generate Jadwal",
+            description:
+              "Untuk membuat jadwal pergi ke Jadwal Mingguan dan klik 'Buat Jadwal Mingguan' untuk membuat jadwal mingguan. AI akan menganalisis semua data Anda (jadwal kuliah, jadwal mendatang, profil, dan pengaturan) untuk membuat jadwal yang optimal.",
+          },
+          {
+            icon: <i className="fas fa-home text-4xl text-custom-blue"></i>,
+            title: "Siap Digunakan!",
+            description:
+              "Dashboard ini akan menampilkan jadwal harian Anda. Mulailah dengan mengisi jadwal kuliah untuk hasil terbaik. Selamat menggunakan AI Scheduler!",
+          },
+        ]}
+      />
     </>
   );
 };

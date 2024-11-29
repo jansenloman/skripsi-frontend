@@ -173,6 +173,8 @@ const JadwalKuliah = () => {
                   setMode("delete");
                   setSelectedKuliahRows([]);
                 }}
+                editDisabled={jadwalKuliah.length === 0}
+                deleteDisabled={jadwalKuliah.length === 0}
               />
             </div>
           </div>

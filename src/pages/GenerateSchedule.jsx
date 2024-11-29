@@ -188,7 +188,7 @@ const GenerateSchedule = () => {
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">
-                  Masukkan Jadwal Yang Diinginkan
+                  Atur Jadwal Sesuai Keinginan Anda
                 </label>
                 <textarea
                   value={formData.input}
@@ -197,7 +197,14 @@ const GenerateSchedule = () => {
                   }
                   rows={6}
                   className="w-full p-3 sm:p-4 text-sm sm:text-base text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-custom-blue/20 focus:border-custom-blue transition-all duration-200"
-                  placeholder="Contoh: Saya ingin membuat jadwal belajar untuk persiapan ujian akhir semester..."
+                  placeholder="Jelaskan jadwal yang Anda inginkan. Contoh:
+-  Saya ingin belajar Matematika setiap Senin & Rabu jam 9 pagi
+- Tolong kosongkan jadwal Jumat sore untuk kegiatan organisasi
+- Saya ingin mengubah jadwal kuliah Basis Data ke Selasa sore
+- Saya butuh waktu belajar 2 jam setiap pagi sebelum kuliah
+- Tambahkan jadwal kerja kelompok Sabtu jam 3 sore
+- Ubah jadwal praktikum yang tadinya Rabu jadi Kamis
+Jadwal tidak hanya berupa poin, tapi bisa berupa paragraf, jadwal yang diisikan boleh secara acak, tidak harus berurutan"
                   required
                 />
               </div>
@@ -213,7 +220,13 @@ const GenerateSchedule = () => {
                   }
                   rows={4}
                   className="w-full p-3 sm:p-4 text-sm sm:text-base text-gray-700 border border-gray-200 rounded-lg focus:ring-2 focus:ring-custom-blue/20 focus:border-custom-blue transition-all duration-200"
-                  placeholder="Tambahan informasi atau preferensi khusus..."
+                  placeholder="Tambahkan informasi tambahan seperti:
+- Deadline tugas (Contoh: Tugas Matematika deadline Jumat)
+- Preferensi waktu belajar (Contoh: Lebih suka belajar pagi)
+- Kegiatan rutin (Contoh: Les bahasa Inggris Selasa & Kamis)
+- Target belajar (Contoh: Fokus ke materi UTS minggu depan)
+- Waktu istirahat (Contoh: Butuh break setiap 2 jam)
+- Catatan khusus (Contoh: Senin ada kelas tambahan)"
                 />
               </div>
 

@@ -271,11 +271,26 @@ const JadwalMendatang = () => {
                     setMode("delete");
                     setSelectedMendatangRows([]);
                   }}
+                  editDisabled={jadwalMendatang.length === 0}
+                  deleteDisabled={jadwalMendatang.length === 0}
                 />
               </div>
               <button
                 onClick={() => navigate("/jadwal-mendatang-history")}
-                className="inline-flex items-center px-2 py-1.5 md:px-4 md:py-2.5 text-xs md:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 sm:order-1"
+                className={`
+                  inline-flex items-center px-2 py-1.5 md:px-4 md:py-2.5 
+                  text-xs md:text-sm font-medium text-gray-700 
+                  bg-white border border-gray-300 rounded-lg shadow-sm 
+                  hover:bg-gray-50 focus:outline-none focus:ring-2 
+                  focus:ring-offset-2 focus:ring-blue-500 
+                  transition-all duration-200 sm:order-1
+                  ${
+                    jadwalMendatang.length === 0
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }
+                `}
+                disabled={jadwalMendatang.length === 0}
               >
                 <svg
                   className="w-3 h-3 md:w-4 md:h-4 mr-1.5 md:mr-2"

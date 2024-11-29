@@ -64,6 +64,10 @@ const RegisterPassword = () => {
 
       // Redirect to verification pending page
       navigate("/verification-pending");
+
+      if (response.ok) {
+        localStorage.setItem("isNewUser", "true");
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -142,7 +146,7 @@ const RegisterPassword = () => {
               <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
                 <div className="text-center mb-6">
                   <h2 className="text-xl font-bold text-gray-800 mb-2">
-                    Register
+                    Daftar
                   </h2>
                   <p className="text-gray-500 text-sm">
                     Pendaftaran untuk: {email}
@@ -226,7 +230,7 @@ const RegisterPassword = () => {
                     {isLoading ? (
                       <span className="flex items-center justify-center">
                         <i className="fas fa-circle-notch fa-spin mr-2"></i>
-                        Processing...
+                        Memproses...
                       </span>
                     ) : (
                       "Buat Akun"

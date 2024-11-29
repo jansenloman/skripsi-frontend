@@ -134,9 +134,11 @@ const Login = () => {
               <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                    Login
+                    Masuk atau Daftar
                   </h2>
-                  <p className="text-gray-500 text-base">Masuk ke akun Anda</p>
+                  <p className="text-gray-500 text-base">
+                    Silahkan masukkan email Anda untuk melanjutkan
+                  </p>
                 </div>
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
@@ -152,7 +154,7 @@ const Login = () => {
                       htmlFor="email"
                       className="block text-base font-medium text-gray-700"
                     >
-                      Email Address
+                      Email
                     </label>
                     <div className="relative">
                       <input
@@ -180,7 +182,7 @@ const Login = () => {
                     {isLoading ? (
                       <span className="flex items-center justify-center">
                         <i className="fas fa-circle-notch fa-spin mr-2"></i>
-                        Processing...
+                        Memproses...
                       </span>
                     ) : (
                       "Lanjutkan"
@@ -205,13 +207,13 @@ const Login = () => {
           isOpen={showModal}
           onClose={() => setShowModal(false)}
           title="Email Belum terdaftar"
-          message="Email yang Anda masukkan belum terdaftar dalam sistem kami."
+          message='Email yang Anda masukkan belum terdaftar dalam sistem kami. Silahkan tekan tombol "Daftar" untuk melanjutkan'
           actionButton={
             <button
               onClick={handleRegister}
               className="bg-gradient-to-r from-custom-blue to-blue-600 text-white px-6 py-2.5 rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 text-sm font-medium"
             >
-              Registrasi
+              Daftar
             </button>
           }
         />

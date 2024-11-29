@@ -261,43 +261,43 @@ const Navbar = () => {
             icon: (
               <i className="fas fa-calendar-check text-4xl text-custom-blue"></i>
             ),
-            title: "Selamat Datang di AI Scheduler!",
+            title: "Hai! Selamat datang di AI Scheduler! 👋",
             description:
-              "Aplikasi ini membantu Anda membuat jadwal mingguan yang terorganisir dan personal. Mari mulai dengan mengenal fitur-fitur utamanya!",
+              "Aku akan membantumu membuat jadwal mingguan yang terorganisir dan personal. Yuk, aku kenalkan fitur-fitur utamaku!",
           },
           {
             icon: <i className="fas fa-user text-4xl text-custom-blue"></i>,
-            title: "Langkah 1: Profil & Pengaturan",
+            title: "Pertama, ayo lengkapi profilmu!",
             description:
-              "Lengkapi profil dan pengaturan Anda di menu 'Profile'. Tentukan waktu produktif dan preferensi belajar untuk jadwal yang lebih personal (opsional).",
+              "Kamu bisa mengatur profil dan preferensimu di menu 'Profile'. Beritahu aku kapan waktu produktifmu dan bagaimana cara belajar yang kamu suka, agar aku bisa menyesuaikan jadwalmu (ini opsional kok!)",
           },
           {
             icon: (
               <i className="fas fa-calendar-alt text-4xl text-custom-blue"></i>
             ),
-            title: "Langkah 2: Input Jadwal Kuliah",
+            title: "Selanjutnya, kasih tau jadwal kuliahmu",
             description:
-              "Klik menu 'Jadwal Kuliah' untuk memasukkan jadwal perkuliahan Anda. Ini akan menjadi dasar utama pembuatan jadwal mingguan Anda.",
+              "Klik menu 'Jadwal Kuliah' ya untuk memasukkan jadwal perkuliahanmu. Ini penting banget karena akan jadi dasar utama dalam pembuatan jadwal mingguanmu nanti.",
           },
           {
             icon: (
               <i className="fas fa-calendar-check text-4xl text-custom-blue"></i>
             ),
-            title: "Langkah 3: Jadwal Mendatang",
+            title: "Jangan lupa jadwal lainnya!",
             description:
-              "Di menu 'Jadwal Mendatang', tambahkan kegiatan-kegiatan penting seperti ujian, deadline tugas, atau kegiatan kampus lainnya, atau bisa juga kegiatan pribadi seperti janji temu, acara, dan lainnya.",
+              "Di menu 'Jadwal Mendatang', kamu bisa tambahkan kegiatan penting lainnya seperti deadline tugas, ujian, janji temu, atau acara lainnya. Aku akan memastikan kamu tidak melewatkan satu pun!",
           },
           {
             icon: <i className="fas fa-list-alt text-4xl text-custom-blue"></i>,
-            title: "Langkah 4: Generate Jadwal",
+            title: "Biar aku yang atur jadwalmu",
             description:
-              "Untuk membuat jadwal pergi ke Jadwal Mingguan dan klik 'Buat Jadwal Mingguan' untuk membuat jadwal mingguan. AI akan menganalisis semua data Anda (jadwal kuliah, jadwal mendatang, profil, dan pengaturan) untuk membuat jadwal yang optimal.",
+              "Setelah semua siap, kamu bisa ke menu 'Jadwal Mingguan' dan klik 'Buat Jadwal Mingguan'. Aku akan menganalisis semua datamu dan membuatkan jadwal yang paling optimal untukmu!",
           },
           {
             icon: <i className="fas fa-home text-4xl text-custom-blue"></i>,
-            title: "Siap Digunakan!",
+            title: "Kamu siap mulai! 🎉",
             description:
-              "Dashboard ini akan menampilkan jadwal harian Anda. Mulailah dengan mengisi jadwal kuliah untuk hasil terbaik. Selamat menggunakan AI Scheduler!",
+              "Dashboard ini akan jadi tempat kamu melihat jadwal harianmu. Untuk hasil terbaik, mulai dengan mengisi jadwal kuliahmu dulu ya! Semangat menggunakan AI Scheduler!",
           },
         ]}
       />

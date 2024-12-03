@@ -16,12 +16,10 @@ const Home = () => {
   const [currentQuote, setCurrentQuote] = useState("");
   const navigate = useNavigate();
 
-
   const [todayClasses, setTodayClasses] = useState([]);
   const [tomorrowClasses, setTomorrowClasses] = useState([]);
   const [todayUpcomingSchedules, setTodayUpcomingSchedules] = useState([]);
   const [futureEvents, setFutureEvents] = useState([]);
-
 
   const [profileLoading, setProfileLoading] = useState(true);
   const [classesLoading, setClassesLoading] = useState(true);
@@ -39,11 +37,10 @@ const Home = () => {
     if (isFirstVisit && isNewUser) {
       setShowTutorial(true);
       localStorage.setItem("tutorialShown", "true");
-      localStorage.removeItem("isNewUser"); 
+      localStorage.removeItem("isNewUser");
     }
   }, []);
 
- 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -144,7 +141,6 @@ const Home = () => {
     fetchFuture();
   }, []);
 
-
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -234,45 +230,45 @@ const Home = () => {
     "Setiap kotak dalam jadwal adalah langkah menuju tujuan besar.",
     "Menghargai jadwal adalah cara terbaik untuk menghargai waktu.",
     "Jadwal adalah kompas yang membimbing kita melalui kesibukan sehari-hari.",
-  "Kesuksesan dimulai dari jadwal yang terencana dengan baik.",
-  "Setiap jadwal adalah peluang untuk mengelola waktu lebih bijaksana.",
-  "Jadwal bukanlah penghalang kebebasan, melainkan cara untuk menciptakan ruang bagi apa yang penting.",
-  "Tanpa jadwal, kamu berjalan tanpa arah dalam lautan waktu.",
-  "Jadwal membantu kamu berkata 'ya' pada hal yang penting dan 'tidak' pada hal yang tidak.",
-  "Disiplin dalam jadwal membentuk karakter dan kebiasaan yang produktif.",
-  "Jangan menunggu waktu yang tepat; buat jadwal dan mulailah sekarang.",
-  "Jadwal memberi struktur pada hari-harimu yang penuh peluang.",
-  "Hal kecil yang dilakukan secara konsisten dalam jadwal membawa hasil besar.",
-  "Dengan jadwal, tugas besar bisa dipecah menjadi langkah-langkah kecil yang mudah dikelola.",
-  "Jadwal adalah investasi kecil untuk keuntungan besar di masa depan.",
-  "Kesibukan yang terorganisir melalui jadwal menciptakan kepuasan dalam pekerjaan.",
-  "Jangan takut merombak jadwal, selama itu membuatmu lebih produktif.",
-  "Sebuah jadwal yang efisien memungkinkan kamu memiliki waktu untuk bekerja dan menikmati hidup.",
-  "Jadwal adalah penolong terbaik untuk menghindari penundaan.",
-  "Setiap jadwal yang baik dimulai dari niat untuk menjadi lebih baik setiap hari.",
-  "Jadwal bukan tentang mengisi waktu, tapi tentang memanfaatkannya dengan bijak.",
-  "Tepati jadwalmu, karena itu adalah janji kepada dirimu sendiri.",
-  "Hari yang sukses dimulai dari pagi yang terencana dengan baik.",
-  "Jadwal yang baik adalah alat untuk mengubah waktu menjadi pencapaian.",
-  "Setiap menit dalam jadwal adalah peluang untuk membuat hari lebih bermakna.",
-  "Jangan biarkan hari berlalu tanpa rencana, jadwal adalah langkah pertama menuju produktivitas.",
-  "Jadwal tidak hanya mengatur waktu, tetapi juga mengatur hidupmu.",
-  "Disiplin terhadap jadwal adalah langkah kecil menuju tujuan besar.",
-  "Jadwal yang jelas membantu kamu tetap fokus di tengah gangguan.",
-  "Setiap hari yang direncanakan dengan baik adalah kemenangan kecil.",
-  "Jadwal adalah kunci untuk menjaga keseimbangan antara kerja dan istirahat.",
-  "Rencana tanpa jadwal adalah seperti peta tanpa arah.",
-  "Jadwal yang fleksibel namun terstruktur adalah kombinasi yang sempurna.",
-  "Jangan menunggu inspirasi; biarkan jadwalmu menjadi sumber motivasi.",
-  "Jadwal adalah alat untuk mengubah kebiasaan buruk menjadi kebiasaan baik.",
-  "Dengan jadwal, kamu tahu kapan harus berhenti dan kapan harus mulai lagi.",
-  "Jadwal membantu kamu mencapai lebih banyak dengan usaha yang lebih sedikit.",
-  "Rutin yang konsisten dimulai dari jadwal yang baik.",
-  "Setiap jadwal adalah peluang untuk memperbaiki diri dari hari kemarin.",
-  "Jadwal adalah teman terbaik bagi mereka yang ingin mencapai sesuatu.",
-  "Fleksibilitas jadwal memberi ruang untuk hal-hal yang tidak terduga.",
-  "Menjaga jadwal adalah tanda hormat terhadap waktu dan tujuan hidupmu.",
-  "Waktu terbaik untuk memulai adalah sekarang, jadwal terbaik adalah yang kamu buat hari ini."
+    "Kesuksesan dimulai dari jadwal yang terencana dengan baik.",
+    "Setiap jadwal adalah peluang untuk mengelola waktu lebih bijaksana.",
+    "Jadwal bukanlah penghalang kebebasan, melainkan cara untuk menciptakan ruang bagi apa yang penting.",
+    "Tanpa jadwal, kamu berjalan tanpa arah dalam lautan waktu.",
+    "Jadwal membantu kamu berkata 'ya' pada hal yang penting dan 'tidak' pada hal yang tidak.",
+    "Disiplin dalam jadwal membentuk karakter dan kebiasaan yang produktif.",
+    "Jangan menunggu waktu yang tepat; buat jadwal dan mulailah sekarang.",
+    "Jadwal memberi struktur pada hari-harimu yang penuh peluang.",
+    "Hal kecil yang dilakukan secara konsisten dalam jadwal membawa hasil besar.",
+    "Dengan jadwal, tugas besar bisa dipecah menjadi langkah-langkah kecil yang mudah dikelola.",
+    "Jadwal adalah investasi kecil untuk keuntungan besar di masa depan.",
+    "Kesibukan yang terorganisir melalui jadwal menciptakan kepuasan dalam pekerjaan.",
+    "Jangan takut merombak jadwal, selama itu membuatmu lebih produktif.",
+    "Sebuah jadwal yang efisien memungkinkan kamu memiliki waktu untuk bekerja dan menikmati hidup.",
+    "Jadwal adalah penolong terbaik untuk menghindari penundaan.",
+    "Setiap jadwal yang baik dimulai dari niat untuk menjadi lebih baik setiap hari.",
+    "Jadwal bukan tentang mengisi waktu, tapi tentang memanfaatkannya dengan bijak.",
+    "Tepati jadwalmu, karena itu adalah janji kepada dirimu sendiri.",
+    "Hari yang sukses dimulai dari pagi yang terencana dengan baik.",
+    "Jadwal yang baik adalah alat untuk mengubah waktu menjadi pencapaian.",
+    "Setiap menit dalam jadwal adalah peluang untuk membuat hari lebih bermakna.",
+    "Jangan biarkan hari berlalu tanpa rencana, jadwal adalah langkah pertama menuju produktivitas.",
+    "Jadwal tidak hanya mengatur waktu, tetapi juga mengatur hidupmu.",
+    "Disiplin terhadap jadwal adalah langkah kecil menuju tujuan besar.",
+    "Jadwal yang jelas membantu kamu tetap fokus di tengah gangguan.",
+    "Setiap hari yang direncanakan dengan baik adalah kemenangan kecil.",
+    "Jadwal adalah kunci untuk menjaga keseimbangan antara kerja dan istirahat.",
+    "Rencana tanpa jadwal adalah seperti peta tanpa arah.",
+    "Jadwal yang fleksibel namun terstruktur adalah kombinasi yang sempurna.",
+    "Jangan menunggu inspirasi; biarkan jadwalmu menjadi sumber motivasi.",
+    "Jadwal adalah alat untuk mengubah kebiasaan buruk menjadi kebiasaan baik.",
+    "Dengan jadwal, kamu tahu kapan harus berhenti dan kapan harus mulai lagi.",
+    "Jadwal membantu kamu mencapai lebih banyak dengan usaha yang lebih sedikit.",
+    "Rutin yang konsisten dimulai dari jadwal yang baik.",
+    "Setiap jadwal adalah peluang untuk memperbaiki diri dari hari kemarin.",
+    "Jadwal adalah teman terbaik bagi mereka yang ingin mencapai sesuatu.",
+    "Fleksibilitas jadwal memberi ruang untuk hal-hal yang tidak terduga.",
+    "Menjaga jadwal adalah tanda hormat terhadap waktu dan tujuan hidupmu.",
+    "Waktu terbaik untuk memulai adalah sekarang, jadwal terbaik adalah yang kamu buat hari ini.",
   ];
 
   useEffect(() => {
@@ -328,8 +324,10 @@ const Home = () => {
   const iconBoxStyle = "p-2 sm:p-2.5 bg-custom-blue/10 rounded-xl";
   const iconStyle = "text-custom-blue text-base sm:text-lg";
   const titleStyle = "text-lg sm:text-xl font-semibold text-gray-800";
-  const linkStyle = "text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200 flex items-center space-x-1";
-  const scheduleCardStyle = "p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-100/80";
+  const linkStyle =
+    "text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200 flex items-center space-x-1";
+  const scheduleCardStyle =
+    "p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-100/80";
 
   // Komponen EmptyState yang konsisten
   const EmptyState = ({ message }) => (
@@ -487,10 +485,11 @@ const Home = () => {
               Jadwal Akademik Terdekat
             </h2>
             <button
-              onClick={() => navigate('/jadwal-akademik')}
-              className="text-sm text-gray-600 hover:text-custom-blue transition-colors"
+              onClick={() => navigate("/jadwal-akademik")}
+              className={linkStyle}
             >
-              Lihat Semua
+              <span>Lihat Semua</span>
+              <i className="fas fa-chevron-right text-xs"></i>
             </button>
           </div>
 
@@ -503,9 +502,7 @@ const Home = () => {
                 <h3 className="font-medium text-gray-800 line-clamp-2">
                   {event.name}
                 </h3>
-                <p className="text-sm text-gray-500 mt-auto">
-                  {event.date}
-                </p>
+                <p className="text-sm text-gray-500 mt-auto">{event.date}</p>
               </div>
             ))}
           </div>
@@ -575,7 +572,10 @@ const Home = () => {
                   </div>
                   <h2 className={titleStyle}>Jadwal Kuliah Hari Ini</h2>
                 </div>
-                <button onClick={() => navigate("/jadwal-kuliah")} className={linkStyle}>
+                <button
+                  onClick={() => navigate("/jadwal-kuliah")}
+                  className={linkStyle}
+                >
                   <span>Lihat Semua</span>
                   <i className="fas fa-chevron-right text-xs"></i>
                 </button>
@@ -595,7 +595,8 @@ const Home = () => {
                           <div className="flex items-center text-sm text-gray-600">
                             <i className="far fa-clock mr-2"></i>
                             <span>
-                              {formatTime(schedule.jam_mulai)} - {formatTime(schedule.jam_selesai)}
+                              {formatTime(schedule.jam_mulai)} -{" "}
+                              {formatTime(schedule.jam_selesai)}
                             </span>
                           </div>
                         </div>
@@ -620,7 +621,10 @@ const Home = () => {
                   </div>
                   <h2 className={titleStyle}>Jadwal Kuliah Besok</h2>
                 </div>
-                <button onClick={() => navigate("/jadwal-kuliah")} className={linkStyle}>
+                <button
+                  onClick={() => navigate("/jadwal-kuliah")}
+                  className={linkStyle}
+                >
                   <span>Lihat Semua</span>
                   <i className="fas fa-chevron-right text-xs"></i>
                 </button>
@@ -640,7 +644,8 @@ const Home = () => {
                           <div className="flex items-center text-sm text-gray-600">
                             <i className="far fa-clock mr-2"></i>
                             <span>
-                              {formatTime(schedule.jam_mulai)} - {formatTime(schedule.jam_selesai)}
+                              {formatTime(schedule.jam_mulai)} -{" "}
+                              {formatTime(schedule.jam_selesai)}
                             </span>
                           </div>
                         </div>
@@ -662,7 +667,10 @@ const Home = () => {
                   </div>
                   <h2 className={titleStyle}>Jadwal Mendatang</h2>
                 </div>
-                <button onClick={() => navigate("/jadwal-mendatang")} className={linkStyle}>
+                <button
+                  onClick={() => navigate("/jadwal-mendatang")}
+                  className={linkStyle}
+                >
                   <span>Lihat Semua</span>
                   <i className="fas fa-chevron-right text-xs"></i>
                 </button>
@@ -682,12 +690,17 @@ const Home = () => {
                           <div className="space-y-1.5">
                             <div className="flex items-center text-sm text-gray-600">
                               <i className="far fa-calendar mr-2"></i>
-                              <span>{new Date(event.tanggal).toLocaleDateString("id-ID")}</span>
+                              <span>
+                                {new Date(event.tanggal).toLocaleDateString(
+                                  "id-ID"
+                                )}
+                              </span>
                             </div>
                             <div className="flex items-center text-sm text-gray-600">
                               <i className="far fa-clock mr-2"></i>
                               <span>
-                                {formatTime(event.jam_mulai)} - {formatTime(event.jam_selesai)}
+                                {formatTime(event.jam_mulai)} -{" "}
+                                {formatTime(event.jam_selesai)}
                               </span>
                             </div>
                           </div>

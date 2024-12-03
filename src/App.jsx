@@ -18,6 +18,7 @@ import Settings from "./pages/Settings";
 import { Toaster } from "react-hot-toast";
 import ScheduleList from "./pages/ScheduleList";
 import NotFound from "./pages/NotFound";
+import JadwalAkademik from "./pages/JadwalAkademik";
 
 function App() {
   return (
@@ -123,6 +124,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Settings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/jadwal-akademik"
+            element={
+              <ProtectedRoute>
+                <JadwalAkademik />
               </ProtectedRoute>
             }
           />

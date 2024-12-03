@@ -4,7 +4,6 @@ import { toast } from "react-hot-toast";
 import Navbar from "../components/Navbar";
 import ActionButtons from "../components/ActionButtons";
 import DeleteConfirmation from "../components/DeleteConfirmation";
-import LoadingIndicator from "../components/LoadingIndicator";
 import { API_BASE_URL } from "../utils/constants";
 
 const formatDate = (dateString) => {
@@ -23,6 +22,38 @@ const validateTime = (jamMulai, jamSelesai) => {
   const endTime = endHour * 60 + endMinute;
   return endTime > startTime;
 };
+
+const TableSkeleton = () => (
+  <div className="overflow-x-auto -mx-3 sm:mx-0">
+    <div className="inline-block min-w-full align-middle">
+      <div className="overflow-hidden border border-gray-200 sm:rounded-xl">
+        <div className="animate-pulse">
+          {/* Header Skeleton */}
+          <div className="bg-gray-50 px-6 py-4">
+            <div className="grid grid-cols-4 gap-4">
+              <div className="h-4 bg-gray-200 rounded w-24"></div>
+              <div className="h-4 bg-gray-200 rounded w-32"></div>
+              <div className="h-4 bg-gray-200 rounded w-40"></div>
+              <div className="h-4 bg-gray-200 rounded w-24"></div>
+            </div>
+          </div>
+
+          {/* Rows Skeleton */}
+          {[1, 2, 3, 4, 5].map((item) => (
+            <div key={item} className="border-t border-gray-200 px-6 py-4">
+              <div className="grid grid-cols-4 gap-4">
+                <div className="h-4 bg-gray-100 rounded w-32"></div>
+                <div className="h-4 bg-gray-100 rounded w-40"></div>
+                <div className="h-4 bg-gray-100 rounded w-48"></div>
+                <div className="h-4 bg-gray-100 rounded w-28"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const JadwalMendatang = () => {
   const navigate = useNavigate();
@@ -247,7 +278,28 @@ const JadwalMendatang = () => {
     );
   };
 
-  if (isLoading) return <LoadingIndicator />;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <Navbar />
+        <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
+            {/* Header Skeleton */}
+            <div className="animate-pulse mb-6">
+              <div className="flex justify-between items-center">
+                <div className="h-8 bg-gray-200 rounded w-48"></div>
+                <div className="flex gap-2">
+                  <div className="h-10 bg-gray-200 rounded w-24"></div>
+                  <div className="h-10 bg-gray-200 rounded w-32"></div>
+                </div>
+              </div>
+            </div>
+            <TableSkeleton />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -337,15 +389,25 @@ const JadwalMendatang = () => {
                     Klik pada jadwal yang ingin Anda hapus
                   </span>
                 </div>
-                <button
-                  onClick={() => {
-                    setMode("view");
-                    setSelectedMendatangRows([]);
-                  }}
-                  className="w-full sm:w-auto mt-2 sm:mt-0 py-2 sm:py-1.5 px-4 text-sm font-medium bg-white rounded-lg hover:bg-red-50 transition-colors"
-                >
-                  Batal Hapus
-                </button>
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <button
+                    onClick={() => {
+                      setMode("view");
+                      setSelectedMendatangRows([]);
+                    }}
+                    className="w-full sm:w-auto py-2 sm:py-1.5 px-4 text-sm font-medium bg-white rounded-lg hover:bg-red-50 transition-colors"
+                  >
+                    Batal Hapus
+                  </button>
+                  {selectedMendatangRows.length > 0 && (
+                    <button
+                      onClick={handleDeleteSelected}
+                      className="w-full sm:w-auto py-2 sm:py-1.5 px-4 text-sm font-medium bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                    >
+                      Hapus
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -638,20 +700,6 @@ const JadwalMendatang = () => {
           count={selectedMendatangRows.length}
           type="mendatang"
         />
-
-        {mode === "delete" && selectedMendatangRows.length > 0 && (
-          <div className="fixed bottom-16 sm:bottom-4 left-0 right-0 sm:left-auto sm:right-4 mx-2 sm:mx-0">
-            <div className="bg-red-500 text-white px-4 py-3 sm:py-2 rounded-lg shadow-lg text-sm sm:text-base flex items-center justify-between sm:inline-flex sm:space-x-2">
-              <span>{selectedMendatangRows.length} jadwal dipilih</span>
-              <button
-                onClick={handleDeleteSelected}
-                className="bg-white text-red-500 px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-red-50 transition-colors"
-              >
-                Hapus
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

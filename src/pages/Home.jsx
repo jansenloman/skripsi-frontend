@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import {
-  LoadingIndicator,
-  SmallLoadingIndicator,
-} from "../components/LoadingIndicator";
 import { fetchWithAuth } from "../utils/api";
 import { API_BASE_URL } from "../utils/constants";
 import TutorialModal from "../components/TutorialModal";
+import {
+  academicCalendar,
+  getUpcomingEvents,
+} from "../../data/academicCalendar";
 
 const Home = () => {
   const [userEmail, setUserEmail] = useState("");
@@ -16,13 +16,13 @@ const Home = () => {
   const [currentQuote, setCurrentQuote] = useState("");
   const navigate = useNavigate();
 
-  // State untuk data
+
   const [todayClasses, setTodayClasses] = useState([]);
   const [tomorrowClasses, setTomorrowClasses] = useState([]);
   const [todayUpcomingSchedules, setTodayUpcomingSchedules] = useState([]);
   const [futureEvents, setFutureEvents] = useState([]);
 
-  // State untuk loading per-section
+
   const [profileLoading, setProfileLoading] = useState(true);
   const [classesLoading, setClassesLoading] = useState(true);
   const [upcomingLoading, setUpcomingLoading] = useState(true);
@@ -30,7 +30,8 @@ const Home = () => {
 
   const [showTutorial, setShowTutorial] = useState(false);
 
-  // Tambahkan useEffect untuk mengecek apakah ini pertama kali user mengakses dashboard
+  const upcomingEvents = getUpcomingEvents(academicCalendar);
+
   useEffect(() => {
     const isFirstVisit = !localStorage.getItem("tutorialShown");
     const isNewUser = localStorage.getItem("isNewUser") === "true";
@@ -38,11 +39,11 @@ const Home = () => {
     if (isFirstVisit && isNewUser) {
       setShowTutorial(true);
       localStorage.setItem("tutorialShown", "true");
-      localStorage.removeItem("isNewUser"); // Hapus flag new user
+      localStorage.removeItem("isNewUser"); 
     }
   }, []);
 
-  // Pisahkan fetch data menjadi beberapa useEffect terpisah
+ 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -143,7 +144,7 @@ const Home = () => {
     fetchFuture();
   }, []);
 
-  // Update waktu setiap detik
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -153,7 +154,6 @@ const Home = () => {
   }, []);
 
   const formatTime = (time) => {
-    // Mengambil hanya jam dan menit (HH:mm)
     return time.slice(0, 5);
   };
 
@@ -173,6 +173,106 @@ const Home = () => {
     "Disiplin adalah jembatan antara tujuan dan pencapaian.",
     "Manajemen waktu yang baik adalah kunci kesuksesan akademik.",
     "Jadwal yang terorganisir membawa ketenangan pikiran.",
+    "Jadwal bukanlah batasan, tapi panduan untuk mencapai tujuan.",
+    "Hari tanpa rencana adalah peluang yang terbuang sia-sia.",
+    "Menghormati jadwal adalah langkah pertama menuju kedisiplinan.",
+    "Jangan biarkan waktu mengaturmu; buat jadwal dan kendalikan waktumu.",
+    "Sebuah jadwal kecil yang konsisten lebih baik daripada rencana besar yang diabaikan.",
+    "Jadwal yang baik adalah kombinasi antara produktivitas dan waktu istirahat.",
+    "Mengatur jadwal adalah seni mendahulukan hal yang penting.",
+    "Hari ini adalah hasil dari jadwal yang kamu buat kemarin.",
+    "Konsistensi dalam menjalankan jadwal adalah kunci keberhasilan.",
+    "Jangan biarkan tugas menumpuk karena jadwal yang kacau.",
+    "Hargai waktumu dengan membuat jadwal yang bermakna.",
+    "Jadwal yang jelas adalah langkah pertama menuju mimpi yang besar.",
+    "Pentingnya jadwal adalah memberi arah pada setiap langkah kecil.",
+    "Buat jadwal yang realistis, karena terlalu padat hanya akan membuatmu kewalahan.",
+    "Jadwal adalah cerminan dari prioritas hidupmu.",
+    "Setiap detik yang direncanakan dengan baik adalah investasi untuk masa depan.",
+    "Rencana yang matang selalu dimulai dari jadwal yang teratur.",
+    "Tulis jadwalmu di pagi hari, dan jalani harimu dengan penuh fokus.",
+    "Jangan hanya sibuk, jadilah efektif dengan mengikuti jadwal.",
+    "Kehidupan yang terorganisir dimulai dari jadwal yang terstruktur.",
+    "Ketika kamu menghargai jadwalmu, waktu akan menghargaimu kembali.",
+    "Jadwal adalah alat untuk mengubah harapan menjadi kenyataan.",
+    "Kedisiplinan dimulai dengan menepati jadwal yang kamu buat sendiri.",
+    "Setiap hari yang direncanakan adalah langkah lebih dekat menuju sukses.",
+    "Jadwal yang baik mengajarkan kita untuk menghargai setiap menit.",
+    "Jangan hanya bekerja keras, bekerjalah dengan jadwal yang terorganisir.",
+    "Jadwalmu mencerminkan seberapa serius kamu pada tujuan hidupmu.",
+    "Rencana tanpa jadwal hanyalah impian kosong.",
+    "Waktu tidak pernah menunggu, jadi buatlah jadwal dan kejar mimpimu.",
+    "Jadwal yang fleksibel tetap membutuhkan komitmen yang kuat.",
+    "Hidupmu akan lebih teratur jika jadwalmu terstruktur.",
+    "Buat jadwal, patuhi jadwal, dan lihat bagaimana waktu bekerja untukmu.",
+    "Jadwal adalah batasan yang membebaskan kita dari kekacauan.",
+    "Waktu yang baik dimulai dari jadwal yang baik.",
+    "Produktivitas sejati dimulai dengan jadwal yang dirancang dengan bijak.",
+    "Setiap jadwal adalah janji pada dirimu sendiri untuk terus maju.",
+    "Rencana besar dimulai dari jadwal harian yang kecil namun konsisten.",
+    "Jadwal bukan sekadar daftar tugas, tetapi peta perjalanan menuju impianmu.",
+    "Tantangan terbesar bukan membuat jadwal, tapi mematuhinya.",
+    "Dengan jadwal, setiap hari memiliki tujuan dan arah yang jelas.",
+    "Jadwal adalah komitmen untuk menghormati waktu dan dirimu sendiri.",
+    "Dengan jadwal, kamu mengubah waktu menjadi sekutu, bukan musuh.",
+    "Jadwal yang konsisten adalah rahasia produktivitas jangka panjang.",
+    "Hari yang sibuk lebih mudah dijalani dengan jadwal yang terorganisir.",
+    "Jangan takut menyesuaikan jadwalmu, fleksibilitas adalah bagian dari kemajuan.",
+    "Jadwal adalah senjata rahasia mereka yang selalu berhasil.",
+    "Dengan jadwal, bahkan tugas besar terasa lebih ringan karena terpecah dalam langkah kecil.",
+    "Menepati jadwal adalah tanda kedewasaan dalam mengelola waktu.",
+    "Jangan menunda pekerjaan yang sudah masuk dalam jadwalmu.",
+    "Setiap hari adalah kesempatan baru untuk menjalani jadwalmu dengan lebih baik.",
+    "Jadwal bukan hanya daftar tugas, tetapi strategi mencapai impian.",
+    "Tanpa jadwal, bahkan waktu 24 jam terasa tidak cukup.",
+    "Jadwal membantu kita fokus pada apa yang benar-benar penting.",
+    "Tugas yang terjadwal memiliki peluang lebih besar untuk diselesaikan.",
+    "Hidup yang sukses dimulai dengan menghormati jadwal.",
+    "Waktu yang dihabiskan untuk membuat jadwal tidak pernah sia-sia.",
+    "Jadwalmu adalah bukti nyata bahwa kamu serius dengan impianmu.",
+    "Jadwal yang baik memberi ruang untuk kerja keras dan istirahat seimbang.",
+    "Setiap kotak dalam jadwal adalah langkah menuju tujuan besar.",
+    "Menghargai jadwal adalah cara terbaik untuk menghargai waktu.",
+    "Jadwal adalah kompas yang membimbing kita melalui kesibukan sehari-hari.",
+  "Kesuksesan dimulai dari jadwal yang terencana dengan baik.",
+  "Setiap jadwal adalah peluang untuk mengelola waktu lebih bijaksana.",
+  "Jadwal bukanlah penghalang kebebasan, melainkan cara untuk menciptakan ruang bagi apa yang penting.",
+  "Tanpa jadwal, kamu berjalan tanpa arah dalam lautan waktu.",
+  "Jadwal membantu kamu berkata 'ya' pada hal yang penting dan 'tidak' pada hal yang tidak.",
+  "Disiplin dalam jadwal membentuk karakter dan kebiasaan yang produktif.",
+  "Jangan menunggu waktu yang tepat; buat jadwal dan mulailah sekarang.",
+  "Jadwal memberi struktur pada hari-harimu yang penuh peluang.",
+  "Hal kecil yang dilakukan secara konsisten dalam jadwal membawa hasil besar.",
+  "Dengan jadwal, tugas besar bisa dipecah menjadi langkah-langkah kecil yang mudah dikelola.",
+  "Jadwal adalah investasi kecil untuk keuntungan besar di masa depan.",
+  "Kesibukan yang terorganisir melalui jadwal menciptakan kepuasan dalam pekerjaan.",
+  "Jangan takut merombak jadwal, selama itu membuatmu lebih produktif.",
+  "Sebuah jadwal yang efisien memungkinkan kamu memiliki waktu untuk bekerja dan menikmati hidup.",
+  "Jadwal adalah penolong terbaik untuk menghindari penundaan.",
+  "Setiap jadwal yang baik dimulai dari niat untuk menjadi lebih baik setiap hari.",
+  "Jadwal bukan tentang mengisi waktu, tapi tentang memanfaatkannya dengan bijak.",
+  "Tepati jadwalmu, karena itu adalah janji kepada dirimu sendiri.",
+  "Hari yang sukses dimulai dari pagi yang terencana dengan baik.",
+  "Jadwal yang baik adalah alat untuk mengubah waktu menjadi pencapaian.",
+  "Setiap menit dalam jadwal adalah peluang untuk membuat hari lebih bermakna.",
+  "Jangan biarkan hari berlalu tanpa rencana, jadwal adalah langkah pertama menuju produktivitas.",
+  "Jadwal tidak hanya mengatur waktu, tetapi juga mengatur hidupmu.",
+  "Disiplin terhadap jadwal adalah langkah kecil menuju tujuan besar.",
+  "Jadwal yang jelas membantu kamu tetap fokus di tengah gangguan.",
+  "Setiap hari yang direncanakan dengan baik adalah kemenangan kecil.",
+  "Jadwal adalah kunci untuk menjaga keseimbangan antara kerja dan istirahat.",
+  "Rencana tanpa jadwal adalah seperti peta tanpa arah.",
+  "Jadwal yang fleksibel namun terstruktur adalah kombinasi yang sempurna.",
+  "Jangan menunggu inspirasi; biarkan jadwalmu menjadi sumber motivasi.",
+  "Jadwal adalah alat untuk mengubah kebiasaan buruk menjadi kebiasaan baik.",
+  "Dengan jadwal, kamu tahu kapan harus berhenti dan kapan harus mulai lagi.",
+  "Jadwal membantu kamu mencapai lebih banyak dengan usaha yang lebih sedikit.",
+  "Rutin yang konsisten dimulai dari jadwal yang baik.",
+  "Setiap jadwal adalah peluang untuk memperbaiki diri dari hari kemarin.",
+  "Jadwal adalah teman terbaik bagi mereka yang ingin mencapai sesuatu.",
+  "Fleksibilitas jadwal memberi ruang untuk hal-hal yang tidak terduga.",
+  "Menjaga jadwal adalah tanda hormat terhadap waktu dan tujuan hidupmu.",
+  "Waktu terbaik untuk memulai adalah sekarang, jadwal terbaik adalah yang kamu buat hari ini."
   ];
 
   useEffect(() => {
@@ -188,6 +288,56 @@ const Home = () => {
     if (hour < 18) return "Selamat Sore";
     return "Selamat Malam";
   };
+
+  // Tambahkan komponen skeleton untuk profile
+  const ProfileSkeleton = () => (
+    <div className="animate-pulse">
+      <div className="h-4 w-24 bg-gray-200 rounded mb-3"></div>
+      <div className="h-8 w-64 bg-gray-200 rounded mb-3"></div>
+      <div className="h-4 w-48 bg-gray-200 rounded"></div>
+    </div>
+  );
+
+  // Tambahkan komponen skeleton untuk jadwal
+  const ScheduleSkeleton = () => (
+    <div className="space-y-3">
+      {[1, 2].map((item) => (
+        <div
+          key={item}
+          className="p-4 bg-gray-50 rounded-xl border border-gray-100/80"
+        >
+          <div className="animate-pulse space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="h-4 w-4 bg-gray-200 rounded"></div>
+              <div className="h-4 w-24 bg-gray-200 rounded"></div>
+            </div>
+            <div className="h-5 w-48 bg-gray-200 rounded"></div>
+            <div className="flex items-center space-x-2">
+              <div className="h-4 w-4 bg-gray-200 rounded"></div>
+              <div className="h-4 w-32 bg-gray-200 rounded"></div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  // Style konsisten untuk semua card jadwal
+  const cardHeaderStyle = "flex items-center justify-between mb-4 sm:mb-6";
+  const iconContainerStyle = "flex items-center space-x-2 sm:space-x-3";
+  const iconBoxStyle = "p-2 sm:p-2.5 bg-custom-blue/10 rounded-xl";
+  const iconStyle = "text-custom-blue text-base sm:text-lg";
+  const titleStyle = "text-lg sm:text-xl font-semibold text-gray-800";
+  const linkStyle = "text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200 flex items-center space-x-1";
+  const scheduleCardStyle = "p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-100/80";
+
+  // Komponen EmptyState yang konsisten
+  const EmptyState = ({ message }) => (
+    <div className="flex flex-col items-center justify-center py-8 text-gray-500 bg-gray-50 rounded-xl border border-gray-100/80">
+      <i className="far fa-calendar-check text-4xl mb-3 text-gray-400"></i>
+      <p className="text-sm">{message}</p>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -244,28 +394,20 @@ const Home = () => {
 
       <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
         {/* Welcome & Time Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-8">
-            {/* Profile Section - Gunakan flex dan width full */}
+            {/* Profile Section */}
             <div className="w-full">
               {profileLoading ? (
-                <div className="h-24 flex items-center">
-                  <LoadingIndicator />
-                </div>
+                <ProfileSkeleton />
               ) : (
                 <div>
                   <div className="text-sm sm:text-base text-gray-500 mb-1">
                     {getGreeting()}
                   </div>
-                  {userName ? (
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 truncate w-full">
-                      {userName} 👋
-                    </h1>
-                  ) : (
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 truncate w-full">
-                      {userEmail} 👋
-                    </h1>
-                  )}
+                  <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3 truncate w-full">
+                    {userName || userEmail} 👋
+                  </h1>
                   <div className="text-sm sm:text-base text-gray-500">
                     {formatDate(currentTime)}
                   </div>
@@ -274,8 +416,7 @@ const Home = () => {
             </div>
 
             {/* Time Section */}
-            <div className="text-center">
-              {/* Clock Container */}
+            <div className="text-center w-full md:w-auto">
               <div className="clock-container bg-gradient-to-br from-white to-gray-50 p-4 sm:p-6 rounded-2xl border border-gray-100 shadow-sm relative w-full sm:w-auto sm:min-w-[280px]">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-custom-blue/20 to-purple-400/20 rounded-t-2xl"></div>
 
@@ -327,59 +468,99 @@ const Home = () => {
           </div>
         </div>
 
+        {/* Quote Card */}
+        <div className="mb-4 sm:mb-6">
+          <div className="bg-gradient-to-br from-custom-blue/5 to-purple-50 p-4 sm:p-6 rounded-2xl border border-blue-100/50">
+            <div className="bg-white/80 backdrop-blur-sm p-4 sm:p-5 rounded-xl">
+              <i className="fas fa-quote-left text-xl sm:text-2xl text-custom-blue/30 mb-2 sm:mb-3 block"></i>
+              <p className="text-sm sm:text-base text-gray-700 italic leading-relaxed">
+                {currentQuote}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Academic Calendar Section */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-4 sm:mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Jadwal Akademik Terdekat
+            </h2>
+            <button
+              onClick={() => navigate('/jadwal-akademik')}
+              className="text-sm text-gray-600 hover:text-custom-blue transition-colors"
+            >
+              Lihat Semua
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {upcomingEvents.map((event, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg p-4 border border-gray-100 hover:bg-gray-50 transition-all duration-200 flex flex-col h-[120px]"
+              >
+                <h3 className="font-medium text-gray-800 line-clamp-2">
+                  {event.name}
+                </h3>
+                <p className="text-sm text-gray-500 mt-auto">
+                  {event.date}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tambahkan CSS untuk hide scrollbar mobile view kalender akademik*/}
+        <style>{`
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
+
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
           {/* Left Column - Upcoming Schedule */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-8">
             {/* Today's Upcoming */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="p-2 sm:p-2.5 bg-custom-blue/10 rounded-xl">
-                    <i className="fas fa-clock text-custom-blue text-base sm:text-lg"></i>
+              <div className={cardHeaderStyle}>
+                <div className={iconContainerStyle}>
+                  <div className={iconBoxStyle}>
+                    <i className={`fas fa-clock ${iconStyle}`}></i>
                   </div>
-                  <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
-                    Jadwal Selanjutnya
-                  </h2>
+                  <h2 className={titleStyle}>Jadwal Selanjutnya</h2>
                 </div>
               </div>
 
               {upcomingLoading ? (
-                <div className="flex justify-center py-6 sm:py-8">
-                  <SmallLoadingIndicator />
-                </div>
+                <ScheduleSkeleton />
               ) : (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="space-y-3">
                   {todayUpcomingSchedules.length > 0 ? (
                     todayUpcomingSchedules.map((schedule, index) => (
-                      <div
-                        key={index}
-                        className="p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1.5 sm:space-y-2">
-                            <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500">
-                              <i className="far fa-calendar-alt"></i>
-                              <span>{schedule.day}</span>
-                            </div>
-                            <h3 className="text-sm sm:text-base font-medium text-gray-800">
-                              {schedule.title}
-                            </h3>
-                            <div className="flex items-center text-xs sm:text-sm text-gray-600">
-                              <i className="far fa-clock mr-1.5 sm:mr-2"></i>
-                              <span>{schedule.time}</span>
-                            </div>
+                      <div key={index} className={scheduleCardStyle}>
+                        <div className="flex flex-col space-y-2">
+                          <div className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500">
+                            <i className="far fa-calendar-alt"></i>
+                            <span>{schedule.day}</span>
+                          </div>
+                          <h3 className="text-sm sm:text-base font-medium text-gray-800">
+                            {schedule.title}
+                          </h3>
+                          <div className="flex items-center text-xs sm:text-sm text-gray-600">
+                            <i className="far fa-clock mr-1.5 sm:mr-2"></i>
+                            <span>{schedule.time}</span>
                           </div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-6 sm:py-8 text-gray-500 bg-gray-50 rounded-xl">
-                      <i className="far fa-calendar-check text-3xl sm:text-4xl mb-2 sm:mb-3 text-gray-400"></i>
-                      <p className="text-xs sm:text-sm">
-                        Tidak ada jadwal selanjutnya untuk hari ini
-                      </p>
-                    </div>
+                    <EmptyState message="Tidak ada jadwal selanjutnya untuk hari ini" />
                   )}
                 </div>
               )}
@@ -387,53 +568,41 @@ const Home = () => {
 
             {/* Today's Classes */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="p-2 sm:p-2.5 bg-custom-blue/10 rounded-xl">
-                    <i className="fas fa-book text-custom-blue text-base sm:text-lg"></i>
+              <div className={cardHeaderStyle}>
+                <div className={iconContainerStyle}>
+                  <div className={iconBoxStyle}>
+                    <i className={`fas fa-book ${iconStyle}`}></i>
                   </div>
-                  <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
-                    Jadwal Kuliah Hari Ini
-                  </h2>
+                  <h2 className={titleStyle}>Jadwal Kuliah Hari Ini</h2>
                 </div>
-                <button
-                  onClick={() => navigate("/jadwal-kuliah")}
-                  className="text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200"
-                >
-                  Lihat Semua
+                <button onClick={() => navigate("/jadwal-kuliah")} className={linkStyle}>
+                  <span>Lihat Semua</span>
+                  <i className="fas fa-chevron-right text-xs"></i>
                 </button>
               </div>
+
               {classesLoading ? (
-                <div className="flex justify-center py-8">
-                  <SmallLoadingIndicator />
-                </div>
+                <ScheduleSkeleton />
               ) : (
                 <div className="space-y-3">
                   {todayClasses.length > 0 ? (
                     todayClasses.map((schedule, index) => (
-                      <div
-                        key={index}
-                        className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200"
-                      >
-                        <p className="font-medium text-gray-800 mb-2">
-                          {schedule.mata_kuliah}
-                        </p>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <i className="far fa-clock mr-2"></i>
-                          <span>
-                            {formatTime(schedule.jam_mulai)} -{" "}
-                            {formatTime(schedule.jam_selesai)}
-                          </span>
+                      <div key={index} className={scheduleCardStyle}>
+                        <div className="flex flex-col space-y-2">
+                          <h3 className="font-medium text-gray-800">
+                            {schedule.mata_kuliah}
+                          </h3>
+                          <div className="flex items-center text-sm text-gray-600">
+                            <i className="far fa-clock mr-2"></i>
+                            <span>
+                              {formatTime(schedule.jam_mulai)} - {formatTime(schedule.jam_selesai)}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-8 text-gray-500 bg-gray-50 rounded-xl">
-                      <i className="far fa-calendar-check text-4xl mb-3 text-gray-400"></i>
-                      <p className="text-sm">
-                        Tidak ada jadwal kuliah hari ini
-                      </p>
-                    </div>
+                    <EmptyState message="Tidak ada jadwal kuliah hari ini" />
                   )}
                 </div>
               )}
@@ -444,51 +613,41 @@ const Home = () => {
           <div className="space-y-4 sm:space-y-8">
             {/* Tomorrow's Classes */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-              <div className="flex items-center justify-between mb-4 sm:mb-6">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="p-2 sm:p-2.5 bg-custom-blue/10 rounded-xl">
-                    <i className="fas fa-calendar-plus text-custom-blue text-base sm:text-lg"></i>
+              <div className={cardHeaderStyle}>
+                <div className={iconContainerStyle}>
+                  <div className={iconBoxStyle}>
+                    <i className={`fas fa-calendar-plus ${iconStyle}`}></i>
                   </div>
-                  <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
-                    Jadwal Kuliah Besok
-                  </h2>
+                  <h2 className={titleStyle}>Jadwal Kuliah Besok</h2>
                 </div>
-                <button
-                  onClick={() => navigate("/jadwal-kuliah")}
-                  className="text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200"
-                >
-                  Lihat Semua
+                <button onClick={() => navigate("/jadwal-kuliah")} className={linkStyle}>
+                  <span>Lihat Semua</span>
+                  <i className="fas fa-chevron-right text-xs"></i>
                 </button>
               </div>
+
               {classesLoading ? (
-                <div className="flex justify-center py-8">
-                  <SmallLoadingIndicator />
-                </div>
+                <ScheduleSkeleton />
               ) : (
                 <div className="space-y-3">
                   {tomorrowClasses.length > 0 ? (
                     tomorrowClasses.map((schedule, index) => (
-                      <div
-                        key={index}
-                        className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200"
-                      >
-                        <p className="font-medium text-gray-800 mb-2">
-                          {schedule.mata_kuliah}
-                        </p>
-                        <div className="flex items-center text-sm text-gray-600">
-                          <i className="far fa-clock mr-2"></i>
-                          <span>
-                            {formatTime(schedule.jam_mulai)} -{" "}
-                            {formatTime(schedule.jam_selesai)}
-                          </span>
+                      <div key={index} className={scheduleCardStyle}>
+                        <div className="flex flex-col space-y-2">
+                          <h3 className="font-medium text-gray-800">
+                            {schedule.mata_kuliah}
+                          </h3>
+                          <div className="flex items-center text-sm text-gray-600">
+                            <i className="far fa-clock mr-2"></i>
+                            <span>
+                              {formatTime(schedule.jam_mulai)} - {formatTime(schedule.jam_selesai)}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-8 text-gray-500 bg-gray-50 rounded-xl">
-                      <i className="far fa-calendar-check text-4xl mb-3 text-gray-400"></i>
-                      <p className="text-sm">Tidak ada jadwal kuliah besok</p>
-                    </div>
+                    <EmptyState message="Tidak ada jadwal kuliah besok" />
                   )}
                 </div>
               )}
@@ -496,77 +655,51 @@ const Home = () => {
 
             {/* Future Events */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="p-2 sm:p-2.5 bg-custom-blue/10 rounded-xl">
-                    <i className="fas fa-calendar-week text-custom-blue text-base sm:text-lg"></i>
+              <div className={cardHeaderStyle}>
+                <div className={iconContainerStyle}>
+                  <div className={iconBoxStyle}>
+                    <i className={`fas fa-calendar-week ${iconStyle}`}></i>
                   </div>
-                  <h2 className="text-lg sm:text-xl font-semibold text-gray-800">
-                    Jadwal Mendatang
-                  </h2>
+                  <h2 className={titleStyle}>Jadwal Mendatang</h2>
                 </div>
-                <button
-                  onClick={() => navigate("/jadwal-mendatang")}
-                  className="text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200"
-                >
-                  Lihat Semua
+                <button onClick={() => navigate("/jadwal-mendatang")} className={linkStyle}>
+                  <span>Lihat Semua</span>
+                  <i className="fas fa-chevron-right text-xs"></i>
                 </button>
               </div>
+
               {futureLoading ? (
-                <div className="flex justify-center py-8">
-                  <SmallLoadingIndicator />
-                </div>
+                <ScheduleSkeleton />
               ) : (
                 <div className="space-y-3">
                   {futureEvents.length > 0 ? (
                     futureEvents.map((event, index) => (
-                      <div
-                        key={index}
-                        className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200"
-                      >
-                        <p className="font-medium text-gray-800 mb-2">
-                          {event.kegiatan}
-                        </p>
-                        <div className="space-y-1 text-sm text-gray-600">
-                          <div className="flex items-center">
-                            <i className="far fa-calendar mr-2"></i>
-                            <span>
-                              {new Date(event.tanggal).toLocaleDateString(
-                                "id-ID"
-                              )}
-                            </span>
-                          </div>
-                          <div className="flex items-center">
-                            <i className="far fa-clock mr-2"></i>
-                            <span>
-                              {formatTime(event.jam_mulai)} -{" "}
-                              {formatTime(event.jam_selesai)}
-                            </span>
+                      <div key={index} className={scheduleCardStyle}>
+                        <div className="flex flex-col space-y-2">
+                          <h3 className="font-medium text-gray-800">
+                            {event.kegiatan}
+                          </h3>
+                          <div className="space-y-1.5">
+                            <div className="flex items-center text-sm text-gray-600">
+                              <i className="far fa-calendar mr-2"></i>
+                              <span>{new Date(event.tanggal).toLocaleDateString("id-ID")}</span>
+                            </div>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <i className="far fa-clock mr-2"></i>
+                              <span>
+                                {formatTime(event.jam_mulai)} - {formatTime(event.jam_selesai)}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-8 text-gray-500 bg-gray-50 rounded-xl">
-                      <i className="far fa-calendar-check text-4xl mb-3 text-gray-400"></i>
-                      <p className="text-sm">
-                        Tidak ada jadwal mendatang terdekat
-                      </p>
-                    </div>
+                    <EmptyState message="Tidak ada jadwal mendatang terdekat" />
                   )}
                 </div>
               )}
             </div>
-          </div>
-        </div>
-
-        {/* Motivational Quote */}
-        <div className="mt-4 sm:mt-8 bg-gradient-to-br from-custom-blue/5 to-purple-50 p-4 sm:p-6 rounded-2xl border border-blue-100/50">
-          <div className="bg-white/80 backdrop-blur-sm p-4 sm:p-5 rounded-xl">
-            <i className="fas fa-quote-left text-xl sm:text-2xl text-custom-blue/30 mb-2 sm:mb-3 block"></i>
-            <p className="text-sm sm:text-base text-gray-700 italic leading-relaxed">
-              {currentQuote}
-            </p>
           </div>
         </div>
       </div>

@@ -7,11 +7,17 @@
 @layer base {
   html {
     font-family: "Poppins", sans-serif;
+    height: -webkit-fill-available;
   }
 }
 
 body {
   @apply font-sans;
+  min-height: -webkit-fill-available;
+  position: fixed;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Navbar Styles */

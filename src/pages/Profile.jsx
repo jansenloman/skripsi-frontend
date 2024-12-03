@@ -2,8 +2,36 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { fetchWithAuth } from "../utils/api";
-import LoadingIndicator from "../components/LoadingIndicator";
 import { API_BASE_URL } from "../utils/constants";
+
+const ProfileSkeleton = () => (
+  <div className="animate-pulse">
+    {/* Header Skeleton */}
+    <div className="p-4 sm:p-6 border-b border-gray-100">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0">
+        <div>
+          <div className="h-7 bg-gray-200 rounded w-32 mb-2"></div>
+          <div className="h-4 bg-gray-100 rounded w-48"></div>
+        </div>
+        <div className="h-9 bg-gray-200 rounded w-28"></div>
+      </div>
+    </div>
+
+    {/* Content Skeleton */}
+    <div className="p-4 sm:p-6">
+      <div className="grid grid-cols-1 gap-6 sm:gap-8">
+        <div className="space-y-4 sm:space-y-6">
+          {[1, 2, 3, 4].map((item) => (
+            <div key={item}>
+              <div className="h-4 bg-gray-200 rounded w-20 mb-2"></div>
+              <div className="h-6 bg-gray-100 rounded w-full"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -84,7 +112,18 @@ const Profile = () => {
     setIsEditing(!isEditing);
   };
 
-  if (isLoading) return <LoadingIndicator />;
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <Navbar />
+        <div className="max-w-4xl mx-auto py-4 sm:py-12 px-3 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+            <ProfileSkeleton />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">

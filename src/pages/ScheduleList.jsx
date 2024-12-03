@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import LoadingIndicator from "../components/LoadingIndicator";
 import { API_BASE_URL } from "../utils/constants";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ScheduleList = () => {
   const [schedule, setSchedule] = useState({});
@@ -11,6 +11,13 @@ const ScheduleList = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  const [showPastDays, setShowPastDays] = useState(false);
+  const [activeDay, setActiveDay] = useState(() => {
+    const today = new Date().getDay();
+    const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    const adjustedToday = today === 0 ? 6 : today - 1;
+    return days[adjustedToday];
+  });
 
   useEffect(() => {
     if (location.state?.message) {
@@ -56,212 +63,285 @@ const ScheduleList = () => {
     );
   };
 
+  const getDayIndex = (day) => {
+    const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+    return days.indexOf(day);
+  };
+
+  const isPastDay = (day) => {
+    const today = new Date().getDay();
+    const dayIndex = getDayIndex(day);
+    
+    // Konversi Sunday dari 0 ke 6 untuk sistem hari kita
+    const adjustedToday = today === 0 ? 6 : today - 1;
+    
+    return dayIndex < adjustedToday;
+  };
+
+  const sortedSchedule = Object.entries(schedule).sort((a, b) => {
+    return getDayIndex(a[0]) - getDayIndex(b[0]);
+  });
+
+  const ScheduleSkeleton = () => (
+    <div className="grid gap-3 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {[1, 2, 3, 4, 5, 6].map((item) => (
+        <div
+          key={item}
+          className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+        >
+          {/* Header Skeleton */}
+          <div className="bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 border-b border-gray-200">
+            <div className="h-5 bg-gray-200 rounded w-24"></div>
+          </div>
+
+          {/* Content Skeleton */}
+          <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
+            {[1, 2, 3].map((task) => (
+              <div key={task} className="animate-pulse">
+                <div className="p-3 sm:p-4 bg-gray-50 rounded-lg">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                      <div className="flex items-center">
+                        <div className="h-3 bg-gray-200 rounded w-24"></div>
+                      </div>
+                    </div>
+                    <div className="h-5 bg-gray-200 rounded w-16"></div>
+                  </div>
+
+                  {/* Suggestions Skeleton */}
+                  <div className="mt-2 sm:mt-3 bg-gradient-to-br from-blue-50/80 to-purple-50/80 rounded-lg border border-blue-100/50 overflow-hidden">
+                    <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-50/50 border-b border-blue-100/50">
+                      <div className="h-4 bg-blue-100 rounded w-32"></div>
+                    </div>
+                    <div className="p-3 sm:p-4">
+                      <div className="space-y-1.5 sm:space-y-2">
+                        {[1, 2].map((suggestion) => (
+                          <div
+                            key={suggestion}
+                            className="flex items-start space-x-2"
+                          >
+                            <div className="h-3 bg-gray-200 rounded w-full"></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <Navbar />
+        <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
+            {/* Header Skeleton */}
+            <div className="animate-pulse mb-6">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <div>
+                  <div className="h-7 bg-gray-200 rounded w-48 mb-2"></div>
+                  <div className="h-4 bg-gray-100 rounded w-64"></div>
+                </div>
+                <div className="h-9 bg-gray-200 rounded w-40"></div>
+              </div>
+            </div>
+            <ScheduleSkeleton />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
-      {isLoading && <LoadingIndicator />}
 
       <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-8">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
-                Jadwal Mingguan
-              </h1>
-              <p className="mt-1 text-xs sm:text-sm text-gray-500">
-                Jadwal yang disusun AI untuk Anda
-              </p>
-            </div>
-            <button
-              onClick={() => navigate("/generate-schedule")}
-              className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-medium bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
-            >
-              <svg
-                className="mr-1.5 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-              Buat Jadwal Mingguan
-            </button>
-          </div>
-
-          {successMessage && (
-            <div className="mb-4 sm:mb-6 flex items-center p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg">
-              <i className="fas fa-check-circle text-green-500 mr-2 sm:mr-3"></i>
-              <span className="text-xs sm:text-sm text-green-700">
-                {successMessage}
-              </span>
-            </div>
-          )}
-
-          {error && (
-            <div className="mb-4 sm:mb-6 flex items-center p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg">
-              <i className="fas fa-exclamation-circle text-red-500 mr-2 sm:mr-3"></i>
-              <span className="text-xs sm:text-sm text-red-700">{error}</span>
-            </div>
-          )}
-
-          {isScheduleEmpty() && !isLoading ? (
-            <div className="text-center py-6">
-              <div className="mb-6">
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 inline-block p-4 rounded-2xl mb-4">
-                  <div className="relative">
-                    <i className="fas fa-calendar text-4xl text-custom-blue/30"></i>
-                    <div className="absolute -top-2 -right-2">
-                      <div className="bg-white p-1.5 rounded-full shadow-sm border border-gray-100">
-                        <i className="fas fa-plus text-sm text-custom-blue"></i>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-800 mb-3">
-                  Belum Ada Jadwal
-                </h3>
-                <p className="text-base text-gray-500 max-w-md mx-auto mb-6 px-4">
-                  Buat jadwal mingguan Anda dengan bantuan AI untuk
-                  mengoptimalkan waktu belajar dan aktivitas Anda
+          <div className="space-y-4">
+            {/* Header dengan Button Generate */}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-semibold text-gray-800">
+                  Jadwal Mingguan
+                </h1>
+                <p className="mt-1 text-xs sm:text-sm text-gray-500">
+                  Jadwal yang disusun AI untuk Anda
                 </p>
               </div>
-
-              <div className="hidden sm:block max-w-lg mx-auto mb-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                    <div className="w-10 h-10 bg-custom-blue/10 rounded-lg flex items-center justify-center mb-3">
-                      <i className="fas fa-robot text-custom-blue text-lg"></i>
-                    </div>
-                    <h4 className="font-medium text-gray-800 mb-2 text-base">
-                      AI-Powered
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      Jadwal otomatis disesuaikan dengan kebutuhan Anda
-                    </p>
+              <div className="flex gap-2">
+                {/* Past Days Button */}
+                {sortedSchedule.some(([hari]) => isPastDay(hari)) && (
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowPastDays(!showPastDays)}
+                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border-2 border-orange-400 rounded-full shadow-sm hover:bg-orange-50 transition-all duration-200"
+                    >
+                      <i className="fas fa-history mr-2 text-orange-500"></i>
+                      Hari Sebelumnya
+                    </button>
+                    
+                    <AnimatePresence>
+                      {showPastDays && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute left-0 mt-2 w-48 sm:w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10"
+                        >
+                          <div className="py-2 px-3 border-b border-gray-100">
+                            <h3 className="text-xs font-medium text-gray-500">Hari Sebelumnya</h3>
+                          </div>
+                          {sortedSchedule
+                            .filter(([hari]) => isPastDay(hari))
+                            .map(([hari]) => (
+                              <button
+                                key={hari}
+                                onClick={() => {
+                                  setActiveDay(hari);
+                                  setShowPastDays(false);
+                                }}
+                                className="w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 text-left flex items-center space-x-2"
+                              >
+                                <i className="fas fa-calendar-day text-gray-400"></i>
+                                <span>{hari}</span>
+                              </button>
+                            ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
-                  <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                    <div className="w-10 h-10 bg-custom-blue/10 rounded-lg flex items-center justify-center mb-3">
-                      <i className="fas fa-clock text-custom-blue text-lg"></i>
-                    </div>
-                    <h4 className="font-medium text-gray-800 mb-2 text-base">
-                      Fleksibel
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      Sesuaikan jadwal dengan waktu luang Anda
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => navigate("/generate-schedule")}
-                className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-custom-blue rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200"
-              >
-                <i className="fas fa-plus mr-2"></i>
-                Buat Jadwal Sekarang
-              </button>
-
-              <div className="mt-6 text-sm text-gray-400 px-4">
-                Tips: Jadwal akan dihapus setiap hari minggu pukul 23.59 WIB
-              </div>
-            </div>
-          ) : (
-            <div className="grid gap-3 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {Object.entries(schedule).map(([hari, tasks]) => (
-                <div
-                  key={hari}
-                  className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
+                )}
+                <button
+                  onClick={() => navigate("/generate-schedule")}
+                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 transition-all duration-200"
                 >
-                  <div className="bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 border-b border-gray-200">
-                    <h2 className="font-semibold text-gray-800 text-sm sm:text-base">
-                      {hari}
-                    </h2>
-                  </div>
-                  <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
-                    {tasks.map((task) => (
-                      <div
-                        key={task.task_id}
-                        className={`p-3 sm:p-4 rounded-lg transition-all duration-200 ${
-                          task.type === "fixed"
-                            ? "bg-blue-50 hover:bg-blue-100"
-                            : task.type === "free"
-                            ? "bg-green-50 hover:bg-green-100"
-                            : "bg-gray-50 hover:bg-gray-100"
-                        }`}
-                      >
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <p className="font-medium text-gray-900 text-sm sm:text-base mb-1">
-                              {task.deskripsi}
-                            </p>
-                            <div className="flex items-center text-xs sm:text-sm text-gray-600">
-                              <i className="far fa-clock mr-1.5 sm:mr-2"></i>
-                              <span>
-                                {formatTime(task.jam_mulai)} -{" "}
-                                {formatTime(task.jam_selesai)}
-                              </span>
-                            </div>
-                          </div>
-                          {task.type && (
-                            <span
-                              className={`text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full font-medium ml-2 ${
-                                task.type === "fixed"
-                                  ? "bg-blue-100 text-blue-700"
-                                  : task.type === "free"
-                                  ? "bg-green-100 text-green-700"
-                                  : "bg-gray-100 text-gray-700"
-                              }`}
-                            >
-                              {task.type}
-                            </span>
-                          )}
-                        </div>
+                  <i className="fas fa-plus mr-2"></i>
+                  Buat Jadwal Mingguan
+                </button>
+              </div>
+            </div>
 
-                        {task.suggestions && (
-                          <div className="mt-2 sm:mt-3 bg-gradient-to-br from-blue-50/80 to-purple-50/80 rounded-lg border border-blue-100/50 overflow-hidden">
-                            <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-50/50 border-b border-blue-100/50 flex items-center">
-                              <div className="p-1 sm:p-1.5 bg-blue-100 rounded-lg mr-1.5 sm:mr-2">
-                                <i className="fas fa-lightbulb text-blue-600 text-xs sm:text-sm"></i>
-                              </div>
-                              <span className="text-xs sm:text-sm font-medium text-blue-700">
-                                Saran untuk Anda
-                              </span>
-                            </div>
-                            <div className="p-3 sm:p-4">
-                              <div className="space-y-1.5 sm:space-y-2">
-                                {task.suggestions
-                                  .split(/,\s*/)
-                                  .map((suggestion, index) => (
-                                    <div
-                                      key={index}
-                                      className="flex items-start space-x-2 sm:space-x-3 text-xs sm:text-sm text-gray-600"
-                                    >
-                                      <div className="flex-shrink-0 w-1 h-1 sm:w-1.5 sm:h-1.5 mt-1.5 rounded-full bg-gradient-to-br from-blue-400 to-purple-400"></div>
-                                      <p className="flex-1 leading-relaxed">
-                                        {suggestion
-                                          .replace(/^\d+\)\s*/, "")
-                                          .trim()}
-                                      </p>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
+            {/* Tab Navigation */}
+            <div className="space-y-2">
+              {/* Tab Navigation */}
+              <div className="flex-1">
+                <div className="sm:flex sm:space-x-1 sm:bg-gray-50 sm:p-1 sm:rounded-xl sm:border sm:border-gray-200">
+                  <div className="flex overflow-x-auto hide-scrollbar sm:flex-1 sm:overflow-visible bg-gray-50 p-1 rounded-xl border border-gray-200 sm:bg-transparent sm:p-0 sm:border-0">
+                    <div className="flex space-x-1 min-w-full sm:min-w-0 sm:flex-1">
+                      {sortedSchedule
+                        .filter(([hari]) => !isPastDay(hari))
+                        .map(([hari]) => (
+                          <button
+                            key={hari}
+                            onClick={() => setActiveDay(hari)}
+                            className={`
+                              flex-1 min-w-[100px] sm:min-w-0 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200
+                              ${activeDay === hari 
+                                ? "bg-white text-gray-800 shadow-sm" 
+                                : "text-gray-600 hover:bg-white/60"
+                              }
+                            `}
+                          >
+                            {hari}
+                          </button>
+                        ))}
+                    </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
-          )}
+
+            {/* Tabel Jadwal */}
+            <div className="overflow-x-auto -mx-3 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden border border-gray-200 sm:rounded-xl">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-3 py-3 sm:px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                          Waktu
+                        </th>
+                        <th className="px-3 py-3 sm:px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Kegiatan
+                        </th>
+                        <th className="px-3 py-3 sm:px-6 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                          Tipe
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {sortedSchedule
+                        .filter(([hari]) => hari === activeDay)
+                        .map(([_, tasks]) => 
+                          tasks
+                            .sort((a, b) => a.jam_mulai.localeCompare(b.jam_mulai))
+                            .map((task) => (
+                              <tr 
+                                key={task.task_id}
+                                className="hover:bg-gray-50 transition-colors"
+                              >
+                                <td className="px-3 py-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">
+                                  {formatTime(task.jam_mulai)} - {formatTime(task.jam_selesai)}
+                                </td>
+                                <td className="px-3 py-4 sm:px-6 text-sm text-gray-900">
+                                  <div className="font-medium">{task.deskripsi}</div>
+                                  {task.suggestions && (
+                                    <div className="mt-2 text-xs text-gray-500">
+                                      <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
+                                        <div className="font-medium text-blue-700 mb-1">Saran:</div>
+                                        <ul className="list-disc list-inside space-y-1 text-gray-600">
+                                          {task.suggestions.split(/,\s*/).map((suggestion, idx) => (
+                                            <li key={idx} className="break-words">
+                                              {suggestion.replace(/^\d+\)\s*/, "").trim()}
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  )}
+                                </td>
+                                <td className="px-3 py-4 sm:px-6 whitespace-nowrap">
+                                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    ${task.type === "fixed" 
+                                      ? "bg-blue-100 text-blue-800"
+                                      : task.type === "free"
+                                      ? "bg-green-100 text-green-800"
+                                      : "bg-gray-100 text-gray-800"
+                                    }`}
+                                  >
+                                    {task.type}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* CSS untuk hide scrollbar tapi tetap bisa scroll */}
+      <style jsx>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 };

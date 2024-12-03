@@ -3,6 +3,81 @@ import Navbar from "../components/Navbar";
 import { toast } from "react-hot-toast";
 import { API_BASE_URL } from "../utils/constants";
 
+const SettingsSkeleton = () => (
+  <div className="animate-pulse space-y-4 sm:space-y-8">
+    {/* Header Skeleton */}
+    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0 mb-6 sm:mb-8">
+      <div>
+        <div className="h-7 bg-gray-200 rounded w-48 mb-2"></div>
+        <div className="h-4 bg-gray-100 rounded w-64"></div>
+      </div>
+      <div className="flex gap-2 sm:gap-3">
+        <div className="h-9 bg-gray-200 rounded w-24"></div>
+        <div className="h-9 bg-gray-200 rounded w-28"></div>
+      </div>
+    </div>
+
+    {/* Waktu Dasar Skeleton */}
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-gray-50 px-3 sm:px-4 py-2.5 sm:py-3 border-b border-gray-200">
+        <div className="h-5 bg-gray-200 rounded w-32"></div>
+      </div>
+      <div className="p-3 sm:p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[1, 2].map((item) => (
+            <div key={item}>
+              <div className="h-4 bg-gray-200 rounded w-28 mb-2"></div>
+              <div className="h-10 bg-gray-100 rounded w-full"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Waktu Makan Skeleton */}
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-gray-50 px-3 sm:px-4 py-2.5 sm:py-3 border-b border-gray-200">
+        <div className="h-5 bg-gray-200 rounded w-32"></div>
+      </div>
+      <div className="p-3 sm:p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[1, 2, 3].map((section) => (
+            <div key={section} className="space-y-3 sm:space-y-4">
+              {[1, 2].map((item) => (
+                <div key={item}>
+                  <div className="h-4 bg-gray-200 rounded w-32 mb-2"></div>
+                  <div className="h-10 bg-gray-100 rounded w-full"></div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Waktu Istirahat & Produktif Skeleton */}
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-gray-50 px-3 sm:px-4 py-2.5 sm:py-3 border-b border-gray-200">
+        <div className="h-5 bg-gray-200 rounded w-48"></div>
+      </div>
+      <div className="p-3 sm:p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[1, 2].map((section) => (
+            <div key={section} className="space-y-3 sm:space-y-4">
+              {[1, 2].map((item) => (
+                <div key={item}>
+                  <div className="h-4 bg-gray-200 rounded w-36 mb-2"></div>
+                  <div className="h-10 bg-gray-100 rounded w-full"></div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const Settings = () => {
   const [settings, setSettings] = useState({
     wake_time: "",
@@ -95,6 +170,19 @@ const Settings = () => {
       setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <Navbar />
+        <div className="max-w-7xl mx-auto py-4 sm:py-8 px-3 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+            <SettingsSkeleton />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">

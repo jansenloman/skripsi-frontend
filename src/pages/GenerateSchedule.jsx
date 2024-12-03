@@ -153,15 +153,57 @@ const GenerateSchedule = () => {
     </div>
   );
 
+  // Tambahkan komponen FormSkeleton
+  const FormSkeleton = () => (
+    <div className="max-w-4xl mx-auto py-4 sm:py-12 px-3 sm:px-6 lg:px-8">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
+        {/* Header Skeleton */}
+        <div className="mb-6 sm:mb-8 animate-pulse">
+          <div className="h-7 bg-gray-200 rounded w-48 mb-2"></div>
+          <div className="h-4 bg-gray-100 rounded w-64"></div>
+        </div>
+
+        {/* Warning Box Skeleton */}
+        <div className="mb-6 sm:mb-8 animate-pulse">
+          <div className="p-3 sm:p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start">
+            <div className="h-4 w-4 bg-yellow-200 rounded mr-2 sm:mr-3"></div>
+            <div className="flex-1">
+              <div className="h-4 bg-yellow-100 rounded w-3/4"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Form Fields Skeleton */}
+        <div className="space-y-4 sm:space-y-6 animate-pulse">
+          {/* Input Field Skeleton */}
+          <div>
+            <div className="h-5 bg-gray-200 rounded w-40 mb-1.5 sm:mb-2"></div>
+            <div className="h-[144px] bg-gray-100 rounded-lg w-full"></div>
+          </div>
+
+          {/* Tambahan Field Skeleton */}
+          <div>
+            <div className="h-5 bg-gray-200 rounded w-36 mb-1.5 sm:mb-2"></div>
+            <div className="h-[96px] bg-gray-100 rounded-lg w-full"></div>
+          </div>
+
+          {/* Buttons Skeleton */}
+          <div className="flex justify-end space-x-3 sm:space-x-4 pt-4">
+            <div className="h-8 sm:h-9 bg-gray-200 rounded-lg w-20 sm:w-24"></div>
+            <div className="h-8 sm:h-9 bg-gray-200 rounded-lg w-28 sm:w-32"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
 
-      {isLoading && <LoadingIndicator />}
-      {showGeneratingModal && <GeneratingModal />}
-      {showSuccessModal && <SuccessModal />}
-
-      {!isLoading && (
+      {isLoading ? (
+        <FormSkeleton />
+      ) : (
         <div className="max-w-4xl mx-auto py-4 sm:py-12 px-3 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">
             <div className="mb-6 sm:mb-8">
@@ -272,6 +314,9 @@ Jadwal tidak hanya berupa poin, tapi bisa berupa paragraf, jadwal yang diisikan 
           </div>
         </div>
       )}
+
+      {showGeneratingModal && <GeneratingModal />}
+      {showSuccessModal && <SuccessModal />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import TutorialModal from "../components/TutorialModal";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -21,6 +21,18 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
+    toast.success("Berhasil keluar dari aplikasi", {
+      duration: 2000,
+      position: "top-center",
+      style: {
+        background: "#10B981",
+        color: "#fff",
+        padding: "16px",
+        borderRadius: "10px",
+      },
+      icon: "👋",
+    });
+
     localStorage.clear();
     navigate("/");
   };
@@ -140,6 +152,14 @@ const Navbar = () => {
                       <i className="fas fa-cog group-hover:text-custom-blue"></i>
                       <span>Pengaturan</span>
                     </Link>
+                    <Link
+                      to="/change-password"
+                      className="menu-item group w-full"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      <i className="fas fa-key group-hover:text-custom-blue"></i>
+                      <span>Ubah Password</span>
+                    </Link>
                     <hr className="my-1.5 border-gray-100" />
                     <button
                       onClick={handleLogout}
@@ -238,6 +258,10 @@ const Navbar = () => {
               <Link to="/settings" className="mobile-nav-link">
                 <i className="fas fa-cog"></i>
                 <span>Pengaturan</span>
+              </Link>
+              <Link to="/change-password" className="mobile-nav-link">
+                <i className="fas fa-key"></i>
+                <span>Ubah Password</span>
               </Link>
               <button
                 onClick={handleLogout}

@@ -19,11 +19,37 @@ import { Toaster } from "react-hot-toast";
 import ScheduleList from "./pages/ScheduleList";
 import NotFound from "./pages/NotFound";
 import JadwalAkademik from "./pages/JadwalAkademik";
+import ChangePasswordPage from "./pages/ChangePassword";
 
 function App() {
   return (
     <Router>
-      <Toaster position="top-right" />
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Styling default untuk semua toast
+          className: "",
+          duration: 2000,
+          style: {
+            background: "#363636",
+            color: "#fff",
+          },
+          // Styling khusus untuk toast success
+          success: {
+            duration: 2000,
+            style: {
+              background: "#10B981",
+              color: "#fff",
+              padding: "16px",
+              borderRadius: "10px",
+            },
+          },
+        }}
+      />
       <AnimatePresence mode="wait">
         <Routes>
           <Route
@@ -132,6 +158,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <JadwalAkademik />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/change-password"
+            element={
+              <ProtectedRoute>
+                <ChangePasswordPage />
               </ProtectedRoute>
             }
           />

@@ -83,56 +83,63 @@ const ScheduleList = () => {
   });
 
   const ScheduleSkeleton = () => (
-    <div className="grid gap-3 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {[1, 2, 3, 4, 5, 6].map((item) => (
-        <div
-          key={item}
-          className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden"
-        >
-          {/* Header Skeleton */}
-          <div className="bg-gray-50 px-3 py-2 sm:px-4 sm:py-3 border-b border-gray-200">
-            <div className="h-5 bg-gray-200 rounded w-24"></div>
+    <div className="space-y-4">
+      {/* Header Skeleton */}
+      <div className="animate-pulse mb-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+          <div>
+            <div className="h-7 bg-gray-200 rounded w-48 mb-2"></div>
+            <div className="h-4 bg-gray-100 rounded w-64"></div>
           </div>
+          <div className="flex gap-2">
+            <div className="h-9 bg-gray-200 rounded-full w-40"></div>
+            <div className="h-9 bg-gray-200 rounded-full w-44"></div>
+          </div>
+        </div>
+      </div>
 
-          {/* Content Skeleton */}
-          <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
-            {[1, 2, 3].map((task) => (
-              <div key={task} className="animate-pulse">
-                <div className="p-3 sm:p-4 bg-gray-50 rounded-lg">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                      <div className="flex items-center">
-                        <div className="h-3 bg-gray-200 rounded w-24"></div>
-                      </div>
-                    </div>
-                    <div className="h-5 bg-gray-200 rounded w-16"></div>
-                  </div>
+      {/* Tab Navigation Skeleton */}
+      <div className="bg-gray-50 p-1 rounded-xl border border-gray-200">
+        <div className="flex space-x-1">
+          {[1, 2, 3, 4].map((item) => (
+            <div
+              key={item}
+              className="flex-1 h-10 bg-gray-200 rounded-lg animate-pulse"
+            ></div>
+          ))}
+        </div>
+      </div>
 
-                  {/* Suggestions Skeleton */}
-                  <div className="mt-2 sm:mt-3 bg-gradient-to-br from-blue-50/80 to-purple-50/80 rounded-lg border border-blue-100/50 overflow-hidden">
-                    <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-50/50 border-b border-blue-100/50">
-                      <div className="h-4 bg-blue-100 rounded w-32"></div>
-                    </div>
-                    <div className="p-3 sm:p-4">
-                      <div className="space-y-1.5 sm:space-y-2">
-                        {[1, 2].map((suggestion) => (
-                          <div
-                            key={suggestion}
-                            className="flex items-start space-x-2"
-                          >
-                            <div className="h-3 bg-gray-200 rounded w-full"></div>
-                          </div>
-                        ))}
-                      </div>
+      {/* Table Skeleton */}
+      <div className="border border-gray-200 rounded-xl overflow-hidden">
+        <div className="bg-gray-50 px-6 py-3">
+          <div className="grid grid-cols-3 gap-4">
+            <div className="h-4 bg-gray-200 rounded w-20"></div>
+            <div className="h-4 bg-gray-200 rounded w-24"></div>
+            <div className="h-4 bg-gray-200 rounded w-16"></div>
+          </div>
+        </div>
+        <div className="divide-y divide-gray-200">
+          {[1, 2, 3, 4].map((item) => (
+            <div key={item} className="px-6 py-4">
+              <div className="grid grid-cols-3 gap-4 animate-pulse">
+                <div className="h-4 bg-gray-100 rounded w-24"></div>
+                <div>
+                  <div className="h-4 bg-gray-100 rounded w-full mb-3"></div>
+                  <div className="bg-blue-50 rounded-lg p-3">
+                    <div className="h-4 bg-blue-100/50 rounded w-20 mb-2"></div>
+                    <div className="space-y-2">
+                      <div className="h-3 bg-blue-100/50 rounded w-full"></div>
+                      <div className="h-3 bg-blue-100/50 rounded w-3/4"></div>
                     </div>
                   </div>
                 </div>
+                <div className="h-6 bg-blue-100 rounded-full w-16"></div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 
@@ -142,16 +149,6 @@ const ScheduleList = () => {
         <Navbar />
         <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
-            {/* Header Skeleton */}
-            <div className="animate-pulse mb-6">
-              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-                <div>
-                  <div className="h-7 bg-gray-200 rounded w-48 mb-2"></div>
-                  <div className="h-4 bg-gray-100 rounded w-64"></div>
-                </div>
-                <div className="h-9 bg-gray-200 rounded w-40"></div>
-              </div>
-            </div>
             <ScheduleSkeleton />
           </div>
         </div>
@@ -182,9 +179,9 @@ const ScheduleList = () => {
                   <div className="relative">
                     <button
                       onClick={() => setShowPastDays(!showPastDays)}
-                      className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border-2 border-orange-400 rounded-full shadow-sm hover:bg-orange-50 transition-all duration-200"
+                      className="inline-flex items-center px-3 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm font-medium text-gray-700 bg-white border-2 border-orange-400 rounded-full shadow-sm hover:bg-orange-50 transition-all duration-200"
                     >
-                      <i className="fas fa-history mr-2 text-orange-500"></i>
+                      <i className="fas fa-history mr-1 sm:mr-2 text-orange-500"></i>
                       Hari Sebelumnya
                     </button>
                     
@@ -221,9 +218,9 @@ const ScheduleList = () => {
                 )}
                 <button
                   onClick={() => navigate("/generate-schedule")}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 transition-all duration-200"
+                  className="inline-flex items-center px-3 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 transition-all duration-200"
                 >
-                  <i className="fas fa-plus mr-2"></i>
+                  <i className="fas fa-plus mr-1 sm:mr-2"></i>
                   Buat Jadwal Mingguan
                 </button>
               </div>

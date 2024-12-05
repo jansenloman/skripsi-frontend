@@ -696,9 +696,13 @@ const Home = () => {
                             <div className="flex items-center text-sm text-gray-600">
                               <i className="far fa-calendar mr-2"></i>
                               <span>
-                                {new Date(event.tanggal).toLocaleDateString(
-                                  "id-ID"
-                                )}
+                                {new Date(event.tanggal)
+                                  .toLocaleDateString("id-ID", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "2-digit",
+                                  })
+                                  .replace(/\s/g, "-")}
                               </span>
                             </div>
                             <div className="flex items-center text-sm text-gray-600">

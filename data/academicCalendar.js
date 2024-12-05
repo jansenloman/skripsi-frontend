@@ -447,7 +447,7 @@ export const formatIndonesianDate = (dateStr) => {
 
     return dateStr;
   } catch (error) {
-    console.error("Error formatting date:", dateStr);
+    console.error("Error formatting date:", error, dateStr);
     return dateStr;
   }
 };
@@ -480,12 +480,11 @@ export const parseIndonesianDate = (dateStr) => {
       return new Date(`${year}-${monthNumber}-${day.padStart(2, "0")}`);
     }
 
-    // Handle date range (e.g., "30 Desember - 9 Januari 2025")
     const rangeDateMatch = dateStr.match(
       /(\d+)\s+([A-Za-z]+)(?:\s+(\d{4}))?\s*-\s*(\d+)\s+([A-Za-z]+)\s+(\d{4})/
     );
     if (rangeDateMatch) {
-      const [, startDay, startMonth, startYear, endDay, endMonth, endYear] =
+      const [, startDay, startMonth, startYear, , endMonth, endYear] =
         rangeDateMatch;
       const monthNumber = monthMap[startMonth];
       if (!monthNumber) return null;
@@ -505,7 +504,7 @@ export const parseIndonesianDate = (dateStr) => {
 
     return null;
   } catch (error) {
-    console.error("Error parsing date:", dateStr);
+    console.error("Error parsing date:", error, dateStr);
     return null;
   }
 };
@@ -559,10 +558,16 @@ export const getUpcomingEvents = (academicCalendar, start = 0, limit = 5) => {
       .filter(Boolean)
   );
 
-  // Filter future events and sort
   const futureEvents = processedEvents
     .filter((event) => event.parsedDate >= today)
-    .sort((a, b) => a.parsedDate - b.parsedDate);
+    .sort((a, b) => {
+      if (a.parsedDate.getTime() === b.parsedDate.getTime()) {
+        const aEndDate = parseEndDate(a.date);
+        const bEndDate = parseEndDate(b.date);
+        return aEndDate - bEndDate;
+      }
+      return a.parsedDate - b.parsedDate;
+    });
 
   // Return paginated results
   return {
@@ -570,4 +575,31 @@ export const getUpcomingEvents = (academicCalendar, start = 0, limit = 5) => {
     hasMore: start + limit < futureEvents.length,
     total: futureEvents.length,
   };
+};
+
+const parseEndDate = (dateStr) => {
+  const match = dateStr.match(/- (\d+) ([A-Za-z]+) (\d{4})/);
+  if (match) {
+    const [, day, month, year] = match;
+    const monthNumber = monthMap[month];
+    if (monthNumber) {
+      return new Date(`${year}-${monthNumber}-${day.padStart(2, "0")}`);
+    }
+  }
+  return new Date(0);
+};
+
+const monthMap = {
+  Januari: "01",
+  Februari: "02",
+  Maret: "03",
+  April: "04",
+  Mei: "05",
+  Juni: "06",
+  Juli: "07",
+  Agustus: "08",
+  September: "09",
+  Oktober: "10",
+  November: "11",
+  Desember: "12",
 };

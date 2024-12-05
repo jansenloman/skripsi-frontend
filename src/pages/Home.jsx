@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { fetchWithAuth } from "../utils/api";
@@ -28,7 +28,13 @@ const Home = () => {
 
   const [showTutorial, setShowTutorial] = useState(false);
 
-  const upcomingEvents = getUpcomingEvents(academicCalendar);
+  const [startIndex, setStartIndex] = useState(0);
+  const [academicEvents, setAcademicEvents] = useState([]);
+  const [hasMoreEvents, setHasMoreEvents] = useState(true);
+
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  const academicCalendarRef = useRef(null);
 
   useEffect(() => {
     const isFirstVisit = !localStorage.getItem("tutorialShown");
@@ -337,6 +343,47 @@ const Home = () => {
     </div>
   );
 
+  useEffect(() => {
+    const { events, hasMore } = getUpcomingEvents(academicCalendar, 0, 2);
+    setAcademicEvents(events);
+    setHasMoreEvents(hasMore);
+  }, []);
+
+  const loadMore = () => {
+    const nextStart = startIndex + 5;
+    const { events, hasMore } = getUpcomingEvents(
+      academicCalendar,
+      nextStart,
+      5
+    );
+    setAcademicEvents([...academicEvents, ...events]);
+    setStartIndex(nextStart);
+    setHasMoreEvents(hasMore);
+    setIsExpanded(false);
+  };
+
+  const collapse = () => {
+    const { events, hasMore } = getUpcomingEvents(academicCalendar, 0, 2);
+    setAcademicEvents(events);
+    setStartIndex(0);
+    setHasMoreEvents(hasMore);
+    setIsExpanded(true);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (academicCalendarRef.current && !isExpanded) {
+        const rect = academicCalendarRef.current.getBoundingClientRect();
+        if (rect.bottom < 0) {
+          collapse();
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isExpanded]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -479,47 +526,51 @@ const Home = () => {
         </div>
 
         {/* Academic Calendar Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center space-x-3">
-              <div className="p-2.5 bg-custom-blue/10 rounded-xl">
-                <i className="fas fa-calendar-alt text-lg text-custom-blue"></i>
+        <div
+          ref={academicCalendarRef}
+          className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6"
+        >
+          <div className={cardHeaderStyle}>
+            <div className={iconContainerStyle}>
+              <div className={iconBoxStyle}>
+                <i className={`fas fa-calendar-alt ${iconStyle}`}></i>
               </div>
-              <h2 className="text-xl font-semibold text-gray-800">
-                Jadwal Akademik Terdekat
-              </h2>
+              <h2 className={titleStyle}>Kalender Akademik</h2>
             </div>
             <button
               onClick={() => navigate("/jadwal-akademik")}
-              className="text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200 flex items-center space-x-1"
+              className={linkStyle}
             >
               <span>Lihat Semua</span>
               <i className="fas fa-chevron-right text-xs"></i>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {upcomingEvents.length > 0 ? (
-              upcomingEvents.map((event, index) => (
-                <div
-                  key={index}
-                  className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-100/80 flex flex-col h-[120px]"
-                >
-                  <div className="flex flex-col flex-grow">
-                    <h3 className="font-medium text-gray-800 line-clamp-2 mb-2">
-                      {event.name}
-                    </h3>
-                    <div className="flex items-center text-sm text-gray-500 mt-auto">
-                      <i className="far fa-calendar-alt mr-2"></i>
-                      <span>{event.date}</span>
-                    </div>
+          <div className="space-y-3">
+            {academicEvents.map((event, index) => (
+              <div key={index} className={scheduleCardStyle}>
+                <div className="flex flex-col space-y-2">
+                  <h3 className="font-medium text-gray-800">{event.name}</h3>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <i className="far fa-calendar mr-2"></i>
+                    <span>{event.date}</span>
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="col-span-full">
-                <EmptyState message="Tidak ada jadwal akademik terdekat" />
               </div>
+            ))}
+
+            {hasMoreEvents && (
+              <button
+                onClick={loadMore}
+                className="w-full mt-4 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors duration-200"
+              >
+                Tampilkan Lebih Banyak
+                <i className="fas fa-chevron-down ml-2 text-xs"></i>
+              </button>
+            )}
+
+            {academicEvents.length === 0 && (
+              <EmptyState message="Tidak ada jadwal akademik terdekat" />
             )}
           </div>
         </div>

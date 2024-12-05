@@ -510,7 +510,7 @@ export const parseIndonesianDate = (dateStr) => {
   }
 };
 
-export const getUpcomingEvents = (academicCalendar) => {
+export const getUpcomingEvents = (academicCalendar, start = 0, limit = 5) => {
   const today = new Date();
 
   // Flatten all events
@@ -518,9 +518,7 @@ export const getUpcomingEvents = (academicCalendar) => {
     schedule.items.flatMap((item) => {
       const events = [];
 
-      // Add main item if it has dates
       if (item.oddSemester || item.evenSemester) {
-        // Combine both semester dates
         events.push({
           name: item.name,
           dates: [
@@ -530,7 +528,6 @@ export const getUpcomingEvents = (academicCalendar) => {
         });
       }
 
-      // Add subitems if they exist
       if (item.subitems) {
         events.push(
           ...item.subitems.map((subitem) => ({
@@ -547,7 +544,6 @@ export const getUpcomingEvents = (academicCalendar) => {
     })
   );
 
-  // Process all dates for each event
   const processedEvents = allEvents.flatMap((event) =>
     event.dates
       .map(({ date }) => {
@@ -563,9 +559,15 @@ export const getUpcomingEvents = (academicCalendar) => {
       .filter(Boolean)
   );
 
-  // Filter out past events and sort by closest date
-  return processedEvents
+  // Filter future events and sort
+  const futureEvents = processedEvents
     .filter((event) => event.parsedDate >= today)
-    .sort((a, b) => a.parsedDate - b.parsedDate)
-    .slice(0, 5);
+    .sort((a, b) => a.parsedDate - b.parsedDate);
+
+  // Return paginated results
+  return {
+    events: futureEvents.slice(start, start + limit),
+    hasMore: start + limit < futureEvents.length,
+    total: futureEvents.length,
+  };
 };

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import LoadingIndicator from "../components/LoadingIndicator";
 import { API_BASE_URL } from "../utils/constants";
 
 const GenerateSchedule = () => {

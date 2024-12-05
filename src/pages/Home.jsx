@@ -338,7 +338,7 @@ const Home = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
       {/* Tutorial Modal */}
       <TutorialModal
@@ -390,7 +390,7 @@ const Home = () => {
         ]}
       />
 
-      <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {/* Welcome & Time Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-8 mb-4 sm:mb-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 sm:gap-8">
@@ -479,14 +479,19 @@ const Home = () => {
         </div>
 
         {/* Academic Calendar Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-4 sm:mb-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-800">
-              Jadwal Akademik Terdekat
-            </h2>
+            <div className="flex items-center space-x-3">
+              <div className="p-2.5 bg-custom-blue/10 rounded-xl">
+                <i className="fas fa-calendar-alt text-lg text-custom-blue"></i>
+              </div>
+              <h2 className="text-xl font-semibold text-gray-800">
+                Jadwal Akademik Terdekat
+              </h2>
+            </div>
             <button
               onClick={() => navigate("/jadwal-akademik")}
-              className={linkStyle}
+              className="text-sm text-gray-500 hover:text-custom-blue transition-colors duration-200 flex items-center space-x-1"
             >
               <span>Lihat Semua</span>
               <i className="fas fa-chevron-right text-xs"></i>
@@ -494,30 +499,30 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {upcomingEvents.map((event, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg p-4 border border-gray-100 hover:bg-gray-50 transition-all duration-200 flex flex-col h-[120px]"
-              >
-                <h3 className="font-medium text-gray-800 line-clamp-2">
-                  {event.name}
-                </h3>
-                <p className="text-sm text-gray-500 mt-auto">{event.date}</p>
+            {upcomingEvents.length > 0 ? (
+              upcomingEvents.map((event, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-100/80 flex flex-col h-[120px]"
+                >
+                  <div className="flex flex-col flex-grow">
+                    <h3 className="font-medium text-gray-800 line-clamp-2 mb-2">
+                      {event.name}
+                    </h3>
+                    <div className="flex items-center text-sm text-gray-500 mt-auto">
+                      <i className="far fa-calendar-alt mr-2"></i>
+                      <span>{event.date}</span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full">
+                <EmptyState message="Tidak ada jadwal akademik terdekat" />
               </div>
-            ))}
+            )}
           </div>
         </div>
-
-        {/* Tambahkan CSS untuk hide scrollbar mobile view kalender akademik*/}
-        <style>{`
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-          }
-          .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-          }
-        `}</style>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">

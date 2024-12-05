@@ -9,6 +9,7 @@ const LoginPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -164,10 +165,10 @@ const LoginPassword = () => {
                     </label>
                     <div className="relative">
                       <input
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         id="password"
                         placeholder="Masukkan password"
-                        className="pl-12 pr-4 py-3.5 w-full text-base border border-gray-200 rounded-xl focus:ring-2 focus:ring-custom-blue/20 focus:border-custom-blue"
+                        className="pl-12 pr-12 py-3.5 w-full text-base border border-gray-200 rounded-xl focus:ring-2 focus:ring-custom-blue/20 focus:border-custom-blue"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -175,6 +176,13 @@ const LoginPassword = () => {
                       <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
                         <i className="fas fa-lock text-lg"></i>
                       </div>
+                      <button
+                        type="button"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        <i className={`fas ${showPassword ? "fa-eye-slash" : "fa-eye"} text-lg`}></i>
+                      </button>
                     </div>
                   </div>
 

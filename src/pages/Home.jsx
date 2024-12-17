@@ -281,7 +281,6 @@ const Home = () => {
     setCurrentQuote(motivationalQuotes[randomIndex]);
   }, []);
 
-  // Tambahkan fungsi getGreeting
   const getGreeting = () => {
     const hour = currentTime.getHours();
     if (hour < 12) return "Selamat Pagi";
@@ -290,7 +289,6 @@ const Home = () => {
     return "Selamat Malam";
   };
 
-  // Tambahkan komponen skeleton untuk profile
   const ProfileSkeleton = () => (
     <div className="animate-pulse">
       <div className="h-4 w-24 bg-gray-200 rounded mb-3"></div>
@@ -299,7 +297,6 @@ const Home = () => {
     </div>
   );
 
-  // Tambahkan komponen skeleton untuk jadwal
   const ScheduleSkeleton = () => (
     <div className="space-y-3">
       {[1, 2].map((item) => (
@@ -323,7 +320,6 @@ const Home = () => {
     </div>
   );
 
-  // Style konsisten untuk semua card jadwal
   const cardHeaderStyle = "flex items-center justify-between mb-4 sm:mb-6";
   const iconContainerStyle = "flex items-center space-x-2 sm:space-x-3";
   const iconBoxStyle = "p-2 sm:p-2.5 bg-custom-blue/10 rounded-xl";
@@ -334,7 +330,7 @@ const Home = () => {
   const scheduleCardStyle =
     "p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-100/80";
 
-  // Komponen EmptyState yang konsisten
+  // eslint-disable-next-line react/prop-types
   const EmptyState = ({ message }) => (
     <div className="flex flex-col items-center justify-center py-8 text-gray-500 bg-gray-50 rounded-xl border border-gray-100/80">
       <i className="far fa-calendar-check text-4xl mb-3 text-gray-400"></i>

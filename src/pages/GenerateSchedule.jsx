@@ -125,7 +125,7 @@ const GenerateSchedule = () => {
     </div>
   );
 
-  // Modal sukses yang lebih sederhana
+  // Modal sukses
   const SuccessModal = () => (
     <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl p-6 sm:p-8 max-w-md w-full mx-4 shadow-xl">
@@ -152,7 +152,6 @@ const GenerateSchedule = () => {
     </div>
   );
 
-  // Tambahkan komponen FormSkeleton
   const FormSkeleton = () => (
     <div className="max-w-4xl mx-auto py-4 sm:py-12 px-3 sm:px-6 lg:px-8">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6">

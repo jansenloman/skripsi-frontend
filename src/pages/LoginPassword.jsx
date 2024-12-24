@@ -54,6 +54,9 @@ const LoginPassword = () => {
       // Simpan token dan data penting
       localStorage.setItem("token", data.token);
       localStorage.setItem("email", data.email);
+      if (data.name) {
+        localStorage.setItem("name", data.name);
+      }
 
       // Decode token untuk memeriksa expiry
       const decoded = jwtDecode(data.token);

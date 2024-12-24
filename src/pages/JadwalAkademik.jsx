@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Breadcrumb from "../components/Breadcrumb";
 import { academicCalendar } from "../../data/academicCalendar";
 
 function JadwalAkademik() {
@@ -13,6 +14,12 @@ function JadwalAkademik() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
+      <Breadcrumb
+        items={[
+          { label: "Jadwal", path: "/schedule-list" },
+          { label: "Jadwal Akademik" }
+        ]}
+      />
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {/* Header Section */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">

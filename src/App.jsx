@@ -20,6 +20,7 @@ import ScheduleList from "./pages/ScheduleList";
 import NotFound from "./pages/NotFound";
 import JadwalAkademik from "./pages/JadwalAkademik";
 import ChangePasswordPage from "./pages/ChangePassword";
+import FloatingChatButton from "./components/FloatingChatButton";
 
 function App() {
   return (
@@ -173,6 +174,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </AnimatePresence>
+      <FloatingChatButton />
     </Router>
   );
 }

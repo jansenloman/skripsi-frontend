@@ -2,14 +2,48 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import TutorialModal from "../components/TutorialModal";
 import toast from "react-hot-toast";
+import { fetchWithAuth } from "../utils/api";
+import { API_BASE_URL } from "../utils/constants";
 
-const Navbar = () => {
+const Navbar = ({ onLinkClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const email = localStorage.getItem("email");
+    const name = localStorage.getItem("name");
+    if (email) setUserEmail(email);
+    if (name) {
+      setUserName(name);
+    } else {
+      // Jika nama tidak ada di localStorage, ambil dari API
+      const fetchProfile = async () => {
+        try {
+          const response = await fetchWithAuth(`${API_BASE_URL}/api/profile`);
+          const data = await response.json();
+          if (data.success && data.profile && data.profile.name) {
+            setUserName(data.profile.name);
+            localStorage.setItem("name", data.profile.name);
+          }
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+        }
+      };
+      fetchProfile();
+    }
+  }, []);
+
+  const handleClick = (e, to) => {
+    if (onLinkClick && !onLinkClick(to)) {
+      e.preventDefault();
+    }
+  };
 
   // Handle scroll effect
   useEffect(() => {
@@ -56,6 +90,7 @@ const Navbar = () => {
             <div className="flex items-center">
               <Link
                 to="/home"
+                onClick={(e) => handleClick(e, "/home")}
                 className="flex items-center space-x-2 hover:opacity-80 transition-all duration-200"
               >
                 <div className="bg-custom-blue/10 p-2 rounded-lg">
@@ -71,6 +106,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               <Link
                 to="/home"
+                onClick={(e) => handleClick(e, "/home")}
                 className={`nav-link group ${
                   isActivePath("/home") ? "nav-link-active" : ""
                 }`}
@@ -83,6 +119,7 @@ const Navbar = () => {
 
               <Link
                 to="/jadwal-kuliah"
+                onClick={(e) => handleClick(e, "/jadwal-kuliah")}
                 className={`nav-link group ${
                   isActivePath("/jadwal-kuliah") ? "nav-link-active" : ""
                 }`}
@@ -95,6 +132,7 @@ const Navbar = () => {
 
               <Link
                 to="/jadwal-mendatang"
+                onClick={(e) => handleClick(e, "/jadwal-mendatang")}
                 className={`nav-link group ${
                   isActivePath("/jadwal-mendatang") ? "nav-link-active" : ""
                 }`}
@@ -107,6 +145,7 @@ const Navbar = () => {
 
               <Link
                 to="/schedule-list"
+                onClick={(e) => handleClick(e, "/schedule-list")}
                 className={`nav-link group ${
                   isActivePath("/schedule-list") ? "nav-link-active" : ""
                 }`}
@@ -143,19 +182,30 @@ const Navbar = () => {
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1.5 border border-gray-100 animate-fadeIn">
-                    <Link to="/profile" className="menu-item group">
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-1.5 border border-gray-100 animate-fadeIn">
+                    <Link
+                      to="/profile"
+                      onClick={(e) => handleClick(e, "/profile")}
+                      className="menu-item group flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50/80"
+                    >
                       <i className="fas fa-user group-hover:text-custom-blue"></i>
                       <span>Profil</span>
                     </Link>
-                    <Link to="/settings" className="menu-item group">
-                      <i className="fas fa-cog group-hover:text-custom-blue"></i>
-                      <span>Pengaturan</span>
+                    <Link
+                      to="/settings"
+                      onClick={(e) => handleClick(e, "/settings")}
+                      className="menu-item group flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50/80"
+                    >
+                      <i className="fas fa-clock group-hover:text-custom-blue"></i>
+                      <span>Pengaturan Jadwal</span>
                     </Link>
                     <Link
                       to="/change-password"
-                      className="menu-item group w-full"
-                      onClick={() => setIsDropdownOpen(false)}
+                      onClick={(e) => {
+                        handleClick(e, "/change-password");
+                        setIsDropdownOpen(false);
+                      }}
+                      className="menu-item group flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50/80 w-full"
                     >
                       <i className="fas fa-key group-hover:text-custom-blue"></i>
                       <span>Ubah Password</span>
@@ -163,7 +213,7 @@ const Navbar = () => {
                     <hr className="my-1.5 border-gray-100" />
                     <button
                       onClick={handleLogout}
-                      className="menu-item group text-red-500 hover:bg-red-50/80 w-full"
+                      className="menu-item group text-red-500 hover:bg-red-50/80 w-full flex items-center space-x-2 px-4 py-2"
                     >
                       <i className="fas fa-sign-out-alt group-hover:text-red-600"></i>
                       <span>Keluar</span>
@@ -198,78 +248,141 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - Updated with better spacing */}
+        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden bg-white border-t border-gray-100 shadow-lg animate-fadeIn">
-            <div className="px-4 py-2 space-y-1">
-              <Link
-                to="/home"
-                className={`mobile-nav-link ${
-                  isActivePath("/home")
-                    ? "text-custom-blue bg-custom-blue/10"
-                    : ""
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <i className="fas fa-home w-5"></i>
-                <span>Dashboard</span>
-              </Link>
-              <Link
-                to="/jadwal-kuliah"
-                className={`mobile-nav-link ${
-                  isActivePath("/jadwal-kuliah")
-                    ? "text-custom-blue bg-custom-blue/10"
-                    : ""
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <i className="fas fa-calendar-alt w-5"></i>
-                <span>Jadwal Kuliah</span>
-              </Link>
-              <Link
-                to="/jadwal-mendatang"
-                className={`mobile-nav-link ${
-                  isActivePath("/jadwal-mendatang")
-                    ? "text-custom-blue bg-custom-blue/10"
-                    : ""
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <i className="fas fa-calendar-check w-5"></i>
-                <span>Jadwal Mendatang</span>
-              </Link>
-              <Link
-                to="/schedule-list"
-                className={`mobile-nav-link ${
-                  isActivePath("/schedule-list")
-                    ? "text-custom-blue bg-custom-blue/10"
-                    : ""
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <i className="fas fa-list-alt w-5"></i>
-                <span>Jadwal Mingguan</span>
-              </Link>
-              <hr className="my-2 border-gray-100" />
-              <Link to="/profile" className="mobile-nav-link">
-                <i className="fas fa-user"></i>
-                <span>Profil</span>
-              </Link>
-              <Link to="/settings" className="mobile-nav-link">
-                <i className="fas fa-cog"></i>
-                <span>Pengaturan</span>
-              </Link>
-              <Link to="/change-password" className="mobile-nav-link">
-                <i className="fas fa-key"></i>
-                <span>Ubah Password</span>
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="mobile-nav-link text-red-500 w-full text-left"
-              >
-                <i className="fas fa-sign-out-alt"></i>
-                <span>Keluar</span>
-              </button>
+            {/* Header Section */}
+            <div className="px-4 py-3 bg-gray-50 border-b border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-custom-blue/10 flex items-center justify-center">
+                  <span className="text-custom-blue text-lg font-semibold">
+                    {userName ? userName[0].toUpperCase() : "U"}
+                  </span>
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-gray-900">
+                    {userName || "User"}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {userEmail || "user@email.com"}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="px-3 py-2">
+              <div className="space-y-1">
+                <Link
+                  to="/home"
+                  className={`mobile-nav-link ${
+                    isActivePath("/home") ? "text-custom-blue bg-custom-blue/10" : ""
+                  }`}
+                  onClick={(e) => {
+                    handleClick(e, "/home");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <i className="fas fa-home w-5"></i>
+                  <span>Dashboard</span>
+                </Link>
+                <Link
+                  to="/jadwal-kuliah"
+                  className={`mobile-nav-link ${
+                    isActivePath("/jadwal-kuliah")
+                      ? "text-custom-blue bg-custom-blue/10"
+                      : ""
+                  }`}
+                  onClick={(e) => {
+                    handleClick(e, "/jadwal-kuliah");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <i className="fas fa-calendar-alt w-5"></i>
+                  <span>Jadwal Kuliah</span>
+                </Link>
+                <Link
+                  to="/jadwal-mendatang"
+                  className={`mobile-nav-link ${
+                    isActivePath("/jadwal-mendatang")
+                      ? "text-custom-blue bg-custom-blue/10"
+                      : ""
+                  }`}
+                  onClick={(e) => {
+                    handleClick(e, "/jadwal-mendatang");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <i className="fas fa-calendar-check w-5"></i>
+                  <span>Jadwal Mendatang</span>
+                </Link>
+                <Link
+                  to="/schedule-list"
+                  className={`mobile-nav-link ${
+                    isActivePath("/schedule-list")
+                      ? "text-custom-blue bg-custom-blue/10"
+                      : ""
+                  }`}
+                  onClick={(e) => {
+                    handleClick(e, "/schedule-list");
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <i className="fas fa-list-alt w-5"></i>
+                  <span>Jadwal Mingguan</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Profile Section with Divider */}
+            <div className="mt-2">
+              <div className="py-2 px-3">
+                <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
+                  Pengaturan Akun
+                </div>
+                <div className="space-y-1">
+                  <Link
+                    to="/profile"
+                    onClick={(e) => {
+                      handleClick(e, "/profile");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="mobile-nav-link"
+                  >
+                    <i className="fas fa-user w-5"></i>
+                    <span>Profil</span>
+                  </Link>
+                  <Link
+                    to="/settings"
+                    onClick={(e) => {
+                      handleClick(e, "/settings");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="mobile-nav-link"
+                  >
+                    <i className="fas fa-clock w-5"></i>
+                    <span>Pengaturan Jadwal</span>
+                  </Link>
+                  <Link
+                    to="/ubah-password"
+                    onClick={(e) => {
+                      handleClick(e, "/ubah-password");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="mobile-nav-link"
+                  >
+                    <i className="fas fa-key w-5"></i>
+                    <span>Ubah Password</span>
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="mobile-nav-link w-full text-left text-red-600 hover:bg-red-50"
+                  >
+                    <i className="fas fa-sign-out-alt w-5"></i>
+                    <span>Keluar</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}

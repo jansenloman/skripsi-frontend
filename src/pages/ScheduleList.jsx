@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Breadcrumb from "../components/Breadcrumb";
 import { API_BASE_URL } from "../utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -157,6 +158,11 @@ const ScheduleList = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <Navbar />
+        <Breadcrumb
+          items={[
+            { label: "Jadwal" }
+          ]}
+        />
         <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
             <ScheduleSkeleton />
@@ -209,7 +215,11 @@ const ScheduleList = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
-
+      <Breadcrumb
+        items={[
+          { label: "Jadwal" }
+        ]}
+      />
       <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
           <div className="space-y-4">

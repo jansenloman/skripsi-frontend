@@ -38,7 +38,7 @@ const motivationalQuotes = [
   "Ketika kamu menghargai jadwalmu, waktu akan menghargaimu kembali.",
   "Jadwal adalah alat untuk mengubah harapan menjadi kenyataan.",
   "Kedisiplinan dimulai dengan menepati jadwal yang kamu buat sendiri.",
-  "Setiap hari yang direncanakan adalah langkah lebih dekat menuju sukses.",
+  "Setiap hari yang direncanakan dengan baik adalah langkah lebih dekat menuju sukses.",
   "Jadwal yang baik mengajarkan kita untuk menghargai setiap menit.",
   "Jangan hanya bekerja keras, bekerjalah dengan jadwal yang terorganisir.",
   "Jadwalmu mencerminkan seberapa serius kamu pada tujuan hidupmu.",
@@ -170,6 +170,7 @@ const Home = () => {
 
         if (data.success && data.profile && data.profile.name) {
           setUserName(data.profile.name);
+          localStorage.setItem("name", data.profile.name);
         }
       } catch (error) {
         console.error("Error fetching profile:", error);

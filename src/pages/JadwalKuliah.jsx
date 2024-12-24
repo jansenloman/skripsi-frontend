@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import Navbar from "../components/Navbar";
+import Breadcrumb from "../components/Breadcrumb";
 import ActionButtons from "../components/ActionButtons";
 import DeleteConfirmation from "../components/DeleteConfirmation";
 import { API_BASE_URL } from "../utils/constants";
@@ -171,6 +172,12 @@ const JadwalKuliah = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <Navbar />
+        <Breadcrumb
+          items={[
+            { label: "Jadwal", path: "/schedule-list" },
+            { label: "Jadwal Kuliah" }
+          ]}
+        />
         <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
             {/* Header Skeleton */}
@@ -187,6 +194,12 @@ const JadwalKuliah = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navbar />
+      <Breadcrumb
+        items={[
+          { label: "Jadwal", path: "/schedule-list" },
+          { label: "Jadwal Kuliah" }
+        ]}
+      />
       <div className="max-w-7xl mx-auto py-2 px-2 sm:py-8 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4 sm:mb-6">

@@ -83,7 +83,7 @@ const JadwalMendatangHistory = () => {
       console.log("Token:", token ? "exists" : "missing");
 
       const response = await fetch(
-        `${API_BASE_URL}/api/schedule/jadwal-mendatang/history`,
+        `${API_BASE_URL}/api/schedule/jadwal-mendatang-history`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

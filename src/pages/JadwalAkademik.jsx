@@ -164,25 +164,61 @@ function JadwalAkademik() {
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {schedule.items.map((item, index) => (
-                        <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-6 py-4 text-sm text-gray-800 font-medium">
-                            {item.name}
-                          </td>
-                          {needsCombinedColumn(schedule.category) ? (
-                            <td className="px-6 py-4 text-sm text-gray-600">
-                              {item.oddSemester !== "-" ? item.oddSemester : item.evenSemester}
-                            </td>
-                          ) : (
+                        <>
+                          {/* Jika item memiliki subitems, tampilkan header item */}
+                          {item.subitems ? (
                             <>
-                              <td className="px-6 py-4 text-sm text-gray-600">
-                                {item.oddSemester}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-gray-600">
-                                {item.evenSemester}
-                              </td>
+                              <tr key={`${index}-header`} className="bg-gray-50">
+                                <td colSpan={needsCombinedColumn(schedule.category) ? 2 : 3} className="px-6 py-4 text-sm text-gray-800 font-semibold">
+                                  {item.name}
+                                </td>
+                              </tr>
+                              {/* Tampilkan subitems */}
+                              {item.subitems.map((subitem, subIndex) => (
+                                <tr key={`${index}-${subIndex}`} className="hover:bg-gray-50">
+                                  <td className="px-6 py-4 text-sm text-gray-800 pl-12">
+                                    {subitem.name}
+                                  </td>
+                                  {needsCombinedColumn(schedule.category) ? (
+                                    <td className="px-6 py-4 text-sm text-gray-600">
+                                      {subitem.oddSemester !== "-" ? subitem.oddSemester : subitem.evenSemester}
+                                    </td>
+                                  ) : (
+                                    <>
+                                      <td className="px-6 py-4 text-sm text-gray-600">
+                                        {subitem.oddSemester}
+                                      </td>
+                                      <td className="px-6 py-4 text-sm text-gray-600">
+                                        {subitem.evenSemester}
+                                      </td>
+                                    </>
+                                  )}
+                                </tr>
+                              ))}
                             </>
+                          ) : (
+                            // Tampilkan item normal seperti sebelumnya
+                            <tr key={index} className="hover:bg-gray-50">
+                              <td className="px-6 py-4 text-sm text-gray-800 font-medium">
+                                {item.name}
+                              </td>
+                              {needsCombinedColumn(schedule.category) ? (
+                                <td className="px-6 py-4 text-sm text-gray-600">
+                                  {item.oddSemester !== "-" ? item.oddSemester : item.evenSemester}
+                                </td>
+                              ) : (
+                                <>
+                                  <td className="px-6 py-4 text-sm text-gray-600">
+                                    {item.oddSemester}
+                                  </td>
+                                  <td className="px-6 py-4 text-sm text-gray-600">
+                                    {item.evenSemester}
+                                  </td>
+                                </>
+                              )}
+                            </tr>
                           )}
-                        </tr>
+                        </>
                       ))}
                     </tbody>
                   </table>

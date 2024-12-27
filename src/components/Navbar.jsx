@@ -4,6 +4,7 @@ import TutorialModal from "../components/TutorialModal";
 import toast from "react-hot-toast";
 import { fetchWithAuth } from "../utils/api";
 import { API_BASE_URL } from "../utils/constants";
+import FloatingClock from "./FloatingClock";
 
 const Navbar = ({ onLinkClick }) => {
   const navigate = useNavigate();
@@ -222,6 +223,9 @@ const Navbar = ({ onLinkClick }) => {
                 )}
               </div>
             </div>
+
+            {/* Floating Clock Component */}
+            <FloatingClock />
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center space-x-2">

@@ -276,9 +276,7 @@ const Navbar = ({ onLinkClick }) => {
                 <Link
                   to="/home"
                   className={`mobile-nav-link ${
-                    isActivePath("/home")
-                      ? "text-custom-blue bg-custom-blue/10"
-                      : ""
+                    isActivePath("/home") ? "text-custom-blue bg-custom-blue/10" : ""
                   }`}
                   onClick={(e) => {
                     handleClick(e, "/home");
@@ -366,9 +364,9 @@ const Navbar = ({ onLinkClick }) => {
                     <span>Pengaturan Jadwal</span>
                   </Link>
                   <Link
-                    to="/change-password"
+                    to="/ubah-password"
                     onClick={(e) => {
-                      handleClick(e, "/change-password");
+                      handleClick(e, "/ubah-password");
                       setIsMobileMenuOpen(false);
                     }}
                     className="mobile-nav-link"

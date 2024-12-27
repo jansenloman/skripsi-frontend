@@ -50,66 +50,6 @@ const motivationalQuotes = [
   "Jadwal adalah batasan yang membebaskan kita dari kekacauan.",
   "Waktu yang baik dimulai dari jadwal yang baik.",
   "Produktivitas sejati dimulai dengan jadwal yang dirancang dengan bijak.",
-  "Setiap jadwal adalah janji pada dirimu sendiri untuk terus maju.",
-  "Rencana besar dimulai dari jadwal harian yang kecil namun konsisten.",
-  "Jadwal bukan sekadar daftar tugas, tetapi peta perjalanan menuju impianmu.",
-  "Tantangan terbesar bukan membuat jadwal, tapi mematuhinya.",
-  "Dengan jadwal, setiap hari memiliki tujuan dan arah yang jelas.",
-  "Jadwal adalah komitmen untuk menghormati waktu dan dirimu sendiri.",
-  "Dengan jadwal, kamu mengubah waktu menjadi sekutu, bukan musuh.",
-  "Jadwal yang konsisten adalah rahasia produktivitas jangka panjang.",
-  "Hari yang sibuk lebih mudah dijalani dengan jadwal yang terorganisir.",
-  "Jangan takut menyesuaikan jadwalmu, fleksibilitas adalah bagian dari kemajuan.",
-  "Jadwal adalah senjata rahasia mereka yang selalu berhasil.",
-  "Dengan jadwal, bahkan tugas besar terasa lebih ringan karena terpecah dalam langkah kecil.",
-  "Menepati jadwal adalah tanda kedewasaan dalam mengelola waktu.",
-  "Jangan menunda pekerjaan yang sudah masuk dalam jadwalmu.",
-  "Setiap hari adalah kesempatan baru untuk menjalani jadwalmu dengan lebih baik.",
-  "Jadwal bukan hanya daftar tugas, tetapi strategi mencapai impian.",
-  "Tanpa jadwal, bahkan waktu 24 jam terasa tidak cukup.",
-  "Jadwal membantu kita fokus pada apa yang benar-benar penting.",
-  "Tugas yang terjadwal memiliki peluang lebih besar untuk diselesaikan.",
-  "Hidup yang sukses dimulai dengan menghormati jadwal.",
-  "Waktu yang dihabiskan untuk membuat jadwal tidak pernah sia-sia.",
-  "Jadwalmu adalah bukti nyata bahwa kamu serius dengan impianmu.",
-  "Jadwal yang baik memberi ruang untuk kerja keras dan istirahat seimbang.",
-  "Setiap kotak dalam jadwal adalah langkah menuju tujuan besar.",
-  "Menghargai jadwal adalah cara terbaik untuk menghargai waktu.",
-  "Jadwal adalah kompas yang membimbing kita melalui kesibukan sehari-hari.",
-  "Kesuksesan dimulai dari jadwal yang terencana dengan baik.",
-  "Setiap jadwal adalah peluang untuk mengelola waktu lebih bijaksana.",
-  "Jadwal bukanlah penghalang kebebasan, melainkan cara untuk menciptakan ruang bagi apa yang penting.",
-  "Tanpa jadwal, kamu berjalan tanpa arah dalam lautan waktu.",
-  "Jadwal membantu kamu berkata 'ya' pada hal yang penting dan 'tidak' pada hal yang tidak.",
-  "Disiplin dalam jadwal membentuk karakter dan kebiasaan yang produktif.",
-  "Jangan menunggu waktu yang tepat; buat jadwal dan mulailah sekarang.",
-  "Jadwal memberi struktur pada hari-harimu yang penuh peluang.",
-  "Hal kecil yang dilakukan secara konsisten dalam jadwal membawa hasil besar.",
-  "Dengan jadwal, tugas besar bisa dipecah menjadi langkah-langkah kecil yang mudah dikelola.",
-  "Jadwal adalah investasi kecil untuk keuntungan besar di masa depan.",
-  "Kesibukan yang terorganisir melalui jadwal menciptakan kepuasan dalam pekerjaan.",
-  "Jangan takut merombak jadwal, selama itu membuatmu lebih produktif.",
-  "Sebuah jadwal yang efisien memungkinkan kamu memiliki waktu untuk bekerja dan menikmati hidup.",
-  "Jadwal adalah penolong terbaik untuk menghindari penundaan.",
-  "Setiap jadwal yang baik dimulai dari niat untuk menjadi lebih baik setiap hari.",
-  "Jadwal bukan tentang mengisi waktu, tapi tentang memanfaatkannya dengan bijak.",
-  "Tepati jadwalmu, karena itu adalah janji kepada dirimu sendiri.",
-  "Hari yang sukses dimulai dari pagi yang terencana dengan baik.",
-  "Jadwal yang baik adalah alat untuk mengubah waktu menjadi pencapaian.",
-  "Setiap menit dalam jadwal adalah peluang untuk membuat hari lebih bermakna.",
-  "Jangan biarkan hari berlalu tanpa rencana, jadwal adalah langkah pertama menuju produktivitas.",
-  "Jadwal tidak hanya mengatur waktu, tetapi juga mengatur hidupmu.",
-  "Disiplin terhadap jadwal adalah langkah kecil menuju tujuan besar.",
-  "Jadwal yang jelas membantu kamu tetap fokus di tengah gangguan.",
-  "Setiap hari yang direncanakan dengan baik adalah kemenangan kecil.",
-  "Jadwal adalah kunci untuk menjaga keseimbangan antara kerja dan istirahat.",
-  "Rencana tanpa jadwal adalah seperti peta tanpa arah.",
-  "Jadwal yang fleksibel namun terstruktur adalah kombinasi yang sempurna.",
-  "Jangan menunggu inspirasi; biarkan jadwalmu menjadi sumber motivasi.",
-  "Jadwal adalah alat untuk mengubah kebiasaan buruk menjadi kebiasaan baik.",
-  "Dengan jadwal, kamu tahu kapan harus berhenti dan kapan harus mulai lagi.",
-  "Jadwal membantu kamu mencapai lebih banyak dengan usaha yang lebih sedikit.",
-  "Rutin yang konsisten dimulai dari jadwal yang baik.",
   "Setiap jadwal adalah peluang untuk memperbaiki diri dari hari kemarin.",
   "Jadwal adalah teman terbaik bagi mereka yang ingin mencapai sesuatu.",
   "Fleksibilitas jadwal memberi ruang untuk hal-hal yang tidak terduga.",
@@ -141,6 +81,9 @@ const Home = () => {
   const [hasMoreEvents, setHasMoreEvents] = useState(true);
 
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isWeekExpanded, setIsWeekExpanded] = useState(true); // Default terbuka
+  const [isMonthExpanded, setIsMonthExpanded] = useState(true); // Default terbuka
+  const [isFutureExpanded, setIsFutureExpanded] = useState(false);
 
   const academicCalendarRef = useRef(null);
 
@@ -264,6 +207,47 @@ const Home = () => {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    // Update data awal saat komponen dimount
+    const updateCalendarData = () => {
+      const { events, hasMore } = getUpcomingEvents(academicCalendar, 0, 10);
+      setAcademicEvents(events);
+      setHasMoreEvents(hasMore);
+    };
+
+    // Panggil pertama kali
+    updateCalendarData();
+
+    // Hitung waktu sampai tengah malam berikutnya
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const timeUntilMidnight = tomorrow - now;
+
+    // Set timeout untuk update pertama di tengah malam
+    const initialTimeout = setTimeout(() => {
+      updateCalendarData();
+      
+      // Setelah update pertama, set interval harian
+      const dailyInterval = setInterval(updateCalendarData, 86400000); // 24 jam
+      
+      // Cleanup interval harian
+      return () => clearInterval(dailyInterval);
+    }, timeUntilMidnight);
+
+    // Cleanup timeout awal
+    return () => clearTimeout(initialTimeout);
+  }, []);
+
+  useEffect(() => {
+    const timeInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+
+    return () => clearInterval(timeInterval);
+  }, []);
+
   const formatTime = (time) => {
     return time.slice(0, 5);
   };
@@ -339,12 +323,6 @@ const Home = () => {
     </div>
   );
 
-  useEffect(() => {
-    const { events, hasMore } = getUpcomingEvents(academicCalendar, 0, 2);
-    setAcademicEvents(events);
-    setHasMoreEvents(hasMore);
-  }, []);
-
   const loadMore = () => {
     const nextStart = startIndex + 5;
     const { events, hasMore } = getUpcomingEvents(
@@ -379,6 +357,103 @@ const Home = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isExpanded]);
+
+  const parseEventDate = (dateStr) => {
+    if (!dateStr || dateStr === "-") return null;
+
+    const rangeDateMatch = dateStr.match(
+      /(\d+)\s+([A-Za-z]+)(?:\s+(\d{4}))?\s*-\s*(\d+)\s+([A-Za-z]+)\s+(\d{4})/
+    );
+    
+    const monthMap = {
+      Januari: "01", Februari: "02", Maret: "03", April: "04",
+      Mei: "05", Juni: "06", Juli: "07", Agustus: "08",
+      September: "09", Oktober: "10", November: "11", Desember: "12"
+    };
+
+    if (rangeDateMatch) {
+      const [, startDay, startMonth, startYear, endDay, endMonth, endYear] = rangeDateMatch;
+      
+      // Handle year transition (Dec-Jan)
+      const actualStartYear = !startYear && startMonth === "Desember" && endMonth === "Januari" 
+        ? String(Number(endYear) - 1) 
+        : (startYear || endYear);
+      
+      const startDate = new Date(`${actualStartYear}-${monthMap[startMonth]}-${startDay.padStart(2, "0")}`);
+      const endDate = new Date(`${endYear}-${monthMap[endMonth]}-${endDay.padStart(2, "0")}`);
+      
+      return { startDate, endDate };
+    }
+
+    // Handle single date
+    const singleDateMatch = dateStr.match(/^(\d+)\s+([A-Za-z]+)\s+(\d{4})$/);
+    if (singleDateMatch) {
+      const [, day, month, year] = singleDateMatch;
+      const date = new Date(`${year}-${monthMap[month]}-${day.padStart(2, "0")}`);
+      return { startDate: date, endDate: date };
+    }
+
+    return null;
+  };
+
+  const isEventThisWeek = (dateStr) => {
+    const dates = parseEventDate(dateStr);
+    if (!dates) return false;
+
+    const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+    
+    const endOfWeek = new Date(today);
+    endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
+    endOfWeek.setHours(23, 59, 59, 999);
+    
+    // Event is this week if:
+    // 1. It starts this week, or
+    // 2. It ends this week, or
+    // 3. It spans over this week
+    return (
+      (dates.startDate >= startOfWeek && dates.startDate <= endOfWeek) ||
+      (dates.endDate >= startOfWeek && dates.endDate <= endOfWeek) ||
+      (dates.startDate <= startOfWeek && dates.endDate >= endOfWeek)
+    );
+  };
+
+  const isEventThisMonth = (dateStr) => {
+    const dates = parseEventDate(dateStr);
+    if (!dates) return false;
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    
+    // Event is this month if:
+    // 1. It starts this month, or
+    // 2. It ends this month, or
+    // 3. It spans over this month
+    return (
+      (dates.startDate.getFullYear() === currentYear && dates.startDate.getMonth() === currentMonth) ||
+      (dates.endDate.getFullYear() === currentYear && dates.endDate.getMonth() === currentMonth) ||
+      (dates.startDate <= new Date(currentYear, currentMonth, 1) && 
+       dates.endDate >= new Date(currentYear, currentMonth + 1, 0))
+    );
+  };
+
+  const isEventFuture = (dateStr) => {
+    const dates = parseEventDate(dateStr);
+    if (!dates) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const nextThreeMonths = new Date(today);
+    nextThreeMonths.setMonth(today.getMonth() + 3);
+    
+    // Event is future if:
+    // 1. It starts after today but within next 3 months
+    return dates.startDate > today && dates.startDate <= nextThreeMonths;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -543,30 +618,124 @@ const Home = () => {
           </div>
 
           <div className="space-y-3">
-            {academicEvents.map((event, index) => (
-              <div key={index} className={scheduleCardStyle}>
-                <div className="flex flex-col space-y-2">
-                  <h3 className="font-medium text-gray-800">{event.name}</h3>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <i className="far fa-calendar mr-2"></i>
-                    <span>{event.date}</span>
+            {/* Minggu Ini */}
+            {academicEvents.filter((event) => isEventThisWeek(event.date)).length >
+              0 && (
+              <div className="border border-gray-100 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setIsWeekExpanded(!isWeekExpanded)}
+                  className="w-full px-4 py-3 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition-colors"
+                >
+                  <span className="font-medium text-gray-800">Minggu Ini</span>
+                  <i
+                    className={`fas fa-chevron-${
+                      isWeekExpanded ? "up" : "down"
+                    } text-gray-500`}
+                  ></i>
+                </button>
+                {isWeekExpanded && (
+                  <div className="p-3 space-y-3">
+                    {academicEvents
+                      .filter((event) => isEventThisWeek(event.date))
+                      .map((event, index) => (
+                        <div key={index} className={scheduleCardStyle}>
+                          <div className="flex flex-col space-y-2">
+                            <h3 className="font-medium text-gray-800">
+                              {event.name}
+                            </h3>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <i className="far fa-calendar mr-2"></i>
+                              <span>{event.date}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
                   </div>
-                </div>
+                )}
               </div>
-            ))}
-
-            {hasMoreEvents && (
-              <button
-                onClick={loadMore}
-                className="w-full mt-4 px-4 py-2 text-sm font-medium text-gray-600 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors duration-200"
-              >
-                Tampilkan Lebih Banyak
-                <i className="fas fa-chevron-down ml-2 text-xs"></i>
-              </button>
             )}
 
-            {academicEvents.length === 0 && (
-              <EmptyState message="Tidak ada jadwal akademik terdekat" />
+            {/* Bulan Ini */}
+            {academicEvents.filter((event) => isEventThisMonth(event.date)).length >
+              0 && (
+              <div className="border border-gray-100 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setIsMonthExpanded(!isMonthExpanded)}
+                  className="w-full px-4 py-3 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition-colors"
+                >
+                  <span className="font-medium text-gray-800">Bulan Ini</span>
+                  <i
+                    className={`fas fa-chevron-${
+                      isMonthExpanded ? "up" : "down"
+                    } text-gray-500`}
+                  ></i>
+                </button>
+                {isMonthExpanded && (
+                  <div className="p-3 space-y-3">
+                    {academicEvents
+                      .filter((event) => isEventThisMonth(event.date))
+                      .map((event, index) => (
+                        <div key={index} className={scheduleCardStyle}>
+                          <div className="flex flex-col space-y-2">
+                            <h3 className="font-medium text-gray-800">
+                              {event.name}
+                            </h3>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <i className="far fa-calendar mr-2"></i>
+                              <span>{event.date}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Mendatang */}
+            {academicEvents.filter((event) => isEventFuture(event.date)).length >
+              0 && (
+              <div className="border border-gray-100 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setIsFutureExpanded(!isFutureExpanded)}
+                  className="w-full px-4 py-3 bg-gray-50 flex justify-between items-center hover:bg-gray-100 transition-colors"
+                >
+                  <span className="font-medium text-gray-800">Mendatang</span>
+                  <i
+                    className={`fas fa-chevron-${
+                      isFutureExpanded ? "up" : "down"
+                    } text-gray-500`}
+                  ></i>
+                </button>
+                {isFutureExpanded && (
+                  <div className="p-3 space-y-3">
+                    {academicEvents
+                      .filter((event) => isEventFuture(event.date))
+                      .slice(0, 5)
+                      .map((event, index) => (
+                        <div key={index} className={scheduleCardStyle}>
+                          <div className="flex flex-col space-y-2">
+                            <h3 className="font-medium text-gray-800">
+                              {event.name}
+                            </h3>
+                            <div className="flex items-center text-sm text-gray-600">
+                              <i className="far fa-calendar mr-2"></i>
+                              <span>{event.date}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    {hasMoreEvents && (
+                      <button
+                        onClick={() => navigate("/jadwal-akademik")}
+                        className="w-full text-center text-sm text-custom-blue hover:text-custom-blue-dark"
+                      >
+                        Lihat lebih banyak
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>

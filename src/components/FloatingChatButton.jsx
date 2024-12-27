@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScheduleBot from './ScheduleBot';
+import { useNavigate } from 'react-router-dom';
 
 const FloatingChatButton = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [showBubble, setShowBubble] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('');
+  const navigate = useNavigate();
 
   const chatMessages = [
     "Hai! Lagi cari info jadwal? Aku bisa bantu nih! ",
@@ -61,20 +63,31 @@ const FloatingChatButton = () => {
     "Selamat datang! Yuk kita mulai bikin jadwal kamu lebih keren! "
   ];
 
-  // Tampilkan balon chat setiap 10 detik jika chat belum dibuka
   useEffect(() => {
-    if (!isChatOpen) {
-      const timer = setTimeout(() => {
-        // Pilih pesan random
+    const token = localStorage.getItem('token');
+    if (token) {
+      const initialTimer = setTimeout(() => {
         const randomMessage = chatMessages[Math.floor(Math.random() * chatMessages.length)];
         setCurrentMessage(randomMessage);
         setShowBubble(true);
-        // Sembunyikan balon setelah 5 detik
-        setTimeout(() => setShowBubble(false), 5000);
-      }, 10000);
-      return () => clearTimeout(timer);
+      }, 3000);
+
+      const messageInterval = setInterval(() => {
+        const randomMessage = chatMessages[Math.floor(Math.random() * chatMessages.length)];
+        setCurrentMessage(randomMessage);
+        setShowBubble(true);
+
+        setTimeout(() => {
+          setShowBubble(false);
+        }, 5000);
+      }, 60000);
+
+      return () => {
+        clearTimeout(initialTimer);
+        clearInterval(messageInterval);
+      };
     }
-  }, [isChatOpen, showBubble]);
+  }, []);
 
   const robotVariants = {
     initial: {
@@ -120,6 +133,13 @@ const FloatingChatButton = () => {
       }
     }
   };
+
+  const handleChatClick = () => {
+    navigate('/chat-schedule');
+  };
+
+  const token = localStorage.getItem('token');
+  if (!token) return null;
 
   return (
     <>

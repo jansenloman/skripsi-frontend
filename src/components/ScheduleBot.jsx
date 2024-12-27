@@ -1,19 +1,18 @@
-import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { getChatResponse } from "../utils/geminiAPI";
-import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { getChatResponse } from '../utils/geminiAPI';
+import { toast } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const ScheduleBot = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
     {
-      type: "bot",
-      content:
-        "Halo! 👋 Saya adalah asisten penjadwalan Anda. Apa yang bisa saya bantu hari ini?",
-      timestamp: new Date(),
-    },
+      type: 'bot',
+      content: 'Halo! 👋 Saya adalah asisten penjadwalan Anda. Apa yang bisa saya bantu hari ini?',
+      timestamp: new Date()
+    }
   ]);
-  const [inputMessage, setInputMessage] = useState("");
+  const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
@@ -27,9 +26,9 @@ const ScheduleBot = ({ isOpen, onClose }) => {
   }, [messages]);
 
   const formatTime = (date) => {
-    return new Date(date).toLocaleTimeString("id-ID", {
-      hour: "2-digit",
-      minute: "2-digit",
+    return new Date(date).toLocaleTimeString('id-ID', {
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -39,25 +38,25 @@ const ScheduleBot = ({ isOpen, onClose }) => {
 
     // Add user message
     const userMessage = {
-      type: "user",
+      type: 'user',
       content: inputMessage,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
-    setMessages((prev) => [...prev, userMessage]);
-    setInputMessage("");
+    setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
     setIsTyping(true);
 
     try {
       const response = await getChatResponse(inputMessage, navigate);
       const botResponse = {
-        type: "bot",
-        content: response.replace(/{.*}/, "").trim(),
-        timestamp: new Date(),
+        type: 'bot',
+        content: response.replace(/{.*}/, '').trim(), // Remove JSON navigation command from display
+        timestamp: new Date()
       };
-      setMessages((prev) => [...prev, botResponse]);
+      setMessages(prev => [...prev, botResponse]);
     } catch (error) {
       toast.error(error.message);
-      console.error("Error:", error);
+      console.error('Error:', error);
     } finally {
       setIsTyping(false);
     }
@@ -68,7 +67,7 @@ const ScheduleBot = ({ isOpen, onClose }) => {
     "Tambah kegiatan baru",
     "Cek jadwal minggu ini",
     "Ke halaman profil",
-    "Cara generate jadwal",
+    "Cara generate jadwal"
   ];
 
   return (
@@ -84,25 +83,12 @@ const ScheduleBot = ({ isOpen, onClose }) => {
           <div className="bg-gradient-to-r from-custom-light-blue to-custom-blue text-white p-4 md:rounded-t-2xl flex justify-between items-center">
             <div className="flex items-center space-x-3">
               <div className="w-8 md:w-10 h-8 md:h-10 bg-white rounded-full flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 md:h-6 w-5 md:w-6 text-custom-light-blue"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 md:h-6 w-5 md:w-6 text-custom-light-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                 </svg>
               </div>
               <div>
-                <h2 className="text-base md:text-lg font-semibold">
-                  Schedule Assistant
-                </h2>
+                <h2 className="text-base md:text-lg font-semibold">Schedule Assistant</h2>
                 <p className="text-xs text-custom-yellow">Online</p>
               </div>
             </div>
@@ -110,19 +96,8 @@ const ScheduleBot = ({ isOpen, onClose }) => {
               onClick={onClose}
               className="text-white hover:text-custom-yellow transition-colors p-2 hover:bg-white/10 rounded-full"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 md:h-6 w-5 md:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 md:h-6 w-5 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -134,61 +109,38 @@ const ScheduleBot = ({ isOpen, onClose }) => {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`flex ${
-                  message.type === "user" ? "justify-end" : "justify-start"
-                } items-end space-x-2`}
+                className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} items-end space-x-2`}
               >
-                {message.type === "bot" && (
+                {message.type === 'bot' && (
                   <div className="w-8 md:w-10 h-8 md:h-10 rounded-full bg-custom-light-blue flex items-center justify-center flex-shrink-0">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 md:h-6 w-5 md:w-6 text-white"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                      />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 md:h-6 w-5 md:w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                     </svg>
                   </div>
                 )}
-                <div
-                  className={`max-w-[70%] ${
-                    message.type === "user" ? "order-1" : "order-2"
-                  }`}
-                >
+                <div className={`max-w-[70%] ${message.type === 'user' ? 'order-1' : 'order-2'}`}>
                   <div
                     className={`p-4 rounded-2xl ${
-                      message.type === "user"
-                        ? "bg-gradient-to-r from-custom-light-blue to-custom-blue text-white rounded-br-none"
-                        : "bg-white text-gray-800 rounded-bl-none shadow-md"
+                      message.type === 'user'
+                        ? 'bg-gradient-to-r from-custom-light-blue to-custom-blue text-white rounded-br-none'
+                        : 'bg-white text-gray-800 rounded-bl-none shadow-md'
                     }`}
                   >
-                    {message.type === "bot" ? (
+                    {message.type === 'bot' ? (
                       <div className="space-y-4 whitespace-pre-line">
-                        {message.content.split("\n").map((line, idx) => {
+                        {message.content.split('\n').map((line, idx) => {
                           // Header dengan emoji
                           if (line.match(/^📅|^📚|^⭐|^☕|^🌟|^💡/)) {
                             return (
-                              <h3
-                                key={idx}
-                                className="font-bold text-lg text-custom-blue mt-4"
-                              >
+                              <h3 key={idx} className="font-bold text-lg text-custom-blue mt-4">
                                 {line}
                               </h3>
                             );
                           }
                           // List item dengan bullet point
-                          else if (line.trim().startsWith("•")) {
+                          else if (line.trim().startsWith('•')) {
                             return (
-                              <div
-                                key={idx}
-                                className="pl-4 py-1 flex items-start"
-                              >
+                              <div key={idx} className="pl-4 py-1 flex items-start">
                                 <span className="mr-2">•</span>
                                 <span>{line.substring(1).trim()}</span>
                               </div>
@@ -196,11 +148,7 @@ const ScheduleBot = ({ isOpen, onClose }) => {
                           }
                           // Teks biasa
                           else if (line.trim()) {
-                            return (
-                              <p key={idx} className="text-gray-600">
-                                {line}
-                              </p>
-                            );
+                            return <p key={idx} className="text-gray-600">{line}</p>;
                           }
                           // Spasi kosong
                           return <div key={idx} className="h-2" />;
@@ -219,32 +167,15 @@ const ScheduleBot = ({ isOpen, onClose }) => {
             {isTyping && (
               <div className="flex justify-start items-end space-x-2">
                 <div className="w-8 md:w-10 h-8 md:h-10 rounded-full bg-custom-light-blue flex items-center justify-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 md:h-6 w-5 md:w-6 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 md:h-6 w-5 md:w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                   </svg>
                 </div>
                 <div className="bg-white p-4 md:p-4 rounded-2xl rounded-bl-none shadow-md">
                   <div className="flex space-x-2">
                     <div className="w-2 h-2 bg-custom-light-blue rounded-full animate-bounce"></div>
-                    <div
-                      className="w-2 h-2 bg-custom-light-blue rounded-full animate-bounce"
-                      style={{ animationDelay: "0.2s" }}
-                    ></div>
-                    <div
-                      className="w-2 h-2 bg-custom-light-blue rounded-full animate-bounce"
-                      style={{ animationDelay: "0.4s" }}
-                    ></div>
+                    <div className="w-2 h-2 bg-custom-light-blue rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-2 h-2 bg-custom-light-blue rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
                   </div>
                 </div>
               </div>
@@ -268,10 +199,7 @@ const ScheduleBot = ({ isOpen, onClose }) => {
           </div>
 
           {/* Chat Input */}
-          <form
-            onSubmit={handleSendMessage}
-            className="p-3 md:p-4 bg-white border-t border-gray-100"
-          >
+          <form onSubmit={handleSendMessage} className="p-3 md:p-4 bg-white border-t border-gray-100">
             <div className="flex items-center space-x-2">
               <div className="flex-1 relative">
                 <input
@@ -286,19 +214,8 @@ const ScheduleBot = ({ isOpen, onClose }) => {
                   disabled={!inputMessage.trim()}
                   className="absolute right-2 top-1/2 -translate-y-1/2 w-10 md:w-10 h-10 md:h-10 bg-custom-light-blue text-white rounded-full flex items-center justify-center hover:bg-custom-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 md:h-6 w-5 md:w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 md:h-6 w-5 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
                 </button>
               </div>

@@ -8,7 +8,7 @@ const ScheduleBot = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
     {
       type: 'bot',
-      content: 'Halo! 👋 Saya adalah asisten penjadwalan Anda. Apa yang bisa saya bantu hari ini?',
+      content: 'Halo! 👋 Kamu bisa bertanya apapun mengenai jadwal kamu.',
       timestamp: new Date()
     }
   ]);
@@ -63,11 +63,12 @@ const ScheduleBot = ({ isOpen, onClose }) => {
   };
 
   const quickResponses = [
+    "Bagaimana cara menggunakan aplikasi ini?",
     "Lihat jadwal hari ini",
-    "Tambah kegiatan baru",
+    "Lihat jadwal kuliah",
     "Cek jadwal minggu ini",
-    "Ke halaman profil",
-    "Cara generate jadwal"
+    "Lihat jadwal mendatang",
+    "Jadwal hari Senin",
   ];
 
   return (
@@ -88,7 +89,7 @@ const ScheduleBot = ({ isOpen, onClose }) => {
                 </svg>
               </div>
               <div>
-                <h2 className="text-base md:text-lg font-semibold">Schedule Assistant</h2>
+                <h2 className="text-base md:text-lg font-semibold">Chatbot</h2>
                 <p className="text-xs text-custom-yellow">Online</p>
               </div>
             </div>

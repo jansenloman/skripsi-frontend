@@ -7,11 +7,12 @@
 @layer base {
   html {
     font-family: "Poppins", sans-serif;
+    color-scheme: light;
   }
 }
 
 body {
-  @apply font-sans;
+  @apply font-sans bg-white;
 }
 
 /* Navbar Styles */
@@ -97,4 +98,15 @@ body {
 
 .animate-custom-spin {
   animation: custom-spin 1.5s linear infinite;
+}
+
+/* Force light mode */
+:root {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light;
+  }
 }

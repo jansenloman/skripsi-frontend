@@ -36,6 +36,24 @@ const handleUserRequests = (response, navigate) => {
   }
 };
 
+const formatUpcomingSchedule = (schedules) => {
+  if (!schedules || schedules.length === 0) {
+    return 'Tidak ada jadwal mendatang yang tersedia.';
+  }
+
+  return schedules
+    .map(schedule => {
+      const tanggal = new Date(schedule.tanggal).toLocaleDateString('id-ID', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+      return `- ${schedule.kegiatan} (${tanggal}, ${schedule.jam_mulai}-${schedule.jam_selesai})${schedule.deskripsi ? '\n  ' + schedule.deskripsi : ''}`;
+    })
+    .join('\n\n');
+};
+
 export const getChatResponse = async (message, navigate) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-pro" });
@@ -48,10 +66,35 @@ export const getChatResponse = async (message, navigate) => {
       query.includes(day)
     );
 
-    let scheduleType = 'all';
-    if (query.includes('jadwal mingguan')) scheduleType = 'mingguan';
-    if (query.includes('jadwal kuliah')) scheduleType = 'kuliah';
-    if (query.includes('jadwal mendatang')) scheduleType = 'mendatang';
+    let scheduleType = 'mingguan'; // Default ke jadwal mingguan
+    
+    // Deteksi jadwal kuliah minggu ini vs jadwal kuliah hari tertentu
+    if (query.includes('jadwal kuliah')) {
+      if (query.includes('minggu ini') || query.includes('seminggu')) {
+        scheduleType = 'kuliah-minggu';
+      } else if (requestedDay) {
+        scheduleType = 'kuliah';
+      } else {
+        scheduleType = 'kuliah-minggu';  // default ke jadwal minggu jika hanya "jadwal kuliah"
+      }
+    } else if (query.includes('jadwal mingguan')) {
+      scheduleType = 'mingguan';
+    } else if (query.includes('jadwal mendatang')) {
+      scheduleType = 'mendatang';
+    } else if (requestedDay && !query.includes('jadwal')) {
+      // Jika hanya menyebut hari tanpa spesifik jenis jadwal
+      scheduleType = 'mingguan';
+    }
+
+    // Deteksi apakah ini adalah pertanyaan tentang event mendatang
+    const upcomingEventKeywords = [
+      'event', 'acara', 'kegiatan', 'agenda', 'akan datang',
+      'mendatang', 'yang akan', 'kedepan', 'nanti'
+    ];
+    
+    const isUpcomingEventQuery = upcomingEventKeywords.some(keyword => 
+      query.includes(keyword)
+    );
 
     // Deteksi apakah ini adalah percakapan tentang kesehatan mental
     const mentalHealthKeywords = [
@@ -68,7 +111,36 @@ export const getChatResponse = async (message, navigate) => {
     if (isMentalHealthQuery) {
       contextPrompt = mentalHealthPrompt;
     } else {
-      const formattedSchedule = formatSchedule(schedules, scheduleType, requestedDay);
+      // Format jadwal berdasarkan tipe
+      let formattedSchedule;
+      if (scheduleType === 'kuliah-minggu') {
+        // Format khusus untuk jadwal kuliah seminggu
+        formattedSchedule = "📚 JADWAL KULIAH MINGGU INI:\n\n";
+        days.forEach(day => {
+          const daySchedules = schedules.jadwalKuliah.filter(
+            s => s.hari.toLowerCase() === day
+          ).sort((a, b) => a.jam_mulai.localeCompare(b.jam_mulai));
+          
+          if (daySchedules.length > 0) {
+            formattedSchedule += `${day.toUpperCase()}:\n`;
+            daySchedules.forEach(schedule => {
+              formattedSchedule += `⏰ ${formatTime(schedule.jam_mulai)} - ${formatTime(schedule.jam_selesai)} : ${schedule.mata_kuliah}\n`;
+            });
+            formattedSchedule += '\n';
+          }
+        });
+        
+        if (formattedSchedule === "📚 JADWAL KULIAH MINGGU INI:\n\n") {
+          formattedSchedule += "Tidak ada jadwal kuliah untuk minggu ini.\n";
+        }
+      } else {
+        formattedSchedule = formatSchedule(
+          schedules, 
+          isUpcomingEventQuery ? 'mendatang' : scheduleType, 
+          requestedDay
+        );
+      }
+      
       contextPrompt = `${schedulePrompt}\n\nData jadwal saat ini:\n${formattedSchedule}`;
     }
     

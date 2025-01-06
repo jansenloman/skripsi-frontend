@@ -4,10 +4,13 @@ import Navbar from "../components/Navbar";
 import Breadcrumb from "../components/Breadcrumb";
 import { API_BASE_URL } from "../utils/constants";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const ScheduleList = () => {
   const [schedule, setSchedule] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedConflicts, setSelectedConflicts] = useState(new Set());
   const location = useLocation();
   const navigate = useNavigate();
   const [showPastDays, setShowPastDays] = useState(false);
@@ -153,6 +156,173 @@ const ScheduleList = () => {
       </div>
     </div>
   );
+
+  const handleConflictSelection = async (taskId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${API_BASE_URL}/api/schedule/resolve-conflict`,
+        { taskId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        fetchSchedule(); // Refresh the schedule after resolving conflict
+      }
+    } catch (error) {
+      console.error('Error resolving conflict:', error);
+    }
+  };
+
+  const handleDeleteTask = async (taskId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${API_BASE_URL}/api/schedule/task/${taskId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        withCredentials: true
+      });
+      
+      if (response.data.success) {
+        // Refresh the schedule after deletion
+        fetchSchedule();
+        toast.success('Jadwal berhasil dihapus');
+      } else {
+        toast.error('Gagal menghapus jadwal');
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      toast.error('Gagal menghapus jadwal');
+    }
+  };
+
+  const toggleTaskVisibility = async (taskId, hidden) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `${API_BASE_URL}/api/schedule/task/${taskId}/toggle-visibility`,
+        { hidden },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.success) {
+        // Update local state immediately before fetching
+        setSchedule(prevSchedule => {
+          const newSchedule = { ...prevSchedule };
+          // Update visibility for all days
+          Object.keys(newSchedule).forEach(day => {
+            newSchedule[day] = newSchedule[day].map(task => {
+              // Update the clicked task
+              if (task.task_id === taskId) {
+                return { ...task, hidden };
+              }
+              // If we're showing a task, hide its conflicts
+              if (!hidden && task.conflicts_with?.includes(taskId)) {
+                return { ...task, hidden: true };
+              }
+              return task;
+            });
+          });
+          return newSchedule;
+        });
+        
+        // Then fetch the latest data
+        fetchSchedule();
+      }
+    } catch (error) {
+      console.error('Error toggling task visibility:', error);
+    }
+  };
+
+  const renderTaskActions = (task) => {
+    if (task.type === 'conflict') {
+      return (
+        <div className="mt-2">
+          <button
+            onClick={() => handleConflictSelection(task.task_id)}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm mr-2 transition-colors duration-200"
+          >
+            Pilih Jadwal Ini
+          </button>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderTask = (task) => {
+    // Don't render hidden tasks
+    if (task.hidden) {
+      return null;
+    }
+    
+    const isConflict = task.type === 'conflict';
+    
+    return (
+      <tr key={task.task_id} 
+          className={`hover:bg-gray-50 transition-colors ${
+            isConflict ? 'bg-red-50' : ''
+          }`}
+      >
+        <td className="px-3 py-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">
+          {formatTime(task.jam_mulai)} - {formatTime(task.jam_selesai)}
+        </td>
+        <td className="px-3 py-4 sm:px-6 text-sm text-gray-900">
+          <div className={`font-medium ${isConflict ? 'text-red-600' : ''}`}>
+            {task.deskripsi}
+            {task.suggestions && task.suggestions !== null && task.suggestions.trim() !== '' && (
+              <div className="mt-3">
+                <div className="bg-blue-50 rounded-lg p-3">
+                  <div className="text-sm text-blue-600 font-medium mb-2">
+                    Saran:
+                  </div>
+                  <ul className="space-y-1.5">
+                    {task.suggestions.split(/,\s*/).map((suggestion, idx) => (
+                      <li key={idx} className="text-sm text-blue-600">
+                        • {suggestion.trim()}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+          {isConflict && (
+            <div className="mt-2">
+              <button
+                onClick={() => handleConflictSelection(task.task_id)}
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm mr-2 transition-colors duration-200"
+              >
+                Pilih Jadwal Ini
+              </button>
+            </div>
+          )}
+        </td>
+        <td className="px-3 py-4 sm:px-6 whitespace-nowrap">
+          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+            task.type === "fixed"
+              ? "bg-blue-100 text-blue-800"
+              : task.type === "free"
+              ? "bg-green-100 text-green-800"
+              : task.type === "conflict"
+              ? "bg-red-100 text-red-800"
+              : "bg-gray-100 text-gray-800"
+          }`}>
+            {task.type === 'conflict' ? 'Konflik' : task.type}
+          </span>
+        </td>
+      </tr>
+    );
+  };
 
   if (isLoading) {
     return (
@@ -338,6 +508,76 @@ const ScheduleList = () => {
                   </div>
                 </div>
 
+                {/* Conflict Tasks Section */}
+                {sortedSchedule && 
+                 sortedSchedule.length > 0 && 
+                 sortedSchedule.find(([day]) => day === activeDay)?.[1].some(task => task.type === 'conflict') && (
+                  <div className="mb-6">
+                    <div className="bg-white rounded-lg shadow-sm border-l-4 border-red-500 overflow-hidden">
+                      <div className="p-4">
+                        <div className="flex items-center gap-2 text-red-600 mb-4">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                          <h3 className="text-lg font-medium">
+                            Konflik Jadwal
+                          </h3>
+                        </div>
+
+                        <div className="space-y-3">
+                          {sortedSchedule
+                            .filter(([day]) => day === activeDay)
+                            .map(([_, tasks]) => 
+                              tasks
+                                .filter(task => task.type === 'conflict')
+                                .map((task, taskIndex) => (
+                                  <div key={`conflict-task-${taskIndex}`} 
+                                       className="bg-gray-50 rounded-lg p-4">
+                                    <div className="flex justify-between items-start mb-3">
+                                      <div className="space-y-1">
+                                        <div className="text-sm font-medium text-gray-500">
+                                          {formatTime(task.jam_mulai)} - {formatTime(task.jam_selesai)}
+                                        </div>
+                                        <div className="text-base font-medium text-gray-900">
+                                          {task.deskripsi}
+                                        </div>
+                                      </div>
+                                      <span className="px-2 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-md">
+                                        Konflik
+                                      </span>
+                                    </div>
+                                    
+                                    
+                                    
+                                    <div className="mt-4 flex justify-end gap-2">
+                                      <button
+                                        onClick={() => handleDeleteTask(task.task_id)}
+                                        className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded-md text-gray-600 bg-white hover:bg-gray-50 transition-colors duration-200"
+                                      >
+                                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        Hapus
+                                      </button>
+                                      <button
+                                        onClick={() => handleConflictSelection(task.task_id)}
+                                        className="inline-flex items-center px-3 py-1.5 border border-red-600 text-sm font-medium rounded-md text-red-600 bg-white hover:bg-red-50 transition-colors duration-200"
+                                      >
+                                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Pilih Jadwal Ini
+                                      </button>
+                                    </div>
+                                  </div>
+                                ))
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Tabel Jadwal */}
                 <div className="overflow-x-auto -mx-3 sm:mx-0">
                   <div className="inline-block min-w-full align-middle">
@@ -361,62 +601,11 @@ const ScheduleList = () => {
                             .filter(([hari]) => hari === activeDay)
                             .map(([, tasks]) =>
                               tasks
+                                .filter(task => !task.type.includes('conflict')) // Only show non-conflict tasks
                                 .sort((a, b) =>
                                   a.jam_mulai.localeCompare(b.jam_mulai)
                                 )
-                                .map((task) => (
-                                  <tr
-                                    key={task.task_id}
-                                    className="hover:bg-gray-50 transition-colors"
-                                  >
-                                    <td className="px-3 py-4 sm:px-6 text-sm text-gray-600 whitespace-nowrap">
-                                      {formatTime(task.jam_mulai)} -{" "}
-                                      {formatTime(task.jam_selesai)}
-                                    </td>
-                                    <td className="px-3 py-4 sm:px-6 text-sm text-gray-900">
-                                      <div className="font-medium">
-                                        {task.deskripsi}
-                                      </div>
-                                      {task.suggestions && (
-                                        <div className="mt-2 text-xs text-gray-500">
-                                          <div className="bg-blue-50 border border-blue-100 rounded-lg p-3">
-                                            <div className="font-medium text-blue-700 mb-1">
-                                              Saran:
-                                            </div>
-                                            <ul className="list-disc list-inside space-y-1 text-gray-600">
-                                              {task.suggestions
-                                                .split(/,\s*/)
-                                                .map((suggestion, idx) => (
-                                                  <li
-                                                    key={idx}
-                                                    className="break-words"
-                                                  >
-                                                    {suggestion
-                                                      .replace(/^\d+\)\s*/, "")
-                                                      .trim()}
-                                                  </li>
-                                                ))}
-                                            </ul>
-                                          </div>
-                                        </div>
-                                      )}
-                                    </td>
-                                    <td className="px-3 py-4 sm:px-6 whitespace-nowrap">
-                                      <span
-                                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                      ${
-                                        task.type === "fixed"
-                                          ? "bg-blue-100 text-blue-800"
-                                          : task.type === "free"
-                                          ? "bg-green-100 text-green-800"
-                                          : "bg-gray-100 text-gray-800"
-                                      }`}
-                                      >
-                                        {task.type}
-                                      </span>
-                                    </td>
-                                  </tr>
-                                ))
+                                .map((task) => renderTask(task))
                             )}
                         </tbody>
                       </table>

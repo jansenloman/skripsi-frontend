@@ -333,7 +333,7 @@ const Navbar = ({ onLinkClick }) => {
                   }}
                 >
                   <i className="fas fa-list-alt w-5"></i>
-                  <span>Jadwal Mingguan</span>
+                  <span>Jadwal AI</span>
                 </Link>
               </div>
             </div>
